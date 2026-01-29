@@ -111,6 +111,17 @@
       outline:none;
       border-color:var(--project);
     }
+    .row-fields{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:16px;
+}
+
+@media (max-width: 700px){
+  .row-fields{
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 
@@ -178,6 +189,48 @@
 </div>
 
 </main>
+<script>
+  const subtipos = {
+    filtracion: [
+      "FILTROS DE CAMPANA",
+      "FILTROS DE FILTRONIC",
+      "CARCASA DE FILTRONIC"
+    ],
+    extraccion: [
+      "CAMPANA",
+      "CAJA DE VENTILACION",
+      "CONDUCTOS",
+      "COCINA",
+      "OTROS"
+    ],
+    grasa: [
+      "MENOS DE 80 LITROS",
+      "MAYOR DE 80 LITROS"
+    ]
+  };
 
+  function actualizarSubtipo(){
+    const categoria = document.getElementById("categoria").value;
+    const subtipo = document.getElementById("subtipo");
+
+    subtipo.innerHTML = "";
+    
+    if(!categoria || !subtipos[categoria]){
+      subtipo.innerHTML = "<option>Selecciona primero una categoría</option>";
+      subtipo.disabled = true;
+      return;
+    }
+
+    subtipo.disabled = false;
+    subtipo.innerHTML = "<option value=''>Selecciona subtipo</option>";
+
+    subtipos[categoria].forEach(opcion => {
+      const opt = document.createElement("option");
+      opt.value = opcion;
+      opt.textContent = opcion;
+      subtipo.appendChild(opt);
+    });
+  }
+</script>
 </body>
 </html>
