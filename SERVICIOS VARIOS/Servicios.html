@@ -211,50 +211,50 @@ select:disabled{
 
 </main>
 <script>
-  <div class="block">
-  <div class="block-title">DATOS GENERALES</div>
-
-  <div class="row-fields">
-
-    <div class="field">
-      <label for="fecha">FECHA</label>
-      <input type="date" id="fecha">
-    </div>
-
-    <div class="field">
-      <label for="cliente">CLIENTE</label>
-      <input type="text" id="cliente" placeholder="Nombre del cliente">
-    </div>
-
-  </div>
-</div>
+  const subtipos = {
+    filtracion: [
+      "FILTROS DE CAMPANA",
+      "FILTROS DE FILTRONIC",
+      "CARCASA DE FILTRONIC"
+    ],
+    extraccion: [
+      "CAMPANA",
+      "CAJA DE VENTILACION",
+      "CONDUCTOS",
+      "COCINA",
+      "OTROS"
+    ],
+    grasa: [
+      "MENOS DE 80 LITROS",
+      "MAYOR DE 80 LITROS"
+    ],
+    ventilacion: [
+      "CAJA DE VENTILACION",
+      "CONDUCTOS",
+      "REJILLAS",
+      "OTROS"
+    ]
+  };
 
   function actualizarSubtipo(){
     const categoria = document.getElementById("categoria").value;
     const subtipo = document.getElementById("subtipo");
 
-    // Limpia opciones
     subtipo.innerHTML = "";
 
-    // Si no hay subtipos para esa categoría, se deshabilita
     if(!categoria || !subtipos[categoria]){
       subtipo.disabled = true;
-      subtipo.setAttribute("disabled", "disabled");
       subtipo.innerHTML = "<option value=''>Selecciona primero una categoría</option>";
       return;
     }
 
-    // Habilita (doble seguro)
     subtipo.disabled = false;
-    subtipo.removeAttribute("disabled");
 
-    // Opción por defecto
     const first = document.createElement("option");
     first.value = "";
     first.textContent = "Selecciona subtipo";
     subtipo.appendChild(first);
 
-    // Rellena opciones
     subtipos[categoria].forEach(opcion => {
       const opt = document.createElement("option");
       opt.value = opcion;
@@ -262,9 +262,6 @@ select:disabled{
       subtipo.appendChild(opt);
     });
   }
-
-  // Por si el navegador no dispara bien al inicio:
-  // actualizarSubtipo();
 </script>
 </body>
 </html>
