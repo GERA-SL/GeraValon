@@ -1,1 +1,147 @@
 
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SERVICIOS VARIOS – GeraValon</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0d1117;
+      --panel:#161b22;
+      --border:#30363d;
+      --text:#e6edf3;
+      --muted:#8b949e;
+      --hover:#0f1623;
+
+      /* color del proyecto SERVICIOS VARIOS */
+      --project:#a371f7;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:'Inter', system-ui, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    header{
+      padding:18px 24px;
+      border-bottom:1px solid var(--border);
+      background:var(--panel);
+    }
+
+    .header-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      max-width:900px;
+      margin:0 auto;
+    }
+
+    .icon{
+      width:30px;
+      height:30px;
+      border-radius:6px;
+      background:var(--project);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:14px;
+      color:#0b0f14;
+    }
+
+    h1{
+      margin:0;
+      font-size:20px;
+      font-weight:600;
+      letter-spacing:.4px;
+    }
+
+    main{
+      max-width:900px;
+      margin:0 auto;
+      padding:24px;
+    }
+
+    .block{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:20px;
+      margin-bottom:24px;
+    }
+
+    .block-title{
+      font-size:14px;
+      font-weight:600;
+      margin-bottom:16px;
+      color:var(--muted);
+      letter-spacing:.3px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:16px;
+    }
+
+    label{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    input{
+      background:#0f1623;
+      border:1px solid var(--border);
+      border-radius:8px;
+      padding:10px 12px;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    input:focus{
+      outline:none;
+      border-color:var(--project);
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-row">
+    <div class="icon">S</div>
+    <h1>SERVICIOS VARIOS</h1>
+  </div>
+</header>
+
+<main>
+
+  <!-- BLOQUE 1 -->
+  <div class="block">
+    <div class="block-title">DATOS GENERALES</div>
+
+    <div class="field">
+      <label for="fecha">FECHA</label>
+      <input type="date" id="fecha">
+    </div>
+
+    <div class="field">
+      <label for="cliente">CLIENTE</label>
+      <input type="text" id="cliente" placeholder="Nombre del cliente">
+    </div>
+
+  </div>
+
+</main>
+
+</body>
+</html>
