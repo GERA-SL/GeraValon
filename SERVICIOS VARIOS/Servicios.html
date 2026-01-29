@@ -189,7 +189,6 @@ select:disabled{
         <option value="extraccion">SISTEMA DE EXTRACCIÓN</option>
         <option value="grasa">SEPARADOR DE GRASA</option>
         <option value="ventilacion">VENTILACIÓN</option>
-        <option value="industrial">INDUSTRIAL</option>
       </select>
     </div>
 
@@ -212,24 +211,23 @@ select:disabled{
 
 </main>
 <script>
-  const subtipos = {
-    filtracion: [
-      "FILTROS DE CAMPANA",
-      "FILTROS DE FILTRONIC",
-      "CARCASA DE FILTRONIC"
-    ],
-    extraccion: [
-      "CAMPANA",
-      "CAJA DE VENTILACION",
-      "CONDUCTOS",
-      "COCINA",
-      "OTROS"
-    ],
-    grasa: [
-      "MENOS DE 80 LITROS",
-      "MAYOR DE 80 LITROS"
-    ]
-  };
+  <div class="block">
+  <div class="block-title">DATOS GENERALES</div>
+
+  <div class="row-fields">
+
+    <div class="field">
+      <label for="fecha">FECHA</label>
+      <input type="date" id="fecha">
+    </div>
+
+    <div class="field">
+      <label for="cliente">CLIENTE</label>
+      <input type="text" id="cliente" placeholder="Nombre del cliente">
+    </div>
+
+  </div>
+</div>
 
   function actualizarSubtipo(){
     const categoria = document.getElementById("categoria").value;
