@@ -1,12 +1,135 @@
+
 <!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>GeraValon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GeraValon – Proyectos</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0d1117;
+      --panel:#161b22;
+      --border:#30363d;
+      --text:#e6edf3;
+      --muted:#8b949e;
+      --hover:#0f1623;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:'Inter', system-ui, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    header{
+      padding:20px 24px;
+      border-bottom:1px solid var(--border);
+      background:var(--panel);
+    }
+
+    header h1{
+      margin:0;
+      font-size:22px;
+      font-weight:600;
+    }
+
+    main{
+      max-width:720px;
+      margin:0 auto;
+      padding:0;
+    }
+
+    .list{
+      border-top:1px solid var(--border);
+    }
+
+    .row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:14px 18px;
+      border-bottom:1px solid var(--border);
+      cursor:pointer;
+    }
+
+    .row:hover{
+      background:var(--hover);
+    }
+
+    .icon{
+      width:26px;
+      height:26px;
+      border-radius:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:13px;
+      color:#0b0f14;
+      flex-shrink:0;
+    }
+
+    .name{
+      font-size:15px;
+      font-weight:500;
+    }
+  </style>
 </head>
-  
+
 <body>
-  <h1>GeraValon</h1>
-  <p>Web en construcción</p>
+
+<header>
+  <h1>Proyectos</h1>
+</header>
+
+<main>
+  <div class="list">
+
+    <div class="row" onclick="selectProject('TRADER')">
+      <div class="icon" style="background:#ff5a52">T</div>
+      <div class="name">TRADER</div>
+    </div>
+
+    <div class="row" onclick="selectProject('SERVICIOS VARIOS')">
+      <div class="icon" style="background:#a371f7">S</div>
+      <div class="name">SERVICIOS VARIOS</div>
+    </div>
+
+    <div class="row" onclick="selectProject('RECICLAJE DE ACEITES Y GRASAS')">
+      <div class="icon" style="background:#2ea043">R</div>
+      <div class="name">RECICLAJE DE ACEITES Y GRASAS</div>
+    </div>
+
+    <div class="row" onclick="selectProject('LIMPIEZA INDUSTRIAL')">
+      <div class="icon" style="background:#d29922">L</div>
+      <div class="name">LIMPIEZA INDUSTRIAL</div>
+    </div>
+
+    <div class="row" onclick="selectProject('LIMPIEZA HOSTELERIA')">
+      <div class="icon" style="background:#58a6ff">H</div>
+      <div class="name">LIMPIEZA HOSTELERIA</div>
+    </div>
+
+    <div class="row" onclick="selectProject('INSTALACION Y REPARACION')">
+      <div class="icon" style="background:#f0883e">I</div>
+      <div class="name">INSTALACION Y REPARACION</div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function selectProject(name){
+    alert("Proyecto seleccionado: " + name);
+    // aquí luego enlazamos a costes.html?proyecto=...
+  }
+</script>
+
 </body>
 </html>
