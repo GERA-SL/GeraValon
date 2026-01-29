@@ -111,6 +111,25 @@
       outline:none;
       border-color:var(--project);
     }
+    select{
+  background:#0f1623;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 12px;
+  color:var(--text);
+  font-size:14px;
+}
+
+select:focus{
+  outline:none;
+  border-color:var(--project);
+}
+
+/* cuando está deshabilitado */
+select:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
     .row-fields{
   display:grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -213,17 +232,28 @@
     const categoria = document.getElementById("categoria").value;
     const subtipo = document.getElementById("subtipo");
 
+    // Limpia opciones
     subtipo.innerHTML = "";
-    
+
+    // Si no hay subtipos para esa categoría, se deshabilita
     if(!categoria || !subtipos[categoria]){
-      subtipo.innerHTML = "<option>Selecciona primero una categoría</option>";
       subtipo.disabled = true;
+      subtipo.setAttribute("disabled", "disabled");
+      subtipo.innerHTML = "<option value=''>Selecciona primero una categoría</option>";
       return;
     }
 
+    // Habilita (doble seguro)
     subtipo.disabled = false;
-    subtipo.innerHTML = "<option value=''>Selecciona subtipo</option>";
+    subtipo.removeAttribute("disabled");
 
+    // Opción por defecto
+    const first = document.createElement("option");
+    first.value = "";
+    first.textContent = "Selecciona subtipo";
+    subtipo.appendChild(first);
+
+    // Rellena opciones
     subtipos[categoria].forEach(opcion => {
       const opt = document.createElement("option");
       opt.value = opcion;
@@ -231,6 +261,9 @@
       subtipo.appendChild(opt);
     });
   }
+
+  // Por si el navegador no dispara bien al inicio:
+  // actualizarSubtipo();
 </script>
 </body>
 </html>
