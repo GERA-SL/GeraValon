@@ -141,6 +141,42 @@
 
   </div>
 
+  <!-- BLOQUE 2 -->
+<div class="block">
+  <div class="block-title">TIPO DE SERVICIO</div>
+
+  <div class="row-fields">
+
+    <!-- DESPLEGABLE 1 -->
+    <div class="field">
+      <label for="categoria">CATEGORÍA</label>
+      <select id="categoria" onchange="actualizarSubtipo()">
+        <option value="">Selecciona categoría</option>
+        <option value="filtracion">FILTRACIÓN</option>
+        <option value="extraccion">SISTEMA DE EXTRACCIÓN</option>
+        <option value="grasa">SEPARADOR DE GRASA</option>
+        <option value="ventilacion">VENTILACIÓN</option>
+        <option value="industrial">INDUSTRIAL</option>
+      </select>
+    </div>
+
+    <!-- DESPLEGABLE 2 -->
+    <div class="field">
+      <label for="subtipo">SUBTIPO</label>
+      <select id="subtipo" disabled>
+        <option value="">Selecciona primero una categoría</option>
+      </select>
+    </div>
+
+    <!-- CAMPO 3 -->
+    <div class="field">
+      <label for="detalle">DETALLE</label>
+      <input type="text" id="detalle" placeholder="Observaciones / notas">
+    </div>
+
+  </div>
+</div>
+
 </main>
 
 </body>
