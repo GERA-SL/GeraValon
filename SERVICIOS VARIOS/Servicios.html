@@ -175,39 +175,7 @@ select:disabled{
 </div>
 
   <!-- BLOQUE 2 -->
-<div class="block">
-  <div class="block-title">TIPO DE SERVICIO</div>
 
-  <div class="row-fields">
-
-    <!-- DESPLEGABLE 1 -->
-    <div class="field">
-      <label for="categoria">CATEGORÍA</label>
-      <select id="categoria" onchange="actualizarSubtipo()">
-        <option value="">Selecciona categoría</option>
-        <option value="filtracion">FILTRACIÓN</option>
-        <option value="extraccion">SISTEMA DE EXTRACCIÓN</option>
-        <option value="grasa">SEPARADOR DE GRASA</option>
-        <option value="ventilacion">VENTILACIÓN</option>
-      </select>
-    </div>
-
-    <!-- DESPLEGABLE 2 -->
-    <div class="field">
-      <label for="subtipo">SUBTIPO</label>
-      <select id="subtipo" disabled>
-        <option value="">Selecciona primero una categoría</option>
-      </select>
-    </div>
-
-    <!-- CAMPO 3 -->
-    <div class="field">
-      <label for="detalle">DETALLE</label>
-      <input type="text" id="detalle" placeholder="Observaciones / notas">
-    </div>
-
-  </div>
-</div>
 
 </main>
 <script>
@@ -262,6 +230,63 @@ select:disabled{
       subtipo.appendChild(opt);
     });
   }
+  <script>
+/* ====== DUPLICAR LÍNEAS ====== */
+
+function agregarLinea(){
+  const contenedor = document.getElementById("lineas-servicio");
+  const primera = contenedor.querySelector(".linea-servicio");
+
+  const nueva = primera.cloneNode(true);
+
+  nueva.querySelectorAll("input").forEach(i => i.value = "");
+  nueva.querySelectorAll("select").forEach(s=>{
+    s.selectedIndex = 0;
+    if(s.classList.contains("subtipo")) s.disabled = true;
+  });
+
+  contenedor.appendChild(nueva);
+}
+
+
+/* ====== ACEPTAR (solo lectura) ====== */
+
+function aceptarLineas(){
+  document.querySelectorAll("#lineas-servicio input, #lineas-servicio select")
+    .forEach(el => el.disabled = true);
+}
+
+
+/* ====== SUBTIPOS POR LÍNEA ====== */
+
+function actualizarSubtipoLinea(select){
+  const linea = select.closest(".linea-servicio");
+  const subtipo = linea.querySelector(".subtipo");
+  const categoria = select.value;
+
+  subtipo.innerHTML = "";
+
+  if(!subtipos[categoria]){
+    subtipo.disabled = true;
+    subtipo.innerHTML = "<option value=''>Selecciona primero categoría</option>";
+    return;
+  }
+
+  subtipo.disabled = false;
+
+  const first = document.createElement("option");
+  first.value = "";
+  first.textContent = "Selecciona subtipo";
+  subtipo.appendChild(first);
+
+  subtipos[categoria].forEach(op => {
+    const opt = document.createElement("option");
+    opt.value = op;
+    opt.textContent = op;
+    subtipo.appendChild(opt);
+  });
+}
+</script>
 </script>
 </body>
 </html>
