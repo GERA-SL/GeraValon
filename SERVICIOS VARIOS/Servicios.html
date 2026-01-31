@@ -288,6 +288,29 @@
       color:var(--text);
       margin:4px 6px 0 0;
     }
+    @media print{
+  header,
+  #bloque-export,
+  button,
+  .hint{
+    display:none !important;
+  }
+
+  body{
+    background:#fff !important;
+    color:#000 !important;
+  }
+
+  .block{
+    border:1px solid #bbb !important;
+    background:#fff !important;
+  }
+
+  input, select{
+    border:none !important;
+    background:transparent !important;
+  }
+}
   </style>
 </head>
 
@@ -388,7 +411,7 @@
       </div>
     </div>
   </div>
-  <!-- BLOQUE 4 -->
+   <!-- BLOQUE 4 -->
   <div class="block" id="bloque-export">
     <div class="block-title">EXPORTAR</div>
 
@@ -810,6 +833,15 @@
 
     tareasObra = [];
   }
+  // ===== GENERAR PDF =====
+document.getElementById("btnPdf").addEventListener("click", function(){
+  try{
+    if(typeof modalOverlay !== "undefined"){
+      modalOverlay.style.display = "none";
+    }
+  }catch(e){}
+  window.print();
+});
 </script>
 
 </body>
