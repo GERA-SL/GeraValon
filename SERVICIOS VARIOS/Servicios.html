@@ -831,18 +831,21 @@
 
     tareasObra = [];
   }
-  <!-- BLOQUE 4 -->
-<div class="block" id="bloque-export">
-  <div class="block-title">EXPORTAR</div>
+ // ===== BOTÓN GENERAR PDF =====
+window.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("btnPdf");
 
-  <div class="btn-row">
-    <button type="button" id="btnPdf">GENERAR PDF</button>
-  </div>
+  if(!btn) return;
 
-  <div class="hint">
-    Abre el diálogo del navegador → “Guardar como PDF”.
-  </div>
-</div>
+  btn.addEventListener("click", () => {
+    // cerrar modal si estuviera abierto
+    if(typeof modalOverlay !== "undefined"){
+      modalOverlay.style.display = "none";
+    }
+
+    window.print(); // ← abre Guardar como PDF
+  });
+});
 </script>
 
 </body>
