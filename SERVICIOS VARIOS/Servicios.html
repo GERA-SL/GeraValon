@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SERVICIOS VARIOS – GeraValon</title>
 
+  <!-- Anti-caché (ayuda con GitHub Pages + navegador) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
@@ -354,7 +359,7 @@
     </div>
 
     <div class="hint">
-      Añade varias tareas (líneas). Al pulsar “ACEPTAR”, se eliminan las vacías y se pide el gasto UNA sola vez (por obra).
+      Añade varias tareas (líneas). “ACEPTAR” elimina vacías y abre el menú de gastos UNA sola vez (por obra).
     </div>
   </div>
 
@@ -369,14 +374,18 @@
         <thead>
           <tr>
             <th style="width:34%;">TAREAS (OBRA)</th>
-            <th style="width:24%;">OPERARIOS / HORAS</th>
-            <th style="width:16%;">DESPLAZAMIENTO</th>
-            <th style="width:16%;">MATERIAL + OTROS</th>
-            <th style="width:10%;">TOTAL €</th>
+            <th style="width:28%;">PERSONAL (13€/h)</th>
+            <th style="width:18%;">DESPLAZAMIENTO (0,26€/km)</th>
+            <th style="width:12%;">ÚTILES</th>
+            <th style="width:8%;">TOTAL €</th>
           </tr>
         </thead>
         <tbody id="tbody-resumen"></tbody>
       </table>
+
+      <div class="hint" style="margin-top:12px;">
+        TOTAL = Personal + Km + Útiles + Material + Otros.
+      </div>
     </div>
   </div>
 
@@ -387,10 +396,10 @@
   <div class="modal">
     <div class="modal-header">
       <div>
-        <div class="modal-title" id="modalTitulo">GASTOS DE LA OBRA</div>
-        <div class="modal-sub" id="modalSub">Se aplican a todas las tareas del Bloque 2</div>
+        <div class="modal-title">GASTOS DE LA OBRA</div>
+        <div class="modal-sub">Se aplican a todas las tareas del Bloque 2</div>
       </div>
-      <div class="mono" id="modalContador"></div>
+      <div class="mono" id="modalTotalesTop">Total: 0,00 €</div>
     </div>
 
     <div class="modal-body">
@@ -409,17 +418,29 @@
       <div class="grid-2">
         <div class="field">
           <label>KM</label>
-          <input type="number" id="km" min="0" step="0.1" placeholder="0">
+          <input type="number" id="km" min="0" step="0.1" placeholder="0" oninput="recalcularTotalesModal()">
         </div>
         <div class="field">
           <label>TIPO</label>
-          <select id="tipoKm">
+          <select id="tipoKm" onchange="recalcularTotalesModal()">
             <option value="">(opcional)</option>
             <option value="coche">Coche</option>
             <option value="furgoneta">Furgoneta</option>
             <option value="moto">Moto</option>
             <option value="otro">Otro</option>
           </select>
+        </div>
+      </div>
+
+      <div class="section-title">DESGASTE ÚTILES (FIJO POR OBRA)</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>€</label>
+          <input type="number" id="fijoUtiles" min="0" step="0.01" placeholder="0" oninput="recalcularTotalesModal()">
+        </div>
+        <div class="field">
+          <label>Nota (opcional)</label>
+          <input type="text" id="notaUtiles" placeholder="Ej. fregonas, cubos, espátulas..." oninput="recalcularTotalesModal()">
         </div>
       </div>
 
@@ -448,6 +469,11 @@
 </div>
 
 <script>
+  /* ====== CONSTANTES DE COSTE ====== */
+  const COSTE_HORA = 13;
+  const COSTE_KM = 0.26;
+  const FIJO_UTENSILIOS = 3.00;
+
   /* SUBTIPOS */
   const subtipos = {
     filtracion: ["FILTROS DE CAMPANA","FILTROS DE FILTRONIC","CARCASA DE FILTRONIC"],
@@ -524,8 +550,18 @@
   const tablaOperarios = document.getElementById("tablaOperarios");
   const tablaMaterial = document.getElementById("tablaMaterial");
   const tablaOtros = document.getElementById("tablaOtros");
+  const modalTotalesTop = document.getElementById("modalTotalesTop");
 
-  const operarios = ["", "Operario 1", "Operario 2", "Operario 3", "Operario 4", "Operario 5"];
+  const operarios = [
+    "",
+    "DAVID JUAREZ",
+    "DANIEL PRIETO",
+    "SEILA MARTIN",
+    "SANDRA CASTRILLON",
+    "ENRIQUE LUGONES",
+    "JAIRO ZARZA",
+    "ANTONIO ADROVER"
+  ];
 
   function aceptarLineas(){
     const contenedor = document.getElementById("lineas-servicio");
@@ -559,54 +595,52 @@
   }
 
   function abrirModalObra(){
-    // mostrar tareas (píldoras)
     modalTareas.innerHTML = tareasObra.map(t => `<span class="pill">${escapeHtml(t.label)}</span>`).join("");
 
-    // reset desplazamiento
     document.getElementById("km").value = "";
     document.getElementById("tipoKm").value = "";
+    document.getElementById("fijoUtiles").value = FIJO_UTENSILIOS.toFixed(2);
+    document.getElementById("notaUtiles").value = "";
 
-    // operarios 5
     limpiarFilas(tablaOperarios, 1);
     for(let r=0; r<5; r++){
       const row = document.createElement("div");
       row.className = "row";
       row.innerHTML = `
         <div>
-          <select class="op-nombre">
+          <select class="op-nombre" onchange="recalcularTotalesModal()">
             ${operarios.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o || "(vacío)")}</option>`).join("")}
           </select>
         </div>
-        <div><input type="number" class="op-horas" min="0" step="0.25" placeholder="0"></div>
+        <div><input type="number" class="op-horas" min="0" step="0.25" placeholder="0" oninput="recalcularTotalesModal()"></div>
       `;
       tablaOperarios.appendChild(row);
     }
 
-    // material 5
     limpiarFilas(tablaMaterial, 1);
     for(let r=0; r<5; r++){
       const row = document.createElement("div");
       row.className = "row row-3";
       row.innerHTML = `
-        <div><input type="number" class="mat-eur" min="0" step="0.01" placeholder="0"></div>
+        <div><input type="number" class="mat-eur" min="0" step="0.01" placeholder="0" oninput="recalcularTotalesModal()"></div>
         <div><input type="text" class="mat-con" placeholder="Concepto"></div>
       `;
       tablaMaterial.appendChild(row);
     }
 
-    // otros 5
     limpiarFilas(tablaOtros, 1);
     for(let r=0; r<5; r++){
       const row = document.createElement("div");
       row.className = "row row-3";
       row.innerHTML = `
-        <div><input type="number" class="otr-eur" min="0" step="0.01" placeholder="0"></div>
+        <div><input type="number" class="otr-eur" min="0" step="0.01" placeholder="0" oninput="recalcularTotalesModal()"></div>
         <div><input type="text" class="otr-con" placeholder="Concepto"></div>
       `;
       tablaOtros.appendChild(row);
     }
 
     modalOverlay.style.display = "flex";
+    recalcularTotalesModal();
   }
 
   function cerrarModal(confirmado){
@@ -618,7 +652,13 @@
   }
 
   function aceptarGastosObra(){
-    // operarios
+    const data = leerDatosModal();
+    modalOverlay.style.display = "none";
+    construirResumenObra(data);
+    alert("Gastos guardados. Revisa el Bloque 3 (Resumen).");
+  }
+
+  function leerDatosModal(){
     const opRows = Array.from(tablaOperarios.querySelectorAll(".row")).slice(1);
     const ops = opRows.map(r => {
       const nombre = r.querySelector(".op-nombre").value.trim();
@@ -626,12 +666,18 @@
       return { nombre, horas: isNaN(horas) ? 0 : horas };
     }).filter(x => (x.nombre && x.nombre !== "") || x.horas > 0);
 
-    // desplazamiento
+    const totalHoras = ops.reduce((s,x)=> s + (x.horas || 0), 0);
+    const costePersonal = totalHoras * COSTE_HORA;
+
     const km = parseFloat(document.getElementById("km").value || "0");
     const kmVal = isNaN(km) ? 0 : km;
     const tipoKm = document.getElementById("tipoKm").value || "";
+    const costeKm = kmVal * COSTE_KM;
 
-    // material
+    const fijoUtiles = parseFloat(document.getElementById("fijoUtiles").value || "0");
+    const fijoUtilesVal = isNaN(fijoUtiles) ? 0 : fijoUtiles;
+    const notaUtiles = (document.getElementById("notaUtiles").value || "").trim();
+
     const matRows = Array.from(tablaMaterial.querySelectorAll(".row")).slice(1);
     const material = matRows.map(r => {
       const eur = parseFloat(r.querySelector(".mat-eur").value || "0");
@@ -639,7 +685,6 @@
       return { eur: isNaN(eur) ? 0 : eur, con };
     }).filter(x => x.eur > 0 || x.con.length > 0);
 
-    // otros
     const otrRows = Array.from(tablaOtros.querySelectorAll(".row")).slice(1);
     const otros = otrRows.map(r => {
       const eur = parseFloat(r.querySelector(".otr-eur").value || "0");
@@ -649,23 +694,35 @@
 
     const totalMaterial = material.reduce((s,x)=> s + (x.eur||0), 0);
     const totalOtros = otros.reduce((s,x)=> s + (x.eur||0), 0);
-    const total = totalMaterial + totalOtros;
 
-    modalOverlay.style.display = "none";
+    const total = costePersonal + costeKm + fijoUtilesVal + totalMaterial + totalOtros;
 
-    construirResumenObra({
+    return {
       tareas: tareasObra,
       operarios: ops,
+      totalHoras,
+      costePersonal,
       km: kmVal,
       tipoKm,
+      costeKm,
+      fijoUtiles: fijoUtilesVal,
+      notaUtiles,
       totalMaterial,
       totalOtros,
       total,
       material,
       otros
-    });
+    };
+  }
 
-    alert("Gastos guardados. Revisa el Bloque 3 (Resumen).");
+  function recalcularTotalesModal(){
+    try{
+      const d = leerDatosModal();
+      modalTotalesTop.textContent =
+        `Total: ${fmtEur(d.total)} | Personal: ${fmtEur(d.costePersonal)} | Km: ${fmtEur(d.costeKm)} | Útiles: ${fmtEur(d.fijoUtiles)}`;
+    } catch(e){
+      modalTotalesTop.textContent = "Total: 0,00 €";
+    }
   }
 
   function construirResumenObra(data){
@@ -677,26 +734,26 @@
       return `<div><b>${escapeHtml(t.label)}</b>${det}</div>`;
     }).join("<div style='height:8px'></div>");
 
-    const opsHtml = (data.operarios.length)
+    const personalHtml = (data.operarios.length)
       ? data.operarios.map(o => `${escapeHtml(o.nombre || "(sin nombre)")}: ${fmt(o.horas)}h`).join("<br>")
+        + `<div class="small" style="margin-top:6px;"><b>Total horas:</b> ${fmt(data.totalHoras)}h</div>`
+        + `<div class="small"><b>Coste personal:</b> ${fmtEur(data.costePersonal)}</div>`
       : "<span style='color:var(--muted)'>—</span>";
 
     const despHtml = (data.km > 0)
       ? `${fmt(data.km)} km ${data.tipoKm ? "(" + escapeHtml(data.tipoKm) + ")" : ""}`
+        + `<div class="small" style="margin-top:6px;"><b>Coste km:</b> ${fmtEur(data.costeKm)}</div>`
       : "<span style='color:var(--muted)'>—</span>";
 
-    const matHtml = []
-    if(data.material.length) matHtml.push(`<div><b>Material:</b> ${fmtEur(data.totalMaterial)}</div>`);
-    if(data.otros.length) matHtml.push(`<div><b>Otros:</b> ${fmtEur(data.totalOtros)}</div>`);
-    const moHtml = matHtml.length ? matHtml.join("") : "<span style='color:var(--muted)'>—</span>";
+    const utilesHtml = `${fmtEur(data.fijoUtiles)}${data.notaUtiles ? `<div class="small">${escapeHtml(data.notaUtiles)}</div>` : ""}`;
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${tareasHtml}</td>
-      <td>${opsHtml}</td>
+      <td>${personalHtml}</td>
       <td>${despHtml}</td>
-      <td>${moHtml}</td>
-      <td class="mono">${fmtEur(data.total)}</td>
+      <td>${utilesHtml}<div class="small" style="margin-top:8px;"><b>Material:</b> ${fmtEur(data.totalMaterial)}<br><b>Otros:</b> ${fmtEur(data.totalOtros)}</div></td>
+      <td class="mono"><b>${fmtEur(data.total)}</b></td>
     `;
     tbody.appendChild(tr);
 
@@ -711,12 +768,13 @@
   function fmtEur(n){ return `${fmt(n)} €`; }
 
   function escapeHtml(str){
-    return String(str)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+    const s = String(str);
+    return s
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
   }
 
   function resetTodo(){
