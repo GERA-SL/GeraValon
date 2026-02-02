@@ -445,11 +445,10 @@
 
     // Horas
     const inpHours = document.createElement("input");
-    inpHours.type = "number";
-    inpHours.step = "0.25";
-    inpHours.min = "0";
-    inpHours.placeholder = "0";
-    inpHours.value = (prefill.hours ?? "");
+inpHours.type = "time";
+inpHours.step = "60";              // minutos
+inpHours.value = prefill.hours || "00:00";
+inpHours.title = "Duración (HH:MM)";
 
     // Delete
     const btnDel = document.createElement("button");
@@ -476,12 +475,12 @@
     const data = [];
     for(const row of $("rows").children){
       const [d, job, cat, hrs] = row.querySelectorAll("input, select");
-      const hours = parseFloat(hrs.value);
-      data.push({
-        date: d.value || "",
-        job: job.value || "",
-        cat: cat.value || "",
-        hours: Number.isFinite(hours) ? hours : 0
+      const hhmm = (hrs.value || "00:00").split(":");
+const h = parseInt(hhmm[0] || "0", 10);
+const m = parseInt(hhmm[1] || "0", 10);
+const hours = (Number.isFinite(h) ? h : 0) + (Number.isFinite(m) ? m : 0) / 60;
+
+hours: hours
       });
     }
     return data;
