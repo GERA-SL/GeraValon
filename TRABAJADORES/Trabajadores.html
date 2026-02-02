@@ -472,19 +472,27 @@ inpHours.title = "Duración (HH:MM)";
   }
 
   function getRowsData(){
-    const data = [];
-    for(const row of $("rows").children){
-      const [d, job, cat, hrs] = row.querySelectorAll("input, select");
-      const hhmm = (hrs.value || "00:00").split(":");
-const h = parseInt(hhmm[0] || "0", 10);
-const m = parseInt(hhmm[1] || "0", 10);
-const hours = (Number.isFinite(h) ? h : 0) + (Number.isFinite(m) ? m : 0) / 60;
+  const data = [];
 
-hours: hours
-      });
-    }
-    return data;
+  for(const row of $("rows").children){
+    const [d, job, cat, hrs] = row.querySelectorAll("input, select");
+
+    const hhmm = (hrs.value || "00:00").split(":");
+    const h = parseInt(hhmm[0] || "0", 10);
+    const m = parseInt(hhmm[1] || "0", 10);
+
+    const hours = h + (m / 60);
+
+    data.push({
+      date: d.value || "",
+      job: job.value || "",
+      cat: cat.value || "",
+      hours: hours
+    });
   }
+
+  return data;
+}
 
   // ====== SUMMARY ======
   function buildSummary(){
