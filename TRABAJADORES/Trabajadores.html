@@ -1,1 +1,572 @@
 
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TRABAJADORES – GeraValon</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0d1117;
+      --panel:#161b22;
+      --border:#30363d;
+      --text:#e6edf3;
+      --muted:#8b949e;
+      --hover:#0f1623;
+      --accent:#2ea043;
+      --danger:#ff5a52;
+      --warn:#d29922;
+      --pill:#21262d;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header{
+      padding:20px 24px;
+      border-bottom:1px solid var(--border);
+      background:var(--panel);
+      position:sticky;
+      top:0;
+      z-index:10;
+    }
+    header .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    header h1{
+      margin:0;
+      font-size:20px;
+      font-weight:600;
+      letter-spacing:.3px;
+    }
+    header .sub{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:4px;
+    }
+    main{
+      max-width:1100px;
+      margin:0 auto;
+      padding:18px 14px 40px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .block{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .block-title{
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      font-weight:600;
+      font-size:13px;
+      letter-spacing:.8px;
+      color:var(--muted);
+      text-transform:uppercase;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .block-body{ padding:14px; }
+
+    .grid{
+      display:grid;
+      gap:12px;
+    }
+    .grid.cols-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.cols-2{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    @media (max-width: 900px){
+      .grid.cols-3{ grid-template-columns: 1fr; }
+      .grid.cols-2{ grid-template-columns: 1fr; }
+      header .top{ align-items:flex-start; flex-direction:column; }
+    }
+
+    label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    input, select, textarea{
+      width:100%;
+      background:#0b1220;
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:10px 10px;
+      font-size:14px;
+      outline:none;
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color:#4b5563;
+      box-shadow:0 0 0 2px rgba(46,160,67,.15);
+    }
+    textarea{ min-height:38px; resize:vertical; }
+
+    .btn-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-start;
+      margin-top:12px;
+    }
+    button{
+      appearance:none;
+      border:1px solid var(--border);
+      background:var(--pill);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:10px;
+      font-weight:600;
+      font-size:13px;
+      cursor:pointer;
+    }
+    button:hover{ background:var(--hover); }
+    .btn-primary{
+      border-color:rgba(46,160,67,.55);
+      background:rgba(46,160,67,.16);
+    }
+    .btn-primary:hover{ background:rgba(46,160,67,.22); }
+    .btn-danger{
+      border-color:rgba(255,90,82,.55);
+      background:rgba(255,90,82,.12);
+    }
+    .btn-danger:hover{ background:rgba(255,90,82,.18); }
+    .btn-warn{
+      border-color:rgba(210,153,34,.55);
+      background:rgba(210,153,34,.14);
+    }
+    .btn-warn:hover{ background:rgba(210,153,34,.20); }
+
+    /* Tabla de líneas */
+    .lines{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .lines .head, .lines .row{
+      display:grid;
+      grid-template-columns: 160px 1.4fr 260px 110px 44px;
+      gap:10px;
+      padding:10px;
+      align-items:center;
+    }
+    .lines .head{
+      background:#0b1220;
+      border-bottom:1px solid var(--border);
+      color:var(--muted);
+      font-size:12px;
+      font-weight:600;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+    }
+    .lines .row{
+      border-bottom:1px solid var(--border);
+      background:transparent;
+    }
+    .lines .row:last-child{ border-bottom:none; }
+    .icon-btn{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+    }
+    .muted{
+      color:var(--muted);
+      font-size:12px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+    .summary{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 900px){
+      .lines .head, .lines .row{
+        grid-template-columns: 1fr;
+      }
+      .summary{ grid-template-columns: 1fr; }
+    }
+
+    .sum-card{
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#0b1220;
+      padding:12px;
+    }
+    .sum-card h3{
+      margin:0 0 10px 0;
+      font-size:13px;
+      color:var(--muted);
+      font-weight:700;
+      letter-spacing:.4px;
+      text-transform:uppercase;
+    }
+    .sum-line{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      padding:8px 0;
+      border-bottom:1px dashed rgba(48,54,61,.65);
+      font-size:14px;
+    }
+    .sum-line:last-child{ border-bottom:none; }
+    .sum-strong{
+      font-weight:700;
+      color:var(--text);
+    }
+
+    /* impresión */
+    @media print{
+      header{ position:static; }
+      .no-print{ display:none !important; }
+      body{ background:white; color:black; }
+      .block{ border-color:#ddd; }
+      .block-title{ color:#333; }
+      input, select, textarea{
+        border-color:#ddd;
+        color:black;
+        background:white;
+      }
+      .lines .head{ color:#333; background:#f5f5f5; }
+      .sum-card{ background:#fafafa; border-color:#ddd; }
+      .pill{ border-color:#ddd; color:#333; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="top">
+    <div>
+      <h1>TRABAJADORES</h1>
+      <div class="sub">Registro de horas por actividad · GeraValon</div>
+    </div>
+    <div class="pill no-print" id="statusPill">Sin resumen</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- BLOQUE 1 -->
+  <section class="block">
+    <div class="block-title">BLOQUE 1 · SELECCIÓN</div>
+    <div class="block-body">
+      <div class="grid cols-3">
+        <div>
+          <label for="month">Mes</label>
+          <select id="month">
+            <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+            <option value="4">Abril</option><option value="5">Mayo</option><option value="6">Junio</option>
+            <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+            <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="year">Año</label>
+          <input id="year" type="number" min="2000" max="2100" />
+        </div>
+
+        <div>
+          <label for="worker">Trabajador</label>
+          <select id="worker">
+            <option value="DAVID">DAVID</option>
+            <option value="DANIEL">DANIEL</option>
+            <option value="SANDRA">SANDRA</option>
+            <option value="SEILA">SEILA</option>
+            <option value="JAIRO">JAIRO</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="muted" style="margin-top:10px;">
+        Consejo: rellena Bloque 1 y luego añade líneas en Bloque 2. Después “Aceptar y pasar a resumen”.
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 2 -->
+  <section class="block">
+    <div class="block-title">
+      <span>BLOQUE 2 · PARTES DE TRABAJO</span>
+      <span class="no-print muted" id="lineCount">0 líneas</span>
+    </div>
+
+    <div class="block-body">
+      <div class="lines">
+        <div class="head">
+          <div>Fecha</div>
+          <div>Trabajo</div>
+          <div>Categoría</div>
+          <div>Horas</div>
+          <div class="no-print">✕</div>
+        </div>
+
+        <div id="rows"></div>
+      </div>
+
+      <div class="btn-row no-print">
+        <button type="button" class="btn-warn" id="btnAdd">+ AÑADIR LÍNEA</button>
+        <button type="button" class="btn-primary" id="btnSummary">ACEPTAR Y PASAR A RESUMEN</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOQUE 3 -->
+  <section class="block" id="block3">
+    <div class="block-title">
+      <span>BLOQUE 3 · RESUMEN</span>
+      <span class="muted" id="sumMeta">—</span>
+    </div>
+    <div class="block-body">
+      <div class="summary">
+        <div class="sum-card">
+          <h3>Horas por actividad</h3>
+          <div id="sumByCat"></div>
+        </div>
+
+        <div class="sum-card">
+          <h3>Total y porcentajes</h3>
+          <div id="sumTotals"></div>
+        </div>
+      </div>
+
+      <div class="btn-row no-print">
+        <button type="button" id="btnPdf">GENERAR PDF</button>
+      </div>
+
+      <div class="muted no-print" style="margin-top:10px;">
+        Se abrirá el diálogo del navegador → “Guardar como PDF”.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ====== CONFIG ======
+  const CATEGORIES = [
+    "LIMPIEZA HOSTELERIA",
+    "LIMPIEZA INDUSTRIAL",
+    "SERVICIOS",
+    "MANTENIMIENTO NAVE",
+    "TRABAJOS PARA RECICLAJE"
+  ];
+
+  // ====== HELPERS ======
+  const $ = (id) => document.getElementById(id);
+
+  function todayISO(){
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth()+1).padStart(2,'0');
+    const dd = String(d.getDate()).padStart(2,'0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function setDefaultMonthYear(){
+    const d = new Date();
+    $("month").value = String(d.getMonth()+1);
+    $("year").value = String(d.getFullYear());
+  }
+
+  function makeCategorySelect(value=""){
+    const sel = document.createElement("select");
+    CATEGORIES.forEach(cat=>{
+      const opt = document.createElement("option");
+      opt.value = cat;
+      opt.textContent = cat;
+      sel.appendChild(opt);
+    });
+    if(value) sel.value = value;
+    return sel;
+  }
+
+  function updateLineCount(){
+    const count = $("rows").children.length;
+    $("lineCount").textContent = `${count} línea${count===1?"":"s"}`;
+  }
+
+  // ====== ROWS ======
+  let rowId = 0;
+
+  function addRow(prefill={}){
+    rowId += 1;
+    const wrap = document.createElement("div");
+    wrap.className = "row";
+    wrap.dataset.rowId = String(rowId);
+
+    // Fecha
+    const inpDate = document.createElement("input");
+    inpDate.type = "date";
+    inpDate.value = prefill.date || todayISO();
+
+    // Trabajo
+    const inpJob = document.createElement("input");
+    inpJob.type = "text";
+    inpJob.placeholder = "Ej: Limpieza campana / mantenimiento / recogida...";
+    inpJob.value = prefill.job || "";
+
+    // Categoría
+    const selCat = makeCategorySelect(prefill.cat || CATEGORIES[0]);
+
+    // Horas
+    const inpHours = document.createElement("input");
+    inpHours.type = "number";
+    inpHours.step = "0.25";
+    inpHours.min = "0";
+    inpHours.placeholder = "0";
+    inpHours.value = (prefill.hours ?? "");
+
+    // Delete
+    const btnDel = document.createElement("button");
+    btnDel.type = "button";
+    btnDel.className = "icon-btn btn-danger no-print";
+    btnDel.title = "Eliminar línea";
+    btnDel.textContent = "✕";
+    btnDel.addEventListener("click", ()=>{
+      wrap.remove();
+      updateLineCount();
+    });
+
+    wrap.appendChild(inpDate);
+    wrap.appendChild(inpJob);
+    wrap.appendChild(selCat);
+    wrap.appendChild(inpHours);
+    wrap.appendChild(btnDel);
+
+    $("rows").appendChild(wrap);
+    updateLineCount();
+  }
+
+  function getRowsData(){
+    const data = [];
+    for(const row of $("rows").children){
+      const [d, job, cat, hrs] = row.querySelectorAll("input, select");
+      const hours = parseFloat(hrs.value);
+      data.push({
+        date: d.value || "",
+        job: job.value || "",
+        cat: cat.value || "",
+        hours: Number.isFinite(hours) ? hours : 0
+      });
+    }
+    return data;
+  }
+
+  // ====== SUMMARY ======
+  function buildSummary(){
+    const month = parseInt($("month").value,10);
+    const year = parseInt($("year").value,10);
+    const worker = $("worker").value;
+
+    const rows = getRowsData().filter(r => (r.job.trim() !== "" || r.hours > 0 || r.cat));
+
+    // Suma por categoría
+    const byCat = {};
+    CATEGORIES.forEach(c => byCat[c] = 0);
+
+    let total = 0;
+    for(const r of rows){
+      const h = Math.max(0, r.hours || 0);
+      if(byCat[r.cat] === undefined) byCat[r.cat] = 0;
+      byCat[r.cat] += h;
+      total += h;
+    }
+
+    // Render
+    $("sumMeta").textContent = `${worker} · ${String(month).padStart(2,'0')}/${year}`;
+
+    const byCatEl = $("sumByCat");
+    byCatEl.innerHTML = "";
+    CATEGORIES.forEach(cat=>{
+      const line = document.createElement("div");
+      line.className = "sum-line";
+      line.innerHTML = `<span>${cat}</span><span class="sum-strong">${byCat[cat].toFixed(2)} h</span>`;
+      byCatEl.appendChild(line);
+    });
+
+    const totalsEl = $("sumTotals");
+    totalsEl.innerHTML = "";
+
+    // Total
+    const lineTotal = document.createElement("div");
+    lineTotal.className = "sum-line";
+    lineTotal.innerHTML = `<span class="sum-strong">TOTAL</span><span class="sum-strong">${total.toFixed(2)} h</span>`;
+    totalsEl.appendChild(lineTotal);
+
+    // % por categoría
+    CATEGORIES.forEach(cat=>{
+      const pct = total > 0 ? (byCat[cat] / total) * 100 : 0;
+      const line = document.createElement("div");
+      line.className = "sum-line";
+      line.innerHTML = `<span>% ${cat}</span><span>${pct.toFixed(1)}%</span>`;
+      totalsEl.appendChild(line);
+    });
+
+    // Status pill
+    const pill = $("statusPill");
+    if(total > 0){
+      pill.textContent = `Resumen listo · ${total.toFixed(2)} h`;
+      pill.style.borderColor = "rgba(46,160,67,.55)";
+      pill.style.color = "var(--text)";
+    }else{
+      pill.textContent = "Sin horas";
+      pill.style.borderColor = "rgba(210,153,34,.55)";
+      pill.style.color = "var(--muted)";
+    }
+
+    // Scroll al bloque 3
+    $("block3").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  // ====== PDF ======
+  function generatePdf(){
+    // Imprimir/Guardar PDF desde el navegador
+    window.print();
+  }
+
+  // ====== INIT ======
+  setDefaultMonthYear();
+  addRow(); // primera línea por defecto
+
+  $("btnAdd").addEventListener("click", ()=> addRow());
+  $("btnSummary").addEventListener("click", buildSummary);
+  $("btnPdf").addEventListener("click", generatePdf);
+</script>
+
+</body>
+</html>
