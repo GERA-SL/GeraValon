@@ -373,7 +373,45 @@
       </div>
     </div>
   </section>
+<!-- BLOQUE 4 -->
+<section class="block" style="max-width:700px">
+  <div class="block-title">BLOQUE 4 · COSTE REAL / SALARIO MES</div>
 
+  <div class="block-body grid cols-2">
+
+    <!-- IZQUIERDA -->
+    <div>
+      <label><b>Coste real trabajador</b></label>
+
+      <label>Gasto empresa según nómina (€/mes)</label>
+      <input id="lGasto" type="number" step="0.01">
+
+      <label>Horas mensuales trabajadas</label>
+      <input id="lHoras" type="number" step="0.1" value="160">
+
+      <button id="btnLeft" class="btn-primary">CALCULAR</button>
+
+      <div class="muted" id="lResultado"></div>
+    </div>
+
+
+    <!-- DERECHA -->
+    <div>
+      <label><b>Cuánto pagar este mes</b></label>
+
+      <label>Precio €/hora acordado</label>
+      <input id="rPrecio" type="number" step="0.01">
+
+      <label>Horas trabajadas este mes</label>
+      <input id="rHoras" type="number" step="0.1">
+
+      <button id="btnRight" class="btn-warn">CALCULAR</button>
+
+      <div class="muted" id="rResultado"></div>
+    </div>
+
+  </div>
+</section>
 </main>
 
 <script>
@@ -573,6 +611,33 @@ inpHours.title = "Duración (HH:MM)";
   $("btnAdd").addEventListener("click", ()=> addRow());
   $("btnSummary").addEventListener("click", buildSummary);
   $("btnPdf").addEventListener("click", generatePdf);
+
+  // IZQUIERDA
+$("btnLeft").addEventListener("click", ()=>{
+
+  const gasto = parseFloat($("lGasto").value||0);
+  const horas = parseFloat($("lHoras").value||0);
+
+  const gastoReal = (gasto*13)/12;
+  const costeHora = gastoReal/horas;
+
+  $("lResultado").innerHTML =
+    `Gasto mensual real: <b>${gastoReal.toFixed(2)} €</b><br>
+     Coste hora real: <b>${costeHora.toFixed(2)} €/h</b>`;
+});
+
+
+// DERECHA
+$("btnRight").addEventListener("click", ()=>{
+
+  const precio = parseFloat($("rPrecio").value||0);
+  const horas = parseFloat($("rHoras").value||0);
+
+  const total = precio*horas;
+
+  $("rResultado").innerHTML =
+    `Debe cobrar: <b>${total.toFixed(2)} €</b>`;
+});
 </script>
 
 </body>
