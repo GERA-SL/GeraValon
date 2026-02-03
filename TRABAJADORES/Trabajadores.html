@@ -248,22 +248,86 @@
       color:var(--text);
     }
 
-    /* impresión */
-    @media print{
-      header{ position:static; }
-      .no-print{ display:none !important; }
-      body{ background:white; color:black; }
-      .block{ border-color:#ddd; }
-      .block-title{ color:#333; }
-      input, select, textarea{
-        border-color:#ddd;
-        color:black;
-        background:white;
-      }
-      .lines .head{ color:#333; background:#f5f5f5; }
-      .sum-card{ background:#fafafa; border-color:#ddd; }
-      .pill{ border-color:#ddd; color:#333; }
-    }
+    /* ===== IMPRESIÓN OPTIMIZADA ===== */
+@media print{
+
+  @page{ size:A4; margin:12mm; }
+
+  body{
+    background:white;
+    color:black;
+    font-size:11px;
+  }
+
+  header{
+    position:static;
+    padding:6px 0;
+  }
+
+  /* ❌ ocultar formularios */
+  #block1,
+  #block2,
+  #block4,
+  .no-print{
+    display:none !important;
+  }
+
+  /* ✅ mostrar bloque impresión */
+  .print-only{
+    display:block !important;
+  }
+
+  /* cabecera compacta */
+  header .top{
+    flex-direction:row;
+    justify-content:space-between;
+  }
+
+  header h1{
+    font-size:14px;
+  }
+
+  header .sub{
+    font-size:11px;
+  }
+
+  /* resumen grande */
+  #block3{
+    margin-top:6px;
+    page-break-inside:avoid;
+  }
+
+  /* listado 2 columnas */
+  .print-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px 30px;
+    font-size:10px;
+  }
+
+  .print-grid div{
+    border-bottom:1px dotted #ccc;
+    padding:3px 0;
+  }
+
+  .block{
+    border-color:#ddd;
+  }
+
+  .block-title{
+    color:#333;
+  }
+
+  .sum-card{
+    background:#fafafa;
+    border-color:#ddd;
+  }
+
+  .pill{
+    border-color:#ddd;
+    color:#333;
+  }
+}
   </style>
 </head>
 
@@ -410,6 +474,14 @@
       <div class="muted" id="rResultado"></div>
     </div>
 
+  </div>
+</section>
+
+  <!-- BLOQUE PDF SOLO IMPRESIÓN -->
+<section class="block print-only" id="blockPrintLines">
+  <div class="block-title">PARTES DEL MES (resumen)</div>
+  <div class="block-body">
+    <div id="printLines"></div>
   </div>
 </section>
 </main>
@@ -637,6 +709,35 @@ $("btnRight").addEventListener("click", ()=>{
 
   $("rResultado").innerHTML =
     `Debe cobrar: <b>${total.toFixed(2)} €</b>`;
+});
+
+  function buildPrintLines(){
+
+  const rows = getRowsData().filter(r => r.hours > 0);
+
+  const container = $("printLines");
+  container.innerHTML = "";
+
+  const table = document.createElement("div");
+  table.className = "print-grid";
+
+  rows.forEach(r=>{
+    const line = document.createElement("div");
+
+    const hh = r.hours.toFixed(2);
+
+    line.textContent = `${r.date}   ${r.job.substring(0,20)}   ${hh}h`;
+
+    table.appendChild(line);
+  });
+
+  container.appendChild(table);
+}
+
+// cuando generas resumen → también prepara impresión
+$("btnSummary").addEventListener("click", ()=>{
+  buildSummary();
+  buildPrintLines();
 });
 </script>
 
