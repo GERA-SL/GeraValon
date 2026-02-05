@@ -118,7 +118,6 @@
       box-shadow:0 0 0 2px rgba(46,160,67,.15);
     }
     textarea{ min-height:38px; resize:vertical; }
-
     .btn-row{
       display:flex;
       flex-wrap:wrap;
@@ -255,6 +254,27 @@
 }
 .row.dragging{
   opacity: .55;
+}
+    /* === DRAG HANDLE (☰) === */
+.drag-handle{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.03);
+  color:var(--muted);
+  cursor: grab;
+  user-select:none;
+}
+.drag-handle:active{ cursor: grabbing; }
+.row.dragging{ opacity:.55; }
+
+/* Ajuste columnas: añadimos 44px al principio para el asa */
+.lines .head, .lines .row{
+  grid-template-columns: 44px 160px 1.4fr 260px 110px 44px;
 }
     /* ===== IMPRESIÓN OPTIMIZADA ===== */
 @media print{
@@ -548,7 +568,15 @@
     const wrap = document.createElement("div");
     wrap.className = "row";
     wrap.dataset.rowId = String(rowId);
+wrap.draggable = true;
 
+wrap.addEventListener("dragstart", () => {
+  wrap.classList.add("dragging");
+});
+
+wrap.addEventListener("dragend", () => {
+  wrap.classList.remove("dragging");
+});
     // Fecha
     const inpDate = document.createElement("input");
     inpDate.type = "date";
@@ -749,6 +777,35 @@ $("btnSummary").addEventListener("click", ()=>{
   buildSummary();
   buildPrintLines();
 });
+
+  $("rows").addEventListener("dragover", (e)=>{
+  e.preventDefault();
+
+  const dragging = document.querySelector(".row.dragging");
+  if(!dragging) return;
+
+  const after = getDragAfterElement($("rows"), e.clientY);
+  if(after == null){
+    $("rows").appendChild(dragging);
+  }else{
+    $("rows").insertBefore(dragging, after);
+  }
+});
+
+function getDragAfterElement(container, y){
+  const els = [...container.querySelectorAll(".row:not(.dragging)")];
+
+  return els.reduce((closest, child)=>{
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+
+    if(offset < 0 && offset > closest.offset){
+      return { offset, element: child };
+    }else{
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+}
 </script>
 
 </body>
