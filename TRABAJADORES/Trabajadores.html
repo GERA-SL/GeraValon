@@ -247,7 +247,15 @@
       font-weight:700;
       color:var(--text);
     }
-
+.row{
+  cursor: grab;
+}
+.row:active{
+  cursor: grabbing;
+}
+.row.dragging{
+  opacity: .55;
+}
     /* ===== IMPRESIÓN OPTIMIZADA ===== */
 @media print{
 
