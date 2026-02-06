@@ -84,10 +84,7 @@
     }
     .block-body{ padding:14px; }
 
-    .grid{
-      display:grid;
-      gap:12px;
-    }
+    .grid{ display:grid; gap:12px; }
     .grid.cols-3{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .grid.cols-2{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
@@ -118,6 +115,7 @@
       box-shadow:0 0 0 2px rgba(46,160,67,.15);
     }
     textarea{ min-height:38px; resize:vertical; }
+
     .btn-row{
       display:flex;
       flex-wrap:wrap;
@@ -163,10 +161,13 @@
     }
     .lines .head, .lines .row{
       display:grid;
-      grid-template-columns: 160px 1.4fr 260px 110px 44px;
       gap:10px;
       padding:10px;
       align-items:center;
+    }
+    /* 6 columnas: asa + fecha + trabajo + categoría + horas + delete */
+    .lines .head, .lines .row{
+      grid-template-columns: 44px 160px 1.4fr 260px 110px 44px;
     }
     .lines .head{
       background:#0b1220;
@@ -182,6 +183,7 @@
       background:transparent;
     }
     .lines .row:last-child{ border-bottom:none; }
+
     .icon-btn{
       width:36px;
       height:36px;
@@ -191,10 +193,7 @@
       justify-content:center;
       padding:0;
     }
-    .muted{
-      color:var(--muted);
-      font-size:12px;
-    }
+    .muted{ color:var(--muted); font-size:12px; }
     .pill{
       display:inline-flex;
       align-items:center;
@@ -207,15 +206,14 @@
       font-size:12px;
       white-space:nowrap;
     }
+
     .summary{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap:12px;
     }
     @media (max-width: 900px){
-      .lines .head, .lines .row{
-        grid-template-columns: 1fr;
-      }
+      .lines .head, .lines .row{ grid-template-columns: 1fr; }
       .summary{ grid-template-columns: 1fr; }
     }
 
@@ -242,120 +240,61 @@
       font-size:14px;
     }
     .sum-line:last-child{ border-bottom:none; }
-    .sum-strong{
-      font-weight:700;
-      color:var(--text);
-    }
-.row{
-  cursor: grab;
-}
-.row:active{
-  cursor: grabbing;
-}
-.row.dragging{
-  opacity: .55;
-}
+    .sum-strong{ font-weight:700; color:var(--text); }
+
     /* === DRAG HANDLE (☰) === */
-.drag-handle{
-  width:36px;
-  height:36px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.03);
-  color:var(--muted);
-  cursor: grab;
-  user-select:none;
-}
-.drag-handle:active{ cursor: grabbing; }
-.row.dragging{ opacity:.55; }
+    .drag-handle{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--muted);
+      cursor:grab;
+      user-select:none;
+    }
+    .drag-handle:active{ cursor:grabbing; }
+    .row.dragging{ opacity:.55; }
 
-/* Ajuste columnas: añadimos 44px al principio para el asa */
-.lines .head, .lines .row{
-  grid-template-columns: 44px 160px 1.4fr 260px 110px 44px;
-}
     /* ===== IMPRESIÓN OPTIMIZADA ===== */
-@media print{
+    @media print{
+      @page{ size:A4; margin:12mm; }
 
-  @page{ size:A4; margin:12mm; }
+      body{ background:white; color:black; font-size:11px; }
 
-  body{
-    background:white;
-    color:black;
-    font-size:11px;
-  }
+      header{ position:static; padding:6px 0; }
 
-  header{
-    position:static;
-    padding:6px 0;
-  }
+      /* ❌ ocultar formularios */
+      #block1, #block2, #block4, .no-print{ display:none !important; }
 
-  /* ❌ ocultar formularios */
-  #block1,
-  #block2,
-  #block4,
-  .no-print{
-    display:none !important;
-  }
+      /* ✅ mostrar bloque impresión */
+      .print-only{ display:block !important; }
 
-  /* ✅ mostrar bloque impresión */
-  .print-only{
-    display:block !important;
-  }
+      header .top{ flex-direction:row; justify-content:space-between; }
+      header h1{ font-size:14px; }
+      header .sub{ font-size:11px; }
 
-  /* cabecera compacta */
-  header .top{
-    flex-direction:row;
-    justify-content:space-between;
-  }
+      #block3{ margin-top:6px; page-break-inside:avoid; }
 
-  header h1{
-    font-size:14px;
-  }
+      .print-grid{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap:6px 30px;
+        font-size:10px;
+      }
+      .print-grid div{
+        border-bottom:1px dotted #ccc;
+        padding:3px 0;
+      }
 
-  header .sub{
-    font-size:11px;
-  }
-
-  /* resumen grande */
-  #block3{
-    margin-top:6px;
-    page-break-inside:avoid;
-  }
-
-  /* listado 2 columnas */
-  .print-grid{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap:6px 30px;
-    font-size:10px;
-  }
-
-  .print-grid div{
-    border-bottom:1px dotted #ccc;
-    padding:3px 0;
-  }
-
-  .block{
-    border-color:#ddd;
-  }
-
-  .block-title{
-    color:#333;
-  }
-
-  .sum-card{
-    background:#fafafa;
-    border-color:#ddd;
-  }
-
-  .pill{
-    border-color:#ddd;
-    color:#333;
-  }
-}
+      .block{ border-color:#ddd; }
+      .block-title{ color:#333; }
+      .sum-card{ background:#fafafa; border-color:#ddd; }
+      .pill{ border-color:#ddd; color:#333; }
+    }
   </style>
 </head>
 
@@ -373,7 +312,7 @@
 <main>
 
   <!-- BLOQUE 1 -->
-<section class="block" id="block1">
+  <section class="block" id="block1">
     <div class="block-title">BLOQUE 1 · SELECCIÓN</div>
     <div class="block-body">
       <div class="grid cols-3">
@@ -395,16 +334,15 @@
         <div>
           <label for="worker">Trabajador</label>
           <select id="worker">
-            <option value="DAVID">DAVID JUAREZ</option>
-            <option value="DANIEL">DANIEL PRIETO</option>
-            <option value="SANDRA">SANDRA CASTRILLON </option>
-            <option value="SEILA">SEILA MARTIN </option>
-            <option value="JAIRO">JAIRO ZARZA</option>
-            <option value="JAIRO">FRANCISCO GARCIA</option>
-            <option value="JAIRO">RENE HUERTAS</option>
-            <option value="JAIRO">MARIA J MARTOS</option>
-            <option value="JAIRO">ENRIQUE LUGONES</option>
-            
+            <option value="DAVID_JUAREZ">DAVID JUAREZ</option>
+            <option value="DANIEL_PRIETO">DANIEL PRIETO</option>
+            <option value="SANDRA_CASTRILLON">SANDRA CASTRILLON</option>
+            <option value="SEILA_MARTIN">SEILA MARTIN</option>
+            <option value="JAIRO_ZARZA">JAIRO ZARZA</option>
+            <option value="FRANCISCO_GARCIA">FRANCISCO GARCIA</option>
+            <option value="RENE_HUERTAS">RENE HUERTAS</option>
+            <option value="MARIA_J_MARTOS">MARIA J MARTOS</option>
+            <option value="ENRIQUE_LUGONES">ENRIQUE LUGONES</option>
           </select>
         </div>
       </div>
@@ -416,7 +354,7 @@
   </section>
 
   <!-- BLOQUE 2 -->
-<section class="block" id="block2">
+  <section class="block" id="block2">
     <div class="block-title">
       <span>BLOQUE 2 · PARTES DE TRABAJO</span>
       <span class="no-print muted" id="lineCount">0 líneas</span>
@@ -424,15 +362,14 @@
 
     <div class="block-body">
       <div class="lines">
-        
-       <div class="head">
-  <div></div>
-  <div>Fecha</div>
-  <div>Trabajo</div>
-  <div>Categoría</div>
-  <div>Horas</div>
-  <div class="no-print">✕</div>
-</div>
+        <div class="head">
+          <div></div>
+          <div>Fecha</div>
+          <div>Trabajo</div>
+          <div>Categoría</div>
+          <div>Horas</div>
+          <div class="no-print">✕</div>
+        </div>
 
         <div id="rows"></div>
       </div>
@@ -472,53 +409,54 @@
       </div>
     </div>
   </section>
-<!-- BLOQUE 4 -->
-<section class="block" id="block4">
-  <div class="block-title">BLOQUE 4 · COSTE REAL / SALARIO MES</div>
 
-  <div class="block-body grid cols-2">
+  <!-- BLOQUE 4 -->
+  <section class="block" id="block4">
+    <div class="block-title">BLOQUE 4 · COSTE REAL / SALARIO MES</div>
 
-    <!-- IZQUIERDA -->
-    <div>
-      <label><b>Coste real trabajador</b></label>
+    <div class="block-body grid cols-2">
 
-      <label>Gasto empresa según nómina (€/mes)</label>
-      <input id="lGasto" type="number" step="0.01">
+      <!-- IZQUIERDA -->
+      <div>
+        <label><b>Coste real trabajador</b></label>
 
-      <label>Horas mensuales trabajadas</label>
-      <input id="lHoras" type="number" step="0.1" value="160">
+        <label>Gasto empresa según nómina (€/mes)</label>
+        <input id="lGasto" type="number" step="0.01">
 
-      <button id="btnLeft" class="btn-primary">CALCULAR</button>
+        <label>Horas mensuales trabajadas</label>
+        <input id="lHoras" type="number" step="0.1" value="160">
 
-      <div class="muted" id="lResultado"></div>
+        <button id="btnLeft" class="btn-primary" type="button">CALCULAR</button>
+
+        <div class="muted" id="lResultado"></div>
+      </div>
+
+      <!-- DERECHA -->
+      <div>
+        <label><b>Cuánto pagar este mes</b></label>
+
+        <label>Precio €/hora acordado</label>
+        <input id="rPrecio" type="number" step="0.01">
+
+        <label>Horas trabajadas este mes</label>
+        <input id="rHoras" type="number" step="0.1">
+
+        <button id="btnRight" class="btn-warn" type="button">CALCULAR</button>
+
+        <div class="muted" id="rResultado"></div>
+      </div>
+
     </div>
-
-
-    <!-- DERECHA -->
-    <div>
-      <label><b>Cuánto pagar este mes</b></label>
-
-      <label>Precio €/hora acordado</label>
-      <input id="rPrecio" type="number" step="0.01">
-
-      <label>Horas trabajadas este mes</label>
-      <input id="rHoras" type="number" step="0.1">
-
-      <button id="btnRight" class="btn-warn">CALCULAR</button>
-
-      <div class="muted" id="rResultado"></div>
-    </div>
-
-  </div>
-</section>
+  </section>
 
   <!-- BLOQUE PDF SOLO IMPRESIÓN -->
-<section class="block print-only" id="blockPrintLines">
-  <div class="block-title">PARTES DEL MES (resumen)</div>
-  <div class="block-body">
-    <div id="printLines"></div>
-  </div>
-</section>
+  <section class="block print-only" id="blockPrintLines">
+    <div class="block-title">PARTES DEL MES (resumen)</div>
+    <div class="block-body">
+      <div id="printLines"></div>
+    </div>
+  </section>
+
 </main>
 
 <script>
@@ -572,24 +510,27 @@
 
   function addRow(prefill={}){
     rowId += 1;
+
     const wrap = document.createElement("div");
     wrap.className = "row";
     wrap.dataset.rowId = String(rowId);
-wrap.draggable = false;
+    wrap.draggable = false;
 
-const handle = document.createElement("div");
-handle.className = "drag-handle no-print";
-handle.textContent = "☰";
-handle.title = "Arrastrar para reordenar";
-handle.draggable = true;
+    // Asa ☰
+    const handle = document.createElement("div");
+    handle.className = "drag-handle no-print";
+    handle.textContent = "☰";
+    handle.title = "Arrastrar para reordenar";
+    handle.draggable = true;
 
-handle.addEventListener("dragstart", () => {
-  wrap.classList.add("dragging");
-});
+    handle.addEventListener("dragstart", () => {
+      wrap.classList.add("dragging");
+    });
 
-handle.addEventListener("dragend", () => {
-  wrap.classList.remove("dragging");
-});
+    handle.addEventListener("dragend", () => {
+      wrap.classList.remove("dragging");
+    });
+
     // Fecha
     const inpDate = document.createElement("input");
     inpDate.type = "date";
@@ -604,12 +545,12 @@ handle.addEventListener("dragend", () => {
     // Categoría
     const selCat = makeCategorySelect(prefill.cat || CATEGORIES[0]);
 
-    // Horas
+    // Horas (duración)
     const inpHours = document.createElement("input");
-inpHours.type = "time";
-inpHours.step = "60";              // minutos
-inpHours.value = prefill.hours || "00:00";
-inpHours.title = "Duración (HH:MM)";
+    inpHours.type = "time";
+    inpHours.step = "60";
+    inpHours.value = prefill.hours || "00:00";
+    inpHours.title = "Duración (HH:MM)";
 
     // Delete
     const btnDel = document.createElement("button");
@@ -620,43 +561,48 @@ inpHours.title = "Duración (HH:MM)";
     btnDel.addEventListener("click", ()=>{
       wrap.remove();
       updateLineCount();
+      // si ya hay bloque de € generado, lo recalculamos
+      if(LAST_GASTO_REAL > 0 && document.getElementById("blockMoney")){
+        renderMoneyByCategoryBlock();
+      }
     });
 
+    // Orden columnas (6)
     wrap.appendChild(handle);
-wrap.appendChild(inpDate);
-wrap.appendChild(inpJob);
-wrap.appendChild(selCat);
-wrap.appendChild(inpHours);
-wrap.appendChild(btnDel);
+    wrap.appendChild(inpDate);
+    wrap.appendChild(inpJob);
+    wrap.appendChild(selCat);
+    wrap.appendChild(inpHours);
+    wrap.appendChild(btnDel);
 
     $("rows").appendChild(wrap);
     updateLineCount();
   }
 
   function getRowsData(){
-  const data = [];
+    const data = [];
 
-  for(const row of $("rows").children){
-    const [d, job, cat, hrs] = row.querySelectorAll("input, select");
+    for(const row of $("rows").children){
+      const [d, job, cat, hrs] = row.querySelectorAll("input, select");
 
-    const hhmm = (hrs.value || "00:00").split(":");
-    const h = parseInt(hhmm[0] || "0", 10);
-    const m = parseInt(hhmm[1] || "0", 10);
+      const hhmm = (hrs.value || "00:00").split(":");
+      const h = parseInt(hhmm[0] || "0", 10);
+      const m = parseInt(hhmm[1] || "0", 10);
 
-    const hours = h + (m / 60);
+      const hours = h + (m / 60);
 
-    data.push({
-      date: d.value || "",
-      job: job.value || "",
-      cat: cat.value || "",
-      hours: hours
-    });
+      data.push({
+        date: d.value || "",
+        job: job.value || "",
+        cat: cat.value || "",
+        hours: hours
+      });
+    }
+
+    return data;
   }
 
-  return data;
-}
-
-  // ====== SUMMARY ======
+  // ====== SUMMARY (horas y %)
   function buildSummary(){
     const month = parseInt($("month").value,10);
     const year = parseInt($("year").value,10);
@@ -664,7 +610,6 @@ wrap.appendChild(btnDel);
 
     const rows = getRowsData().filter(r => (r.job.trim() !== "" || r.hours > 0 || r.cat));
 
-    // Suma por categoría
     const byCat = {};
     CATEGORIES.forEach(c => byCat[c] = 0);
 
@@ -676,7 +621,6 @@ wrap.appendChild(btnDel);
       total += h;
     }
 
-    // Render
     $("sumMeta").textContent = `${worker} · ${String(month).padStart(2,'0')}/${year}`;
 
     const byCatEl = $("sumByCat");
@@ -691,13 +635,11 @@ wrap.appendChild(btnDel);
     const totalsEl = $("sumTotals");
     totalsEl.innerHTML = "";
 
-    // Total
     const lineTotal = document.createElement("div");
     lineTotal.className = "sum-line";
     lineTotal.innerHTML = `<span class="sum-strong">TOTAL</span><span class="sum-strong">${total.toFixed(2)} h</span>`;
     totalsEl.appendChild(lineTotal);
 
-    // % por categoría
     CATEGORIES.forEach(cat=>{
       const pct = total > 0 ? (byCat[cat] / total) * 100 : 0;
       const line = document.createElement("div");
@@ -706,7 +648,6 @@ wrap.appendChild(btnDel);
       totalsEl.appendChild(line);
     });
 
-    // Status pill
     const pill = $("statusPill");
     if(total > 0){
       pill.textContent = `Resumen listo · ${total.toFixed(2)} h`;
@@ -718,108 +659,221 @@ wrap.appendChild(btnDel);
       pill.style.color = "var(--muted)";
     }
 
-    // Scroll al bloque 3
     $("block3").scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  // ====== PRINT LINES ======
+  function buildPrintLines(){
+    const rows = getRowsData().filter(r => r.hours > 0);
+
+    const container = $("printLines");
+    container.innerHTML = "";
+
+    const table = document.createElement("div");
+    table.className = "print-grid";
+
+    rows.forEach(r=>{
+      const line = document.createElement("div");
+      line.textContent = `${r.date}   ${r.job.substring(0,20)}   ${r.hours.toFixed(2)}h`;
+      table.appendChild(line);
+    });
+
+    container.appendChild(table);
   }
 
   // ====== PDF ======
   function generatePdf(){
-    // Imprimir/Guardar PDF desde el navegador
     window.print();
+  }
+
+  // ====== BLOQUE € POR ACTIVIDAD (usa gasto mensual real calculado en btnLeft) ======
+  let LAST_GASTO_REAL = 0;  // € (13/12)
+  let LAST_COSTE_HORA = 0;  // €/h
+
+  function renderMoneyByCategoryBlock(){
+    if(!LAST_GASTO_REAL || LAST_GASTO_REAL <= 0){
+      return;
+    }
+
+    const rows = getRowsData().filter(r => (r.job.trim() !== "" || r.hours > 0 || r.cat));
+
+    const byCat = {};
+    CATEGORIES.forEach(c => byCat[c] = 0);
+
+    let totalH = 0;
+    for(const r of rows){
+      const h = Math.max(0, r.hours || 0);
+      if(byCat[r.cat] === undefined) byCat[r.cat] = 0;
+      byCat[r.cat] += h;
+      totalH += h;
+    }
+
+    // crear / actualizar bloque antes de PARTES DEL MES
+    let block = document.getElementById("blockMoney");
+    if(!block){
+      block = document.createElement("section");
+      block.className = "block";
+      block.id = "blockMoney";
+      block.innerHTML = `
+        <div class="block-title">
+          <span>BLOQUE · € POR ACTIVIDAD (según % de horas)</span>
+          <span class="muted" id="moneyMeta">—</span>
+        </div>
+        <div class="block-body">
+          <div class="summary">
+            <div class="sum-card">
+              <h3>€ por actividad</h3>
+              <div id="moneyByCat"></div>
+            </div>
+            <div class="sum-card">
+              <h3>Datos base</h3>
+              <div id="moneyBase"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const anchor = document.getElementById("blockPrintLines");
+      if(anchor){
+        anchor.parentNode.insertBefore(block, anchor);
+      }else{
+        document.querySelector("main").appendChild(block);
+      }
+    }
+
+    // meta
+    const month = $("month").value;
+    const year = $("year").value;
+    const worker = $("worker").value;
+    block.querySelector("#moneyMeta").textContent = `${worker} · ${String(month).padStart(2,'0')}/${year}`;
+
+    // € por categoría (porcentaje de horas)
+    const moneyByCatEl = block.querySelector("#moneyByCat");
+    moneyByCatEl.innerHTML = "";
+
+    CATEGORIES.forEach(cat=>{
+      const pct = totalH > 0 ? (byCat[cat] / totalH) : 0;
+      const euros = LAST_GASTO_REAL * pct;
+
+      const line = document.createElement("div");
+      line.className = "sum-line";
+      line.innerHTML = `<span>${cat}</span><span class="sum-strong">${euros.toFixed(2)} €</span>`;
+      moneyByCatEl.appendChild(line);
+    });
+
+    // datos base
+    const baseEl = block.querySelector("#moneyBase");
+    baseEl.innerHTML = "";
+
+    const b1 = document.createElement("div");
+    b1.className = "sum-line";
+    b1.innerHTML = `<span>Gasto mensual real (13/12)</span><span class="sum-strong">${LAST_GASTO_REAL.toFixed(2)} €</span>`;
+    baseEl.appendChild(b1);
+
+    const b2 = document.createElement("div");
+    b2.className = "sum-line";
+    b2.innerHTML = `<span>Coste hora real</span><span class="sum-strong">${(LAST_COSTE_HORA||0).toFixed(2)} €/h</span>`;
+    baseEl.appendChild(b2);
+
+    const b3 = document.createElement("div");
+    b3.className = "sum-line";
+    b3.innerHTML = `<span>Total horas imputadas</span><span>${totalH.toFixed(2)} h</span>`;
+    baseEl.appendChild(b3);
   }
 
   // ====== INIT ======
   setDefaultMonthYear();
-  addRow(); // primera línea por defecto
+  addRow();
 
   $("btnAdd").addEventListener("click", ()=> addRow());
-  
   $("btnPdf").addEventListener("click", generatePdf);
 
-  // IZQUIERDA
-$("btnLeft").addEventListener("click", ()=>{
+  // IZQUIERDA (Coste real trabajador)
+  $("btnLeft").addEventListener("click", ()=>{
+    const gasto = parseFloat($("lGasto").value||0);
+    const horas = parseFloat($("lHoras").value||0);
 
-  const gasto = parseFloat($("lGasto").value||0);
-  const horas = parseFloat($("lHoras").value||0);
+    if(!gasto || gasto <= 0 || !horas || horas <= 0){
+      $("lResultado").innerHTML = `<b>Rellena gasto y horas mensuales.</b>`;
+      return;
+    }
 
-  const gastoReal = (gasto*13)/12;
-  const costeHora = gastoReal/horas;
+    const gastoReal = (gasto*13)/12;
+    const costeHora = gastoReal/horas;
 
-  $("lResultado").innerHTML =
-    `Gasto mensual real: <b>${gastoReal.toFixed(2)} €</b><br>
-     Coste hora real: <b>${costeHora.toFixed(2)} €/h</b>`;
-});
+    LAST_GASTO_REAL = gastoReal;
+    LAST_COSTE_HORA = costeHora;
 
+    $("lResultado").innerHTML =
+      `Gasto mensual real: <b>${gastoReal.toFixed(2)} €</b><br>
+       Coste hora real: <b>${costeHora.toFixed(2)} €/h</b>`;
 
-// DERECHA
-$("btnRight").addEventListener("click", ()=>{
-
-  const precio = parseFloat($("rPrecio").value||0);
-  const horas = parseFloat($("rHoras").value||0);
-
-  const total = precio*horas;
-
-  $("rResultado").innerHTML =
-    `Debe cobrar: <b>${total.toFixed(2)} €</b>`;
-});
-
-  function buildPrintLines(){
-
-  const rows = getRowsData().filter(r => r.hours > 0);
-
-  const container = $("printLines");
-  container.innerHTML = "";
-
-  const table = document.createElement("div");
-  table.className = "print-grid";
-
-  rows.forEach(r=>{
-    const line = document.createElement("div");
-
-    const hh = r.hours.toFixed(2);
-
-    line.textContent = `${r.date}   ${r.job.substring(0,20)}   ${hh}h`;
-
-    table.appendChild(line);
+    // ✅ genera/actualiza el bloque de € por actividad
+    renderMoneyByCategoryBlock();
   });
 
-  container.appendChild(table);
-}
+  // DERECHA (Cuánto pagar este mes)
+  $("btnRight").addEventListener("click", ()=>{
+    const precio = parseFloat($("rPrecio").value||0);
+    const horas = parseFloat($("rHoras").value||0);
 
-// cuando generas resumen → también prepara impresión
-$("btnSummary").addEventListener("click", ()=>{
-  buildSummary();
-  buildPrintLines();
-});
+    const total = precio*horas;
 
-  $("rows").addEventListener("dragover", (e)=>{
-  e.preventDefault();
+    $("rResultado").innerHTML =
+      `Debe cobrar: <b>${total.toFixed(2)} €</b>`;
+  });
 
-  const dragging = document.querySelector(".row.dragging");
-  if(!dragging) return;
+  // Resumen
+  $("btnSummary").addEventListener("click", ()=>{
+    buildSummary();
+    buildPrintLines();
+  });
 
-  const after = getDragAfterElement($("rows"), e.clientY);
-  if(after == null){
-    $("rows").appendChild(dragging);
-  }else{
-    $("rows").insertBefore(dragging, after);
-  }
-});
-
-function getDragAfterElement(container, y){
-  const els = [...container.querySelectorAll(".row:not(.dragging)")];
-
-  return els.reduce((closest, child)=>{
-    const box = child.getBoundingClientRect();
-    const offset = y - box.top - box.height / 2;
-
-    if(offset < 0 && offset > closest.offset){
-      return { offset, element: child };
-    }else{
-      return closest;
+  // Recalcular € automático si ya hay gasto calculado
+  $("rows").addEventListener("input", ()=>{
+    if(LAST_GASTO_REAL > 0 && document.getElementById("blockMoney")){
+      renderMoneyByCategoryBlock();
     }
-  }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
-}
+  });
+  $("rows").addEventListener("change", ()=>{
+    if(LAST_GASTO_REAL > 0 && document.getElementById("blockMoney")){
+      renderMoneyByCategoryBlock();
+    }
+  });
+
+  // Drag & Drop
+  $("rows").addEventListener("dragover", (e)=>{
+    e.preventDefault();
+
+    const dragging = document.querySelector(".row.dragging");
+    if(!dragging) return;
+
+    const after = getDragAfterElement($("rows"), e.clientY);
+    if(after == null){
+      $("rows").appendChild(dragging);
+    }else{
+      $("rows").insertBefore(dragging, after);
+    }
+
+    // si ya hay bloque €, actualiza al mover
+    if(LAST_GASTO_REAL > 0 && document.getElementById("blockMoney")){
+      renderMoneyByCategoryBlock();
+    }
+  });
+
+  function getDragAfterElement(container, y){
+    const els = [...container.querySelectorAll(".row:not(.dragging)")];
+
+    return els.reduce((closest, child)=>{
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height / 2;
+
+      if(offset < 0 && offset > closest.offset){
+        return { offset, element: child };
+      }
+      return closest;
+    }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+  }
 </script>
 
 </body>
