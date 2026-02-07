@@ -1,1 +1,351 @@
 
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Esquema Campana & Turbinas (MVP)</title>
+<style>
+  :root{ --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#2ea043; }
+  body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); }
+  header{ padding:12px 14px; border-bottom:1px solid var(--border); background:var(--panel); display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  button{ background:#21262d; color:var(--text); border:1px solid var(--border); padding:8px 10px; border-radius:10px; cursor:pointer; font-weight:600; }
+  button:hover{ filter:brightness(1.08); }
+  .wrap{ display:grid; grid-template-columns: 320px 1fr; gap:12px; padding:12px; }
+  .panel{ background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px; }
+  .row{ display:flex; gap:8px; align-items:center; margin:8px 0; }
+  label{ color:var(--muted); font-size:12px; display:block; margin-bottom:4px; }
+  input, select{ width:100%; background:#0b1220; color:var(--text); border:1px solid var(--border); border-radius:10px; padding:8px 10px; }
+  .muted{ color:var(--muted); font-size:12px; }
+  #stageWrap{ background:var(--panel); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  svg{ width:100%; height: calc(100vh - 90px); display:block; background: #0b1220; }
+  .grid line{ stroke:#1f2733; stroke-width:1; }
+  .item rect, .item path, .item line{ stroke:#c9d1d9; stroke-width:2; fill:rgba(255,255,255,.03); }
+  .item text{ fill:#c9d1d9; font-size:12px; user-select:none; }
+  .selected rect, .selected path, .selected line{ stroke: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <button id="btnAddCampana">+ Campana</button>
+  <button id="btnAddTurbina">+ Turbina</button>
+  <button id="btnAddConducto">+ Conducto</button>
+  <button id="btnAddTexto">+ Texto</button>
+  <button id="btnDelete">Eliminar</button>
+  <button id="btnExportSvg">Exportar SVG</button>
+  <button id="btnSave">Guardar JSON</button>
+  <button id="btnLoad">Cargar JSON</button>
+  <span class="muted">Arrastra elementos. Doble click en texto para editar.</span>
+  <input id="fileLoad" type="file" accept="application/json" style="display:none"/>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <div class="row">
+      <div style="flex:1">
+        <label>Snap (cuadrícula)</label>
+        <select id="snap">
+          <option value="0">Sin snap</option>
+          <option value="5">5 px</option>
+          <option value="10" selected>10 px</option>
+          <option value="20">20 px</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <label>Zoom</label>
+        <input id="zoom" type="range" min="60" max="160" value="100"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <div style="flex:1">
+        <label>Propiedad rápida (seleccionado)</label>
+        <input id="propText" placeholder="Etiqueta / caudal / Ø..." />
+      </div>
+    </div>
+
+    <div class="muted">
+      Consejo: escribe cosas tipo “Q=2500 m³/h · Ø315 · F400” en la etiqueta del elemento.
+    </div>
+  </div>
+
+  <div id="stageWrap">
+    <svg id="svg" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <!-- grid -->
+      <g class="grid" id="grid"></g>
+      <!-- items -->
+      <g id="items"></g>
+    </svg>
+  </div>
+</div>
+
+<script>
+(() => {
+  const svg = document.getElementById("svg");
+  const itemsG = document.getElementById("items");
+  const gridG = document.getElementById("grid");
+  const snapSel = document.getElementById("snap");
+  const zoom = document.getElementById("zoom");
+  const propText = document.getElementById("propText");
+  const fileLoad = document.getElementById("fileLoad");
+
+  let selected = null;
+  let drag = null;
+
+  function drawGrid(step=40){
+    gridG.innerHTML = "";
+    const vb = svg.viewBox.baseVal;
+    for(let x=0; x<=vb.width; x+=step){
+      const l = document.createElementNS(svg.namespaceURI, "line");
+      l.setAttribute("x1", x); l.setAttribute("y1", 0);
+      l.setAttribute("x2", x); l.setAttribute("y2", vb.height);
+      gridG.appendChild(l);
+    }
+    for(let y=0; y<=vb.height; y+=step){
+      const l = document.createElementNS(svg.namespaceURI, "line");
+      l.setAttribute("x1", 0); l.setAttribute("y1", y);
+      l.setAttribute("x2", vb.width); l.setAttribute("y2", y);
+      gridG.appendChild(l);
+    }
+  }
+  drawGrid(40);
+
+  function snap(v){
+    const s = parseInt(snapSel.value,10);
+    if(!s) return v;
+    return Math.round(v/s)*s;
+  }
+
+  function svgPoint(evt){
+    const pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function select(el){
+    if(selected) selected.classList.remove("selected");
+    selected = el;
+    if(selected){
+      selected.classList.add("selected");
+      const t = selected.querySelector("text");
+      propText.value = t ? t.textContent : "";
+    }else{
+      propText.value = "";
+    }
+  }
+
+  propText.addEventListener("input", () => {
+    if(!selected) return;
+    const t = selected.querySelector("text");
+    if(t) t.textContent = propText.value;
+  });
+
+  function makeGroup(kind, x, y, label){
+    const g = document.createElementNS(svg.namespaceURI, "g");
+    g.classList.add("item");
+    g.dataset.kind = kind;
+    g.dataset.x = String(x);
+    g.dataset.y = String(y);
+
+    // shape by kind
+    if(kind === "campana"){
+      const r = rect(x, y, 220, 90);
+      const t = text(x+10, y+20, label || "CAMPANA");
+      g.append(r, t);
+    } else if(kind === "turbina"){
+      const r = rect(x, y, 120, 120);
+      const p = document.createElementNS(svg.namespaceURI,"path");
+      p.setAttribute("d", `M ${x+60} ${y+15} L ${x+95} ${y+60} L ${x+60} ${y+105} L ${x+25} ${y+60} Z`);
+      p.setAttribute("fill","rgba(255,255,255,.02)");
+      const t = text(x+10, y+20, label || "TURBINA");
+      g.append(r, p, t);
+    } else if(kind === "conducto"){
+      const r = rect(x, y, 260, 50);
+      const t = text(x+10, y+20, label || "CONDUCTO Ø...");
+      g.append(r, t);
+    } else if(kind === "texto"){
+      const t = text(x, y, label || "Texto");
+      g.append(t);
+    }
+
+    g.addEventListener("mousedown", (e) => {
+      if(e.button !== 0) return;
+      select(g);
+      const p = svgPoint(e);
+      drag = { g, startX: p.x, startY: p.y, ox: parseFloat(g.dataset.x), oy: parseFloat(g.dataset.y) };
+    });
+
+    g.addEventListener("dblclick", () => {
+      const t = g.querySelector("text");
+      if(!t) return;
+      const val = prompt("Editar texto:", t.textContent);
+      if(val !== null){
+        t.textContent = val;
+        propText.value = val;
+      }
+    });
+
+    return g;
+  }
+
+  function rect(x,y,w,h){
+    const r = document.createElementNS(svg.namespaceURI,"rect");
+    r.setAttribute("x", x); r.setAttribute("y", y);
+    r.setAttribute("width", w); r.setAttribute("height", h);
+    r.setAttribute("rx","10"); r.setAttribute("ry","10");
+    return r;
+  }
+
+  function text(x,y,content){
+    const t = document.createElementNS(svg.namespaceURI,"text");
+    t.setAttribute("x", x); t.setAttribute("y", y);
+    t.textContent = content;
+    return t;
+  }
+
+  function setGroupPos(g, x, y){
+    g.dataset.x = String(x);
+    g.dataset.y = String(y);
+    // We rebuild by translating all children by delta from old
+    // Simplest: use transform translate, and keep base at 0,0 for new items? We'll use transform.
+    g.setAttribute("transform", `translate(${x},${y})`);
+  }
+
+  // Create items using transform-based coordinates
+  function add(kind){
+    const x = 80, y = 80;
+    const g = document.createElementNS(svg.namespaceURI, "g");
+    g.classList.add("item");
+    g.dataset.kind = kind;
+    g.dataset.x = String(x);
+    g.dataset.y = String(y);
+    g.setAttribute("transform", `translate(${x},${y})`);
+
+    if(kind==="campana"){
+      g.append(rect(0,0,220,90), text(10,20,"CAMPANA · Q=… · L=…"));
+    }else if(kind==="turbina"){
+      g.append(rect(0,0,120,120));
+      const p = document.createElementNS(svg.namespaceURI,"path");
+      p.setAttribute("d","M 60 15 L 95 60 L 60 105 L 25 60 Z");
+      p.setAttribute("fill","rgba(255,255,255,.02)");
+      g.append(p, text(10,20,"TURBINA · F400?"));
+    }else if(kind==="conducto"){
+      g.append(rect(0,0,260,50), text(10,20,"CONDUCTO · Ø…"));
+    }else if(kind==="texto"){
+      g.append(text(0,0,"Texto"));
+    }
+
+    g.addEventListener("mousedown",(e)=>{
+      if(e.button!==0) return;
+      select(g);
+      const p = svgPoint(e);
+      drag = { g, startX:p.x, startY:p.y, ox:parseFloat(g.dataset.x), oy:parseFloat(g.dataset.y) };
+    });
+    g.addEventListener("dblclick",()=>{
+      const t = g.querySelector("text");
+      if(!t) return;
+      const val = prompt("Editar texto:", t.textContent);
+      if(val!==null){ t.textContent=val; propText.value=val; }
+    });
+
+    itemsG.appendChild(g);
+    select(g);
+  }
+
+  svg.addEventListener("mousemove",(e)=>{
+    if(!drag) return;
+    const p = svgPoint(e);
+    const dx = p.x - drag.startX;
+    const dy = p.y - drag.startY;
+    const nx = snap(drag.ox + dx);
+    const ny = snap(drag.oy + dy);
+    drag.g.dataset.x = String(nx);
+    drag.g.dataset.y = String(ny);
+    drag.g.setAttribute("transform", `translate(${nx},${ny})`);
+  });
+
+  window.addEventListener("mouseup",()=> drag=null);
+
+  svg.addEventListener("mousedown",(e)=>{
+    // click on empty stage to deselect
+    if(e.target === svg || e.target === gridG){
+      select(null);
+    }
+  });
+
+  document.getElementById("btnAddCampana").onclick = ()=> add("campana");
+  document.getElementById("btnAddTurbina").onclick = ()=> add("turbina");
+  document.getElementById("btnAddConducto").onclick = ()=> add("conducto");
+  document.getElementById("btnAddTexto").onclick = ()=> add("texto");
+
+  document.getElementById("btnDelete").onclick = ()=>{
+    if(!selected) return;
+    selected.remove();
+    select(null);
+  };
+
+  zoom.addEventListener("input", ()=>{
+    const z = parseInt(zoom.value,10)/100;
+    svg.style.transformOrigin = "0 0";
+    svg.style.transform = `scale(${z})`;
+  });
+
+  function exportSvg(){
+    const clone = svg.cloneNode(true);
+    // remove selection class
+    clone.querySelectorAll(".selected").forEach(el=>el.classList.remove("selected"));
+    const data = new XMLSerializer().serializeToString(clone);
+    const blob = new Blob([data], {type:"image/svg+xml"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "esquema.svg";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  document.getElementById("btnExportSvg").onclick = exportSvg;
+
+  function saveJson(){
+    const arr = [...itemsG.querySelectorAll("g.item")].map(g=>{
+      const t = g.querySelector("text");
+      return {
+        kind: g.dataset.kind,
+        x: parseFloat(g.dataset.x||"0"),
+        y: parseFloat(g.dataset.y||"0"),
+        label: t ? t.textContent : ""
+      };
+    });
+    const blob = new Blob([JSON.stringify(arr,null,2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "proyecto.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  document.getElementById("btnSave").onclick = saveJson;
+
+  document.getElementById("btnLoad").onclick = ()=> fileLoad.click();
+  fileLoad.addEventListener("change", async ()=>{
+    const f = fileLoad.files[0];
+    if(!f) return;
+    const txt = await f.text();
+    let data;
+    try{ data = JSON.parse(txt); } catch { alert("JSON inválido"); return; }
+    itemsG.innerHTML = "";
+    for(const it of data){
+      add(it.kind);
+      const g = itemsG.lastElementChild;
+      g.dataset.x = String(it.x||0);
+      g.dataset.y = String(it.y||0);
+      g.setAttribute("transform", `translate(${it.x||0},${it.y||0})`);
+      const t = g.querySelector("text");
+      if(t && it.label) t.textContent = it.label;
+    }
+    select(null);
+    fileLoad.value = "";
+  });
+
+})();
+</script>
+</body>
+</html>
