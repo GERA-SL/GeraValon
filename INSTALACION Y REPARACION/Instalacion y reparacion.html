@@ -9,12 +9,19 @@
   :root{
     --bg:#0d1117; --panel:#161b22; --border:#30363d;
     --text:#e6edf3; --muted:#8b949e; --accent:#2ea043;
+
     --c-camp:#2ea043; --c-box:#58a6ff; --c-fan:#d29922;
-    --c-fil:#a371f7; --c-piece:#ff7b72; --c-duct:#c9d1d9; --c-grille:#79c0ff;
+    --c-fil:#a371f7; --c-carbon:#9da7b3;
+    --c-piece:#ff7b72; --c-duct:#c9d1d9; --c-grille:#79c0ff;
   }
   *{ box-sizing:border-box; }
   body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); }
-  header{ padding:10px 12px; border-bottom:1px solid var(--border); background:var(--panel); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+
+  header{
+    padding:10px 12px; border-bottom:1px solid var(--border);
+    background:var(--panel); display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    position:sticky; top:0; z-index:10;
+  }
   button{
     background:#21262d; color:var(--text); border:1px solid var(--border);
     padding:8px 10px; border-radius:10px; cursor:pointer; font-weight:650; font-size:13px;
@@ -33,30 +40,48 @@
   .muted{ color:var(--muted); font-size:12px; line-height:1.35; }
 
   #stageWrap{ background:var(--panel); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
-  svg{ width:100%; height: calc(100vh - 110px); display:block; background:#0b1220; }
+  svg{ width:100%; height: calc(100vh - 120px); display:block; background:#0b1220; }
 
+  /* Grid */
   .gridline{ stroke:#1f2733; stroke-width:1; }
 
+  /* Items */
   .item .shape{ stroke:#c9d1d9; stroke-width:2; fill:rgba(255,255,255,.03); }
   .item text{ fill:#c9d1d9; font-size:12px; user-select:none; }
   .selected .shape{ stroke: var(--accent) !important; }
 
+  /* Accents by type */
   .accent.campana{ stroke: var(--c-camp); }
   .accent.caja{ stroke: var(--c-box); }
   .accent.vent{ stroke: var(--c-fan); }
   .accent.filtronic{ stroke: var(--c-fil); }
-  .accent.carbon{ stroke: #9da7b3; }
+  .accent.carbon{ stroke: var(--c-carbon); }
   .accent.conducto{ stroke: var(--c-duct); }
   .accent.pieza{ stroke: var(--c-piece); }
   .accent.rejilla{ stroke: var(--c-grille); }
 
+  /* Overlay selection box + handles */
   .selbox{ fill:none; stroke: var(--accent); stroke-width:1.5; stroke-dasharray:4 3; pointer-events:none; }
   .handle{ fill: var(--accent); stroke:#0b1220; stroke-width:2; cursor:nwse-resize; }
   .handle.ns{ cursor:ns-resize; }
   .handle.ew{ cursor:ew-resize; }
 
+  /* Rotate handle */
   .rotline{ stroke: var(--accent); stroke-width:2; }
   .rothandle{ fill: var(--accent); stroke:#0b1220; stroke-width:2; cursor:grab; }
+
+  @media (max-width: 980px){
+    .wrap{ grid-template-columns: 1fr; }
+    svg{ height: 70vh; }
+  }
+
+  /* PRINT / PDF */
+  @media print{
+    header, .panel{ display:none !important; }
+    body{ background:white; color:black; }
+    #stageWrap{ border:none; }
+    svg{ height: auto; background:white !important; }
+  }
 </style>
 </head>
 <body>
@@ -80,6 +105,7 @@
   <button id="btnRot90">Rotar 90°</button>
   <button id="btnDelete">Eliminar</button>
 
+  <button id="btnExportPdf">Exportar PDF</button>
   <button id="btnExportSvg">Exportar SVG</button>
   <button id="btnSave">Guardar JSON</button>
   <button id="btnLoad">Cargar JSON</button>
@@ -126,8 +152,9 @@
 
       <div class="muted">
         - El tamaño real se hace con tiradores (escala).<br>
-        - Ancho/Alto base re-dibuja el “marco” principal (conducto/caja/campana).<br>
+        - Ancho/Alto base re-dibuja el “marco” principal (rectángulo base).<br>
         - Rotación: maneta (círculo arriba) o botón 90°.<br>
+        - Si cargas JSON antiguo: “t” → “tee”, “reduccion” → “red”, “flexible” → “flex”.<br>
       </div>
     </div>
   </div>
@@ -163,30 +190,6 @@
   const path = (d)=>{ const p=el("path"); p.setAttribute("d",d); return p; };
   const text = (x,y,txt)=>{ const t=el("text"); t.setAttribute("x",x); t.setAttribute("y",y); t.textContent=txt; t.dataset.role="label"; return t; };
 
-  // --- CODO ANCHO (tubo) ---
-  // El codo se genera como “sector” con radio R y ancho w (espesor del tubo).
-  function elbowPath(angleDeg, R, w){
-    const a = angleDeg * Math.PI / 180;
-    const rOut = R + w/2;
-    const rIn  = Math.max(2, R - w/2);
-
-    // Outer arc: from (rOut,0) to (rOut*cos(a), rOut*sin(a))
-    const x1o = rOut, y1o = 0;
-    const x2o = rOut * Math.cos(a), y2o = rOut * Math.sin(a);
-
-    // Inner arc: from (rIn*cos(a), rIn*sin(a)) back to (rIn,0)
-    const x2i = rIn * Math.cos(a), y2i = rIn * Math.sin(a);
-    const x1i = rIn, y1i = 0;
-
-    return `
-      M ${x1o} ${y1o}
-      A ${rOut} ${rOut} 0 0 1 ${x2o} ${y2o}
-      L ${x2i} ${y2i}
-      A ${rIn} ${rIn} 0 0 0 ${x1i} ${y1i}
-      Z
-    `;
-  }
-
   function drawGrid(step=40){
     gridG.innerHTML="";
     const vb = svg.viewBox.baseVal;
@@ -201,6 +204,10 @@
     const pt = svg.createSVGPoint();
     pt.x = evt.clientX; pt.y = evt.clientY;
     return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  function angleDeg(cx,cy,x,y){
+    return Math.atan2(y-cy, x-cx) * 180 / Math.PI;
   }
 
   function applyTransform(g){
@@ -222,185 +229,36 @@
     return rects[0];
   }
 
-  function makeItem(kind){
-    const g = el("g");
-    g.classList.add("item");
-    g.dataset.kind = kind;
-    g.dataset.x="140"; g.dataset.y="140";
-    g.dataset.r="0"; g.dataset.sx="1"; g.dataset.sy="1";
+  // ===== ELBOW (CODO) path centrado para que el BBOX empiece en (0,0) incluso en 45° =====
+  function elbowPath(angleDeg_, R, w){
+    const a = angleDeg_ * Math.PI / 180;
 
-    const setWH = (w,h)=>{ g.dataset.w=String(w); g.dataset.h=String(h); };
-    const addLabel = (txt)=> g.appendChild(text(10,18,txt));
+    const rOut = R + w/2;
+    const rIn  = Math.max(2, R - w/2);
 
-    if(kind==="campana"){
-      setWH(280,95);
-      const r = rect(0,0,280,95,12); r.classList.add("shape","accent","campana");
-      g.appendChild(r);
-      for(let i=0;i<4;i++){
-        const f = rect(14+i*62, 38, 50, 40, 6);
-        f.classList.add("shape");
-        f.setAttribute("fill","rgba(46,160,67,.08)");
-        f.setAttribute("stroke","rgba(46,160,67,.7)");
-        g.appendChild(f);
-      }
-      addLabel("CAMPANA · filtros=4 · Q=…");
-    }
+    // puntos (codo en 1er cuadrante)
+    const x1o = rOut, y1o = 0;
+    const x2o = rOut * Math.cos(a), y2o = rOut * Math.sin(a);
 
-    if(kind==="caja"){
-      setWH(240,130);
-      const r = rect(0,0,240,130,12); r.classList.add("shape","accent","caja");
-      const mid = rect(22,38,196,70,10); mid.classList.add("shape");
-      mid.setAttribute("fill","rgba(88,166,255,.08)");
-      mid.setAttribute("stroke","rgba(88,166,255,.7)");
-      g.append(r, mid);
-      addLabel("CAJA VENTILACIÓN · Q=…");
-    }
+    const x2i = rIn * Math.cos(a),  y2i = rIn * Math.sin(a);
+    const x1i = rIn,  y1i = 0;
 
-    if(kind==="vent"){
-      setWH(150,150);
-      const r = rect(0,0,150,150,16); r.classList.add("shape","accent","vent");
-      const c = circle(75,75,46); c.classList.add("shape");
-      c.setAttribute("fill","rgba(210,153,34,.08)");
-      c.setAttribute("stroke","rgba(210,153,34,.7)");
-      const p = path("M 75 34 L 112 75 L 75 116 L 38 75 Z");
-      p.classList.add("shape");
-      p.setAttribute("fill","rgba(210,153,34,.06)");
-      p.setAttribute("stroke","rgba(210,153,34,.6)");
-      g.append(r,c,p);
-      addLabel("VENT. CENTRÍFUGO · F400?");
-    }
+    // compensación: para 45° el minX NO es 0
+    const minX = Math.min(x2o, x2i, x1i, x1o);
+    const dx = -minX;
+    const dy = 0;
 
-    if(kind==="campvent"){
-      setWH(300,120);
-      const r = rect(0,0,300,120,12); r.classList.add("shape","accent","campana");
-      const box = rect(185,25,95,70,12); box.classList.add("shape","accent","vent");
-      box.setAttribute("fill","rgba(210,153,34,.05)");
-      const fan = circle(232,60,22); fan.classList.add("shape");
-      fan.setAttribute("fill","rgba(210,153,34,.08)");
-      fan.setAttribute("stroke","rgba(210,153,34,.7)");
-      g.append(r, box, fan);
-      addLabel("CAMPANA + VENT. · Q=…");
-    }
-
-    if(kind==="filtronic"){
-      setWH(260,130);
-      const r = rect(0,0,260,130,12); r.classList.add("shape","accent","filtronic");
-      const grid = rect(18,40,224,70,10); grid.classList.add("shape");
-      grid.setAttribute("fill","rgba(163,113,247,.08)");
-      grid.setAttribute("stroke","rgba(163,113,247,.7)");
-      const bolt = path("M 130 34 L 108 78 L 132 78 L 112 118 L 162 66 L 136 66 Z");
-      bolt.classList.add("shape");
-      bolt.setAttribute("fill","rgba(163,113,247,.08)");
-      bolt.setAttribute("stroke","rgba(163,113,247,.7)");
-      g.append(r, grid, bolt);
-      addLabel("FILTRONIC · modelo=…");
-    }
-
-    if(kind==="carbon"){
-      setWH(280,120);
-      const r = rect(0,0,280,120,12); r.classList.add("shape","accent","carbon");
-      const fill = rect(18,40,244,70,10); fill.classList.add("shape");
-      fill.setAttribute("fill","rgba(157,167,179,.10)");
-      fill.setAttribute("stroke","rgba(157,167,179,.7)");
-      g.append(r, fill);
-      addLabel("CAJÓN CARBÓN · kg=…");
-    }
-
-    if(kind==="conducto"){
-      setWH(360,60);
-      const r = rect(0,0,360,60,10); r.classList.add("shape","accent","conducto");
-      r.setAttribute("fill","rgba(255,255,255,.02)");
-      g.appendChild(r);
-      addLabel("CONDUCTO · Ø… · EI…");
-    }
-
-    if(kind==="flex"){
-      setWH(290,52);
-      const r = rect(0,0,290,52,26); r.classList.add("shape","accent","conducto");
-      r.setAttribute("fill","rgba(255,255,255,.015)");
-      g.appendChild(r);
-      for(let x=14;x<290;x+=18){
-        const l=line(x,10,x,42);
-        l.classList.add("shape");
-        l.setAttribute("stroke","rgba(201,209,217,.35)");
-        l.setAttribute("stroke-width","2");
-        g.appendChild(l);
-      }
-      addLabel("FLEXIBLE · Ø…");
-    }
-
-    // ✅ CODO 90° (ANCHO REAL)
-    if(kind==="codo90"){
-      const R = 90;   // radio medio
-      const W = 40;   // ancho del tubo
-      const d = elbowPath(90, R, W);
-      const p = path(d);
-      p.classList.add("shape","accent","pieza");
-      p.setAttribute("fill","rgba(255,123,114,.06)");
-      // bbox aprox: rOut x rOut
-      const rOut = R + W/2;
-      setWH(Math.ceil(rOut), Math.ceil(rOut));
-      g.appendChild(p);
-      addLabel(`CODO 90° · Ø${W}`);
-      // guardamos parámetros por si luego quieres editar en UI
-      g.dataset.elbowR = String(R);
-      g.dataset.elbowW = String(W);
-    }
-
-    // ✅ CODO 45° (ANCHO REAL)
-    if(kind==="codo45"){
-      const R = 110;
-      const W = 40;
-      const d = elbowPath(45, R, W);
-      const p = path(d);
-      p.classList.add("shape","accent","pieza");
-      p.setAttribute("fill","rgba(255,123,114,.06)");
-      const rOut = R + W/2;
-      // bbox aprox para 45°: (rOut, rOut*sin45)
-      setWH(Math.ceil(rOut), Math.ceil(rOut*Math.sin(Math.PI/4)));
-      g.appendChild(p);
-      addLabel(`CODO 45° · Ø${W}`);
-      g.dataset.elbowR = String(R);
-      g.dataset.elbowW = String(W);
-    }
-
-    if(kind==="tee"){
-      setWH(210,125);
-      const main = rect(0,44,210,42,10); main.classList.add("shape","accent","pieza");
-      const branch = rect(84,0,42,125,10); branch.classList.add("shape","accent","pieza");
-      main.setAttribute("fill","rgba(255,123,114,.04)");
-      branch.setAttribute("fill","rgba(255,123,114,.04)");
-      g.append(main, branch);
-      addLabel("T · Ø…/Ø…");
-    }
-
-    if(kind==="red"){
-      setWH(240,78);
-      const p = path("M 0 0 L 240 0 L 185 78 L 0 78 Z");
-      p.classList.add("shape","accent","pieza");
-      p.setAttribute("fill","rgba(255,123,114,.04)");
-      g.appendChild(p);
-      addLabel("REDUCCIÓN · ØA→ØB");
-    }
-
-    if(kind==="rejilla"){
-      setWH(190,75);
-      const r = rect(0,0,190,75,10); r.classList.add("shape","accent","rejilla");
-      r.setAttribute("fill","rgba(121,192,255,.05)");
-      g.appendChild(r);
-      for(let x=16;x<180;x+=14){
-        const l=line(x,14,x,62);
-        l.classList.add("shape");
-        l.setAttribute("stroke","rgba(121,192,255,.55)");
-        l.setAttribute("stroke-width","2");
-        g.appendChild(l);
-      }
-      addLabel("REJILLA SALIDA · Ø…");
-    }
-
-    applyTransform(g);
-    bindItem(g);
-    return g;
+    return {
+      d: `
+        M ${x1o+dx} ${y1o+dy}
+        A ${rOut} ${rOut} 0 0 1 ${x2o+dx} ${y2o+dy}
+        L ${x2i+dx} ${y2i+dy}
+        A ${rIn} ${rIn} 0 0 0 ${x1i+dx} ${y1i+dy}
+        Z
+      `,
+      w: (rOut - minX),
+      h: (rOut * Math.sin(a))
+    };
   }
 
   let selected=null;
@@ -409,6 +267,13 @@
   let rotating=null;
 
   function clearOverlay(){ overlay.innerHTML=""; }
+
+  function getWorldCenter(g){
+    const w = +g.dataset.w||0, h = +g.dataset.h||0;
+    const x = (+g.dataset.x||0) + (w/2);
+    const y = (+g.dataset.y||0) + (h/2);
+    return {x,y};
+  }
 
   function select(g){
     if(selected) selected.classList.remove("selected");
@@ -449,8 +314,8 @@
 
   function drawOverlay(g){
     clearOverlay();
-    const bb = g.getBBox();
 
+    const bb = g.getBBox();
     const og = el("g");
     og.setAttribute("transform", g.getAttribute("transform"));
 
@@ -458,6 +323,7 @@
     box.classList.add("selbox");
     og.appendChild(box);
 
+    // resize handles (8)
     const pts = [
       {k:"nw", x:bb.x, y:bb.y, cls:""},
       {k:"n",  x:bb.x+bb.width/2, y:bb.y, cls:"ns"},
@@ -481,6 +347,7 @@
       og.appendChild(h);
     });
 
+    // rotate handle
     const cx = bb.x + bb.width/2;
     const top = bb.y;
     const ry = top - 28;
@@ -492,8 +359,7 @@
     rh.addEventListener("mousedown",(e)=>{
       e.stopPropagation();
       const sp = svgPoint(e);
-      const w = +g.dataset.w||0, h = +g.dataset.h||0;
-      const center = getWorldCenter(g, w, h);
+      const center = getWorldCenter(g);
       const ang0 = angleDeg(center.x, center.y, sp.x, sp.y);
       rotating = { g, center, startAng: ang0, startR: (+g.dataset.r||0) };
     });
@@ -504,16 +370,159 @@
     overlay.appendChild(og);
   }
 
-  function getWorldCenter(g, w, h){
-    const x = (+g.dataset.x||0) + (w/2);
-    const y = (+g.dataset.y||0) + (h/2);
-    return {x,y};
+  // ====== ELEMENTOS ======
+  function makeItem(kind){
+    const g = el("g");
+    g.classList.add("item");
+    g.dataset.kind = kind;
+    g.dataset.x="140"; g.dataset.y="140";
+    g.dataset.r="0"; g.dataset.sx="1"; g.dataset.sy="1";
+
+    const setWH = (w,h)=>{ g.dataset.w=String(w); g.dataset.h=String(h); };
+    const addLabel = (txt)=> g.appendChild(text(10,18,txt));
+
+    if(kind==="campana"){
+      setWH(280,95);
+      const r = rect(0,0,280,95,12); r.classList.add("shape","accent","campana");
+      g.appendChild(r);
+      for(let i=0;i<4;i++){
+        const f = rect(14+i*62, 38, 50, 40, 6);
+        f.classList.add("shape");
+        f.setAttribute("fill","rgba(46,160,67,.08)");
+        f.setAttribute("stroke","rgba(46,160,67,.7)");
+        g.appendChild(f);
+      }
+      addLabel("CAMPANA · filtros=4 · Q=…");
+    } else if(kind==="caja"){
+      setWH(240,130);
+      const r = rect(0,0,240,130,12); r.classList.add("shape","accent","caja");
+      const mid = rect(22,38,196,70,10); mid.classList.add("shape");
+      mid.setAttribute("fill","rgba(88,166,255,.08)");
+      mid.setAttribute("stroke","rgba(88,166,255,.7)");
+      g.append(r, mid);
+      addLabel("CAJA VENTILACIÓN · Q=…");
+    } else if(kind==="vent"){
+      setWH(150,150);
+      const r = rect(0,0,150,150,16); r.classList.add("shape","accent","vent");
+      const c = circle(75,75,46); c.classList.add("shape");
+      c.setAttribute("fill","rgba(210,153,34,.08)");
+      c.setAttribute("stroke","rgba(210,153,34,.7)");
+      const p = path("M 75 34 L 112 75 L 75 116 L 38 75 Z");
+      p.classList.add("shape");
+      p.setAttribute("fill","rgba(210,153,34,.06)");
+      p.setAttribute("stroke","rgba(210,153,34,.6)");
+      g.append(r,c,p);
+      addLabel("VENT. CENTRÍFUGO · F400?");
+    } else if(kind==="campvent"){
+      setWH(300,120);
+      const r = rect(0,0,300,120,12); r.classList.add("shape","accent","campana");
+      const box = rect(185,25,95,70,12); box.classList.add("shape","accent","vent");
+      box.setAttribute("fill","rgba(210,153,34,.05)");
+      const fan = circle(232,60,22); fan.classList.add("shape");
+      fan.setAttribute("fill","rgba(210,153,34,.08)");
+      fan.setAttribute("stroke","rgba(210,153,34,.7)");
+      g.append(r, box, fan);
+      addLabel("CAMPANA + VENT. · Q=…");
+    } else if(kind==="filtronic"){
+      setWH(260,130);
+      const r = rect(0,0,260,130,12); r.classList.add("shape","accent","filtronic");
+      const grid = rect(18,40,224,70,10); grid.classList.add("shape");
+      grid.setAttribute("fill","rgba(163,113,247,.08)");
+      grid.setAttribute("stroke","rgba(163,113,247,.7)");
+      const bolt = path("M 130 34 L 108 78 L 132 78 L 112 118 L 162 66 L 136 66 Z");
+      bolt.classList.add("shape");
+      bolt.setAttribute("fill","rgba(163,113,247,.08)");
+      bolt.setAttribute("stroke","rgba(163,113,247,.7)");
+      g.append(r, grid, bolt);
+      addLabel("FILTRONIC · modelo=…");
+    } else if(kind==="carbon"){
+      setWH(280,120);
+      const r = rect(0,0,280,120,12); r.classList.add("shape","accent","carbon");
+      const fill = rect(18,40,244,70,10); fill.classList.add("shape");
+      fill.setAttribute("fill","rgba(157,167,179,.10)");
+      fill.setAttribute("stroke","rgba(157,167,179,.7)");
+      g.append(r, fill);
+      addLabel("CAJÓN CARBÓN · kg=…");
+    } else if(kind==="conducto"){
+      setWH(360,60);
+      const r = rect(0,0,360,60,10); r.classList.add("shape","accent","conducto");
+      r.setAttribute("fill","rgba(255,255,255,.02)");
+      g.appendChild(r);
+      addLabel("CONDUCTO · Ø… · EI…");
+    } else if(kind==="flex"){
+      setWH(290,52);
+      const r = rect(0,0,290,52,26); r.classList.add("shape","accent","conducto");
+      r.setAttribute("fill","rgba(255,255,255,.015)");
+      g.appendChild(r);
+      for(let x=14;x<290;x+=18){
+        const l=line(x,10,x,42);
+        l.classList.add("shape");
+        l.setAttribute("stroke","rgba(201,209,217,.35)");
+        l.setAttribute("stroke-width","2");
+        g.appendChild(l);
+      }
+      addLabel("FLEXIBLE · Ø…");
+    } else if(kind==="codo90"){
+      const R=90, W=50, ang=90;
+      const obj = elbowPath(ang, R, W);
+      setWH(Math.max(80,obj.w), Math.max(80,obj.h));
+      const p = path(obj.d);
+      p.classList.add("shape","accent","pieza");
+      p.setAttribute("fill","rgba(255,123,114,.06)");
+      g.appendChild(p);
+      addLabel(`CODO 90° · Ø${W}`);
+    } else if(kind==="codo45"){
+      const R=110, W=50, ang=45;
+      const obj = elbowPath(ang, R, W);
+      setWH(Math.max(80,obj.w), Math.max(80,obj.h));
+      const p = path(obj.d);
+      p.classList.add("shape","accent","pieza");
+      p.setAttribute("fill","rgba(255,123,114,.06)");
+      g.appendChild(p);
+      addLabel(`CODO 45° · Ø${W}`);
+    } else if(kind==="tee"){
+      // T “cruz” (no desaparece)
+      setWH(210,150);
+      const main = rect(0,54,210,42,10); main.classList.add("shape","accent","pieza");
+      const branch = rect(84,0,42,150,10); branch.classList.add("shape","accent","pieza");
+      main.setAttribute("fill","rgba(255,123,114,.04)");
+      branch.setAttribute("fill","rgba(255,123,114,.04)");
+      g.append(main, branch);
+      addLabel("T · Ø…/Ø…");
+    } else if(kind==="red"){
+      setWH(240,78);
+      const p = path("M 0 0 L 240 0 L 185 78 L 0 78 Z");
+      p.classList.add("shape","accent","pieza");
+      p.setAttribute("fill","rgba(255,123,114,.04)");
+      g.appendChild(p);
+      addLabel("REDUCCIÓN · ØA→ØB");
+    } else if(kind==="rejilla"){
+      setWH(190,75);
+      const r = rect(0,0,190,75,10); r.classList.add("shape","accent","rejilla");
+      r.setAttribute("fill","rgba(121,192,255,.05)");
+      g.appendChild(r);
+      for(let x=16;x<180;x+=14){
+        const l=line(x,14,x,62);
+        l.classList.add("shape");
+        l.setAttribute("stroke","rgba(121,192,255,.55)");
+        l.setAttribute("stroke-width","2");
+        g.appendChild(l);
+      }
+      addLabel("REJILLA SALIDA · Ø…");
+    } else {
+      // fallback
+      setWH(180,80);
+      const r = rect(0,0,180,80,12); r.classList.add("shape");
+      g.appendChild(r);
+      addLabel("ELEMENTO");
+    }
+
+    applyTransform(g);
+    bindItem(g);
+    return g;
   }
 
-  function angleDeg(cx,cy,x,y){
-    return Math.atan2(y-cy, x-cx) * 180 / Math.PI;
-  }
-
+  // ====== MOUSE MOVE / DRAG / RESIZE / ROTATE ======
   svg.addEventListener("mousemove",(e)=>{
     if(drag){
       const p=svgPoint(e);
@@ -560,6 +569,7 @@
     if(e.target===svg || e.target===gridG) select(null);
   });
 
+  // ===== PANEL BINDINGS =====
   inpLabel.addEventListener("input",()=>{
     if(!selected) return;
     const t=selected.querySelector('[data-role="label"]');
@@ -592,6 +602,7 @@
     svg.style.transform=`scale(${z})`;
   });
 
+  // ===== ADD HELPER =====
   function add(kind){
     const g=makeItem(kind);
     const n=itemsG.children.length;
@@ -602,7 +613,7 @@
     select(g);
   }
 
-  // ✅ botones (SIN duplicados)
+  // ===== BUTTONS =====
   document.getElementById("addCampana").onclick=()=>add("campana");
   document.getElementById("addCaja").onclick=()=>add("caja");
   document.getElementById("addVent").onclick=()=>add("vent");
@@ -632,6 +643,13 @@
     select(null);
   };
 
+  // Export PDF (print)
+  document.getElementById("btnExportPdf").onclick=()=>{
+    select(null);
+    window.print();
+  };
+
+  // Export SVG
   document.getElementById("btnExportSvg").onclick=()=>{
     const clone=svg.cloneNode(true);
     const ov=clone.querySelector("#overlay"); if(ov) ov.remove();
@@ -645,11 +663,19 @@
     URL.revokeObjectURL(a.href);
   };
 
+  // Save / Load JSON (con alias)
+  const kindMap = {
+    "t":"tee", "tee":"tee",
+    "reduccion":"red", "red":"red",
+    "flexible":"flex", "flex":"flex"
+  };
+
   document.getElementById("btnSave").onclick=()=>{
     const arr=[...itemsG.querySelectorAll("g.item")].map(g=>{
       const t=g.querySelector('[data-role="label"]');
       return {
-        kind:g.dataset.kind, x:+g.dataset.x, y:+g.dataset.y,
+        kind:g.dataset.kind,
+        x:+g.dataset.x, y:+g.dataset.y,
         r:+g.dataset.r, sx:+g.dataset.sx, sy:+g.dataset.sy,
         w:+g.dataset.w, h:+g.dataset.h,
         label:(t?t.textContent:"")
@@ -675,7 +701,10 @@
     select(null);
 
     for(const it of data){
-      const g=makeItem(it.kind);
+      const raw = (it.kind||"");
+      const k = kindMap[String(raw).toLowerCase()] || raw;
+
+      const g=makeItem(k);
       itemsG.appendChild(g);
 
       g.dataset.x=it.x||0; g.dataset.y=it.y||0;
@@ -692,10 +721,11 @@
       }
       applyTransform(g);
     }
+
     fileLoad.value="";
   });
 
-  // inicial
+  // ===== INIT =====
   add("conducto");
 })();
 </script>
