@@ -35,15 +35,12 @@
   #stageWrap{ background:var(--panel); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
   svg{ width:100%; height: calc(100vh - 110px); display:block; background:#0b1220; }
 
-  /* Grid */
   .gridline{ stroke:#1f2733; stroke-width:1; }
 
-  /* Items */
   .item .shape{ stroke:#c9d1d9; stroke-width:2; fill:rgba(255,255,255,.03); }
   .item text{ fill:#c9d1d9; font-size:12px; user-select:none; }
   .selected .shape{ stroke: var(--accent) !important; }
 
-  /* Accents by type */
   .accent.campana{ stroke: var(--c-camp); }
   .accent.caja{ stroke: var(--c-box); }
   .accent.vent{ stroke: var(--c-fan); }
@@ -53,13 +50,11 @@
   .accent.pieza{ stroke: var(--c-piece); }
   .accent.rejilla{ stroke: var(--c-grille); }
 
-  /* Overlay selection box + handles */
   .selbox{ fill:none; stroke: var(--accent); stroke-width:1.5; stroke-dasharray:4 3; pointer-events:none; }
   .handle{ fill: var(--accent); stroke:#0b1220; stroke-width:2; cursor:nwse-resize; }
   .handle.ns{ cursor:ns-resize; }
   .handle.ew{ cursor:ew-resize; }
 
-  /* Rotate handle */
   .rotline{ stroke: var(--accent); stroke-width:2; }
   .rothandle{ fill: var(--accent); stroke:#0b1220; stroke-width:2; cursor:grab; }
 </style>
@@ -168,6 +163,30 @@
   const path = (d)=>{ const p=el("path"); p.setAttribute("d",d); return p; };
   const text = (x,y,txt)=>{ const t=el("text"); t.setAttribute("x",x); t.setAttribute("y",y); t.textContent=txt; t.dataset.role="label"; return t; };
 
+  // --- CODO ANCHO (tubo) ---
+  // El codo se genera como “sector” con radio R y ancho w (espesor del tubo).
+  function elbowPath(angleDeg, R, w){
+    const a = angleDeg * Math.PI / 180;
+    const rOut = R + w/2;
+    const rIn  = Math.max(2, R - w/2);
+
+    // Outer arc: from (rOut,0) to (rOut*cos(a), rOut*sin(a))
+    const x1o = rOut, y1o = 0;
+    const x2o = rOut * Math.cos(a), y2o = rOut * Math.sin(a);
+
+    // Inner arc: from (rIn*cos(a), rIn*sin(a)) back to (rIn,0)
+    const x2i = rIn * Math.cos(a), y2i = rIn * Math.sin(a);
+    const x1i = rIn, y1i = 0;
+
+    return `
+      M ${x1o} ${y1o}
+      A ${rOut} ${rOut} 0 0 1 ${x2o} ${y2o}
+      L ${x2i} ${y2i}
+      A ${rIn} ${rIn} 0 0 0 ${x1i} ${y1i}
+      Z
+    `;
+  }
+
   function drawGrid(step=40){
     gridG.innerHTML="";
     const vb = svg.viewBox.baseVal;
@@ -211,14 +230,12 @@
     g.dataset.r="0"; g.dataset.sx="1"; g.dataset.sy="1";
 
     const setWH = (w,h)=>{ g.dataset.w=String(w); g.dataset.h=String(h); };
-
     const addLabel = (txt)=> g.appendChild(text(10,18,txt));
 
     if(kind==="campana"){
       setWH(280,95);
       const r = rect(0,0,280,95,12); r.classList.add("shape","accent","campana");
       g.appendChild(r);
-      // filtros dibujados (4 por defecto)
       for(let i=0;i<4;i++){
         const f = rect(14+i*62, 38, 50, 40, 6);
         f.classList.add("shape");
@@ -288,28 +305,6 @@
       g.append(r, fill);
       addLabel("CAJÓN CARBÓN · kg=…");
     }
-    else if(kind==="codo90"){
-  const angle = 90;
-  const R = 80;   // curvatura
-  const w = 40;   // ANCHO del conducto
-
-  const p = document.createElementNS(svg.namespaceURI,"path");
-  p.setAttribute("d", elbowPath(angle, R, w));
-  p.setAttribute("fill","rgba(255,255,255,.04)");
-  p.setAttribute("stroke","#ff6a6a");
-  p.setAttribute("stroke-width","2");
-
-  const t = document.createElementNS(svg.namespaceURI,"text");
-  t.setAttribute("x","10");
-  t.setAttribute("y","-10");
-  t.textContent = "CODO 90 · Ø40";
-
-  g.append(p, t);
-
-  g.dataset.angle = "90";
-  g.dataset.r = String(R);
-  g.dataset.w = String(w);
-}
 
     if(kind==="conducto"){
       setWH(360,60);
@@ -334,22 +329,39 @@
       addLabel("FLEXIBLE · Ø…");
     }
 
+    // ✅ CODO 90° (ANCHO REAL)
     if(kind==="codo90"){
-      setWH(130,130);
-      const p = path("M 12 100 A 88 88 0 0 1 100 12 L 120 12 A 108 108 0 0 0 12 120 Z");
+      const R = 90;   // radio medio
+      const W = 40;   // ancho del tubo
+      const d = elbowPath(90, R, W);
+      const p = path(d);
       p.classList.add("shape","accent","pieza");
       p.setAttribute("fill","rgba(255,123,114,.06)");
+      // bbox aprox: rOut x rOut
+      const rOut = R + W/2;
+      setWH(Math.ceil(rOut), Math.ceil(rOut));
       g.appendChild(p);
-      addLabel("CODO 90° · Ø…");
+      addLabel(`CODO 90° · Ø${W}`);
+      // guardamos parámetros por si luego quieres editar en UI
+      g.dataset.elbowR = String(R);
+      g.dataset.elbowW = String(W);
     }
 
+    // ✅ CODO 45° (ANCHO REAL)
     if(kind==="codo45"){
-      setWH(170,125);
-      const p = path("M 12 100 L 100 12 L 125 12 L 12 125 Z");
+      const R = 110;
+      const W = 40;
+      const d = elbowPath(45, R, W);
+      const p = path(d);
       p.classList.add("shape","accent","pieza");
       p.setAttribute("fill","rgba(255,123,114,.06)");
+      const rOut = R + W/2;
+      // bbox aprox para 45°: (rOut, rOut*sin45)
+      setWH(Math.ceil(rOut), Math.ceil(rOut*Math.sin(Math.PI/4)));
       g.appendChild(p);
-      addLabel("CODO 45° · Ø…");
+      addLabel(`CODO 45° · Ø${W}`);
+      g.dataset.elbowR = String(R);
+      g.dataset.elbowW = String(W);
     }
 
     if(kind==="tee"){
@@ -437,11 +449,8 @@
 
   function drawOverlay(g){
     clearOverlay();
-
-    // bbox in local coordinates of g
     const bb = g.getBBox();
 
-    // overlay group follows same transform as g
     const og = el("g");
     og.setAttribute("transform", g.getAttribute("transform"));
 
@@ -449,7 +458,6 @@
     box.classList.add("selbox");
     og.appendChild(box);
 
-    // resize handles (8)
     const pts = [
       {k:"nw", x:bb.x, y:bb.y, cls:""},
       {k:"n",  x:bb.x+bb.width/2, y:bb.y, cls:"ns"},
@@ -473,7 +481,6 @@
       og.appendChild(h);
     });
 
-    // rotate handle (circle above center)
     const cx = bb.x + bb.width/2;
     const top = bb.y;
     const ry = top - 28;
@@ -498,8 +505,6 @@
   }
 
   function getWorldCenter(g, w, h){
-    // center in local coords: (w/2,h/2)
-    // then apply translation only (we keep it simple and stable using dataset x/y)
     const x = (+g.dataset.x||0) + (w/2);
     const y = (+g.dataset.y||0) + (h/2);
     return {x,y};
@@ -555,7 +560,6 @@
     if(e.target===svg || e.target===gridG) select(null);
   });
 
-  // panel bindings
   inpLabel.addEventListener("input",()=>{
     if(!selected) return;
     const t=selected.querySelector('[data-role="label"]');
@@ -588,7 +592,6 @@
     svg.style.transform=`scale(${z})`;
   });
 
-  // add helper
   function add(kind){
     const g=makeItem(kind);
     const n=itemsG.children.length;
@@ -599,13 +602,14 @@
     select(g);
   }
 
-  // buttons
+  // ✅ botones (SIN duplicados)
   document.getElementById("addCampana").onclick=()=>add("campana");
   document.getElementById("addCaja").onclick=()=>add("caja");
   document.getElementById("addVent").onclick=()=>add("vent");
   document.getElementById("addCampVent").onclick=()=>add("campvent");
   document.getElementById("addFiltronic").onclick=()=>add("filtronic");
   document.getElementById("addCarbon").onclick=()=>add("carbon");
+
   document.getElementById("addConducto").onclick=()=>add("conducto");
   document.getElementById("addFlex").onclick=()=>add("flex");
   document.getElementById("addCodo90").onclick=()=>add("codo90");
@@ -613,13 +617,6 @@
   document.getElementById("addT").onclick=()=>add("tee");
   document.getElementById("addRed").onclick=()=>add("red");
   document.getElementById("addRejilla").onclick=()=>add("rejilla");
-  // === BOTONES DE ELEMENTOS ===
-document.getElementById("addCodo90").onclick = () => add("codo90");
-document.getElementById("addCodo45").onclick = () => add("codo45");
-document.getElementById("addConducto").onclick = () => add("conducto");
-document.getElementById("addFlex").onclick = () => add("flexible");
-document.getElementById("addT").onclick = () => add("t");
-document.getElementById("addRed").onclick = () => add("reduccion");
 
   document.getElementById("btnRot90").onclick=()=>{
     if(!selected) return;
@@ -635,7 +632,6 @@ document.getElementById("addRed").onclick = () => add("reduccion");
     select(null);
   };
 
-  // export svg
   document.getElementById("btnExportSvg").onclick=()=>{
     const clone=svg.cloneNode(true);
     const ov=clone.querySelector("#overlay"); if(ov) ov.remove();
@@ -649,11 +645,15 @@ document.getElementById("addRed").onclick = () => add("reduccion");
     URL.revokeObjectURL(a.href);
   };
 
-  // save/load json
   document.getElementById("btnSave").onclick=()=>{
     const arr=[...itemsG.querySelectorAll("g.item")].map(g=>{
       const t=g.querySelector('[data-role="label"]');
-      return { kind:g.dataset.kind, x:+g.dataset.x, y:+g.dataset.y, r:+g.dataset.r, sx:+g.dataset.sx, sy:+g.dataset.sy, w:+g.dataset.w, h:+g.dataset.h, label:(t?t.textContent:"") };
+      return {
+        kind:g.dataset.kind, x:+g.dataset.x, y:+g.dataset.y,
+        r:+g.dataset.r, sx:+g.dataset.sx, sy:+g.dataset.sy,
+        w:+g.dataset.w, h:+g.dataset.h,
+        label:(t?t.textContent:"")
+      };
     });
     const blob=new Blob([JSON.stringify(arr,null,2)],{type:"application/json"});
     const a=document.createElement("a");
@@ -692,38 +692,12 @@ document.getElementById("addRed").onclick = () => add("reduccion");
       }
       applyTransform(g);
     }
-
     fileLoad.value="";
   });
 
-  // click on empty stage deselect
-  svg.addEventListener("mousedown",(e)=>{
-    if(e.target===svg || e.target===gridG) select(null);
-  });
-
-  // initial sanity
+  // inicial
   add("conducto");
 })();
-  function elbowPath(angleDeg, R, w){
-  const a = angleDeg * Math.PI / 180;
-
-  const rOut = R + w/2;
-  const rIn  = Math.max(2, R - w/2);
-
-  const x1o = rOut, y1o = 0;
-  const x2o = rOut * Math.cos(a), y2o = rOut * Math.sin(a);
-
-  const x2i = rIn * Math.cos(a), y2i = rIn * Math.sin(a);
-  const x1i = rIn, y1i = 0;
-
-  return `
-    M ${x1o} ${y1o}
-    A ${rOut} ${rOut} 0 0 1 ${x2o} ${y2o}
-    L ${x2i} ${y2i}
-    A ${rIn} ${rIn} 0 0 0 ${x1i} ${y1i}
-    Z
-  `;
-}
 </script>
 </body>
 </html>
