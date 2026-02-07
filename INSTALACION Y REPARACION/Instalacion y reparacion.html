@@ -288,6 +288,28 @@
       g.append(r, fill);
       addLabel("CAJÓN CARBÓN · kg=…");
     }
+    else if(kind==="codo90"){
+  const angle = 90;
+  const R = 80;   // curvatura
+  const w = 40;   // ANCHO del conducto
+
+  const p = document.createElementNS(svg.namespaceURI,"path");
+  p.setAttribute("d", elbowPath(angle, R, w));
+  p.setAttribute("fill","rgba(255,255,255,.04)");
+  p.setAttribute("stroke","#ff6a6a");
+  p.setAttribute("stroke-width","2");
+
+  const t = document.createElementNS(svg.namespaceURI,"text");
+  t.setAttribute("x","10");
+  t.setAttribute("y","-10");
+  t.textContent = "CODO 90 · Ø40";
+
+  g.append(p, t);
+
+  g.dataset.angle = "90";
+  g.dataset.r = String(R);
+  g.dataset.w = String(w);
+}
 
     if(kind==="conducto"){
       setWH(360,60);
@@ -591,6 +613,13 @@
   document.getElementById("addT").onclick=()=>add("tee");
   document.getElementById("addRed").onclick=()=>add("red");
   document.getElementById("addRejilla").onclick=()=>add("rejilla");
+  // === BOTONES DE ELEMENTOS ===
+document.getElementById("addCodo90").onclick = () => add("codo90");
+document.getElementById("addCodo45").onclick = () => add("codo45");
+document.getElementById("addConducto").onclick = () => add("conducto");
+document.getElementById("addFlex").onclick = () => add("flexible");
+document.getElementById("addT").onclick = () => add("t");
+document.getElementById("addRed").onclick = () => add("reduccion");
 
   document.getElementById("btnRot90").onclick=()=>{
     if(!selected) return;
@@ -675,6 +704,26 @@
   // initial sanity
   add("conducto");
 })();
+  function elbowPath(angleDeg, R, w){
+  const a = angleDeg * Math.PI / 180;
+
+  const rOut = R + w/2;
+  const rIn  = Math.max(2, R - w/2);
+
+  const x1o = rOut, y1o = 0;
+  const x2o = rOut * Math.cos(a), y2o = rOut * Math.sin(a);
+
+  const x2i = rIn * Math.cos(a), y2i = rIn * Math.sin(a);
+  const x1i = rIn, y1i = 0;
+
+  return `
+    M ${x1o} ${y1o}
+    A ${rOut} ${rOut} 0 0 1 ${x2o} ${y2o}
+    L ${x2i} ${y2i}
+    A ${rIn} ${rIn} 0 0 0 ${x1i} ${y1i}
+    Z
+  `;
+}
 </script>
 </body>
 </html>
