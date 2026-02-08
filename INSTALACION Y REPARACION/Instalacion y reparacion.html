@@ -484,18 +484,16 @@
   // T real: rama solo hacia arriba (no “+”)
   const W = 210;
   const H_MAIN = 42;
-  const H_BRANCH = 70;     // altura de la rama hacia arriba
+  const H_BRANCH = 70;
   const BR = 10;
 
-  const TOTAL_H = H_BRANCH + H_MAIN; // alto total
+  const TOTAL_H = H_BRANCH + H_MAIN;
   setWH(W, TOTAL_H);
 
-  // tramo horizontal (abajo)
   const main = rect(0, H_BRANCH, W, H_MAIN, BR);
   main.classList.add("shape","accent","pieza");
   main.setAttribute("fill","rgba(255,123,114,.04)");
 
-  // rama vertical (solo arriba)
   const branchW = 42;
   const branchX = (W - branchW) / 2;
   const branch = rect(branchX, 0, branchW, H_BRANCH, BR);
@@ -505,62 +503,33 @@
   g.append(main, branch);
   addLabel("T · Ø…/Ø…");
 
-   } else if(kind==="red"){
-  // Reducción tipo “cono” (troncocónica) como en tu icono
-  const W = 260;        // largo
-  const H1 = 110;       // diámetro grande (alto visual)
-  const H2 = 70;        // diámetro pequeño
-  const ring = 10;      // “borde”/aro
+} else if(kind==="red"){
+  // Reducción troncocónica
+  const W = 260;
+  const H1 = 110;
+  const H2 = 70;
+  const ring = 10;
   setWH(W, H1);
 
-  // Rect base invisible para que el BBOX/overlay sea estable
   const base = rect(0,0,W,H1,8);
-  base.classList.add("shape");
-  base.setAttribute("fill","rgba(0,0,0,0)");
-  base.setAttribute("stroke","rgba(0,0,0,0)");
+  base.setAttribute("fill","none");
+  base.setAttribute("stroke","none");
   g.appendChild(base);
 
-  const y1 = (H1 - H1)/2;          // 0
-  const y2 = (H1 - H2)/2;          // centrado del pequeño
+  const y2 = (H1 - H2) / 2;
 
-  // Cuerpo (trapezoide)
-  const body = path(
-    `M ${ring} ${y1}
-     L ${W-ring} ${y2}
-     L ${W-ring} ${y2+H2}
-     L ${ring} ${y1+H1}
-     Z`
-  );
+  const body = path(`
+    M ${ring} 0
+    L ${W-ring} ${y2}
+    L ${W-ring} ${y2+H2}
+    L ${ring} ${H1}
+    Z
+  `);
   body.classList.add("shape","accent","pieza");
   body.setAttribute("fill","rgba(255,123,114,.06)");
 
-  // Aro izquierdo (boca grande)
-  const leftRing = rect(0, y1, ring*1.25, H1, 6);
-  leftRing.classList.add("shape","accent","pieza");
-  leftRing.setAttribute("fill","rgba(255,123,114,.10)");
-
-  // Aro derecho (boca pequeña)
-  const rightRing = rect(W-ring*1.25, y2, ring*1.25, H2, 6);
-  rightRing.classList.add("shape","accent","pieza");
-  rightRing.setAttribute("fill","rgba(255,123,114,.10)");
-
-  // Línea interior (sensación de “doble pared” como el icono)
-  const inner = path(
-    `M ${ring*2} ${y1+8}
-     L ${W-ring*2} ${y2+10}
-     L ${W-ring*2} ${y2+H2-10}
-     L ${ring*2} ${y1+H1-8}
-     Z`
-  );
-  inner.classList.add("shape");
-  inner.setAttribute("fill","rgba(0,0,0,0)");
-  inner.setAttribute("stroke","rgba(255,123,114,.45)");
-  inner.setAttribute("stroke-width","2");
-
-  g.append(body, leftRing, rightRing, inner);
-
+  g.appendChild(body);
   addLabel("REDUCCIÓN · ØA→ØB");
-}
     } else if(kind==="rejilla"){
       setWH(190,75);
       const r = rect(0,0,190,75,10); r.classList.add("shape","accent","rejilla");
