@@ -372,10 +372,19 @@ function getSvgText(t){
       drag={ g, startX:p.x, startY:p.y, ox:+g.dataset.x, oy:+g.dataset.y };
     });
 
-   g.addEventListener("dblclick",()=>{
+  g.addEventListener("dblclick", () => {
   const t = g.querySelector('[data-role="label"]');
-  if(!t) return;
-  openTextModal(t);
+  if (!t) return;
+
+  const val = prompt(
+    "Edita el texto (usa ENTER para saltos de línea):",
+    getSvgText(t)
+  );
+
+  if (val === null) return;
+
+  setSvgText(t, val);
+  inpLabel.value = val;
 });
   }
 
