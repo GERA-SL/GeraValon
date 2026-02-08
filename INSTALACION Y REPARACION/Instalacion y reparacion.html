@@ -353,7 +353,7 @@ function getSvgText(t){
 
     selected.classList.add("selected");
     const t=selected.querySelector('[data-role="label"]');
-    inpLabel.value = t ? t.textContent : "";
+    inpLabel.value = t ? getSvgText(t) : "";
     inpW.value = selected.dataset.w || "";
     inpH.value = selected.dataset.h || "";
     drawOverlay(selected);
@@ -707,10 +707,10 @@ function getSvgText(t){
 
   // ===== PANEL BINDINGS =====
   inpLabel.addEventListener("input",()=>{
-    if(!selected) return;
-    const t=selected.querySelector('[data-role="label"]');
-    if(t) t.textContent=inpLabel.value;
-  });
+  if(!selected) return;
+  const t=selected.querySelector('[data-role="label"]');
+  if(t) setSvgText(t, inpLabel.value);   // <-- esto mantiene multilínea
+});
 
   function applyWH(){
     if(!selected) return;
