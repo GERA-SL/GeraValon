@@ -665,19 +665,45 @@
     window.print();
   };
 
-  // Export SVG
-  document.getElementById("btnExportSvg").onclick=()=>{
-    const clone=svg.cloneNode(true);
-    const ov=clone.querySelector("#overlay"); if(ov) ov.remove();
-    clone.querySelectorAll(".selected").forEach(n=>n.classList.remove("selected"));
-    const data=new XMLSerializer().serializeToString(clone);
-    const blob=new Blob([data],{type:"image/svg+xml"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob);
-    a.download="hvac-esquema.svg";
-    a.click();
-    URL.revokeObjectURL(a.href);
-  };
+ // Export SVG (con estilos + fondo oscuro)
+document.getElementById("btnExportSvg").onclick = () => {
+
+  // 1) clonar el SVG
+  const clone = svg.cloneNode(true);
+
+  // 2) quitar overlay (caja/handles)
+  const ov = clone.querySelector("#overlay");
+  if (ov) ov.remove();
+
+  // 3) quitar selección
+  clone.querySelectorAll(".selected").forEach(n => n.classList.remove("selected"));
+
+  // 4) insertar fondo oscuro para que se vea igual que en pantalla
+  const vb = clone.viewBox.baseVal;
+  const bg = document.createElementNS(NS, "rect");
+  bg.setAttribute("x", vb.x);
+  bg.setAttribute("y", vb.y);
+  bg.setAttribute("width", vb.width);
+  bg.setAttribute("height", vb.height);
+  bg.setAttribute("fill", "#0b1220");
+  clone.insertBefore(bg, clone.firstChild);
+
+  // 5) incrustar los estilos del <style> del HTML dentro del SVG
+  const css = document.querySelector("style")?.textContent || "";
+  const styleEl = document.createElementNS(NS, "style");
+  styleEl.textContent = css;
+  clone.insertBefore(styleEl, clone.firstChild);
+
+  // 6) descargar
+  const data = new XMLSerializer().serializeToString(clone);
+  const blob = new Blob([data], { type: "image/svg+xml" });
+
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "hvac-esquema.svg";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
 
   // Save / Load JSON (con alias)
   const kindMap = {
