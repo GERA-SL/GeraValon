@@ -14,13 +14,7 @@
     --c-fil:#a371f7; --c-carbon:#9da7b3;
     --c-piece:#ff7b72; --c-duct:#c9d1d9; --c-grille:#79c0ff;
   }
-  .sh-row{
-  white-space:nowrap;
-}
-
-.sh-right{
-  min-width:420px;
-}
+  
   *{ box-sizing:border-box; }
   body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); }
 
@@ -122,86 +116,7 @@ svg{
     #stageWrap{ border:none; }
     svg{ height: auto; background:white !important; }
   }
-  /* ===== STAGE HEADER EN DOS COLUMNAS ===== */
-#stageHeader{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:32px;
-  padding:14px 18px;
-  background:#0f1623;
-  border-bottom:1px solid #30363d;
-}
-
-.sh-col{
-  display:flex;
-  gap:14px;
-  align-items:flex-start;
-}
-
-.sh-left{
-  justify-content:flex-start;
-}
-
-.sh-right{
-  flex-direction:column;
-  font-size:12.5px;
-  line-height:1.8;
-}
-
-.sh-logo{
-  width:140px;           /* ancho fijo del hueco */
-  height:80px;           /* alto fijo del hueco */
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px dashed var(--border);
-  border-radius:8px;
-  overflow:hidden;       /* CLAVE: recorta si se pasa */
-}
-
-.sh-logo img{
-  max-width:100%;
-  max-height:100%;
-  object-fit:contain;    /* no deformar */
-  display:block;
-}
-
-.sh-company{
-  font-size:12.5px;
-  line-height:1.35;
-}
-
-.sh-line{
-  color:#e6edf3;
-}
-
-.sh-line.strong{
-  font-weight:700;
-  letter-spacing:.3px;
-}
-
-.sh-row{
-  white-space:nowrap;
-}
-
-.sh-row span{
-  color:#8b949e;
-}
-
-.sh-row .ml{
-  margin-left:18px;
-}
-
-/* PRINT */
-@media print{
-  #stageHeader{
-    background:white;
-    color:black;
-    border-bottom:1px solid #999;
-  }
-  .sh-line, .sh-row span{
-    color:black;
-  }
+  
 }
 </style>
 </head>
