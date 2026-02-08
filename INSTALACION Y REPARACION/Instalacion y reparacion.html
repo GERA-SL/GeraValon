@@ -226,40 +226,7 @@ textarea{
   const inpW = document.getElementById("w");
   const inpH = document.getElementById("h");
   const fileLoad = document.getElementById("fileLoad");
-    // ===== MODAL EDITOR MULTILÍNEA =====
-  const textModal = document.getElementById("textModal");
-  const textModalArea = document.getElementById("textModalArea");
-  const textModalOk = document.getElementById("textModalOk");
-  const textModalCancel = document.getElementById("textModalCancel");
-
-  let modalTargetText = null;
-
-  function openTextModal(t){
-    modalTargetText = t;
-    textModalArea.value = getSvgText(t);
-    textModal.classList.remove("hidden");
-    setTimeout(()=>textModalArea.focus(), 0);
-  }
-  function closeTextModal(){
-    textModal.classList.add("hidden");
-    modalTargetText = null;
-  }
-
-  textModalCancel.onclick = closeTextModal;
-  textModal.onclick = (e)=>{ if(e.target === textModal) closeTextModal(); };
-
-  textModalOk.onclick = ()=>{
-    if(!modalTargetText) return closeTextModal();
-    setSvgText(modalTargetText, textModalArea.value);
-    inpLabel.value = textModalArea.value; // sincroniza panel izq
-    closeTextModal();
-  };
-
-  window.addEventListener("keydown",(e)=>{
-    if(textModal.classList.contains("hidden")) return;
-    if(e.key === "Escape") closeTextModal();
-    if(e.key === "Enter" && (e.ctrlKey || e.metaKey)) textModalOk.click();
-  });
+   
 
   const el = (n)=>document.createElementNS(NS,n);
   const rect = (x,y,w,h,rx=10)=>{ const r=el("rect"); r.setAttribute("x",x); r.setAttribute("y",y); r.setAttribute("width",w); r.setAttribute("height",h); r.setAttribute("rx",rx); r.setAttribute("ry",rx); return r; };
@@ -913,16 +880,6 @@ document.getElementById("btnExportSvg").onclick = () => {
 })();
  
 </script>
-  <!-- ===== EDITOR MULTILÍNEA (MODAL) ===== -->
-<div id="textModal" class="modal hidden">
-  <div class="modalCard">
-    <div class="modalTitle">Editar texto (multilínea)</div>
-    <textarea id="textModalArea" rows="8" spellcheck="false"></textarea>
-    <div class="modalBtns">
-      <button id="textModalCancel" type="button">Cancelar</button>
-      <button id="textModalOk" type="button">Aceptar</button>
-    </div>
-  </div>
-</div>
+ 
 </body>
 </html>
