@@ -9,11 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+    a.row{ text-decoration:none; color:inherit; }
 
-    a.row{
-  text-decoration: none;
-  color: inherit;
-}
     :root{
       --bg:#0d1117;
       --panel:#161b22;
@@ -47,7 +44,6 @@
     main{
       max-width:720px;
       margin:0 auto;
-      padding:0;
     }
 
     .list{
@@ -63,9 +59,7 @@
       cursor:pointer;
     }
 
-    .row:hover{
-      background:var(--hover);
-    }
+    .row:hover{ background:var(--hover); }
 
     .icon{
       width:26px;
@@ -84,6 +78,18 @@
       font-size:15px;
       font-weight:500;
     }
+
+    /* SUBMENU */
+    .submenu{
+      display:none;
+      background:#0f1623;
+      border-bottom:1px solid var(--border);
+    }
+
+    .submenu .row{
+      padding-left:58px;
+      font-size:14px;
+    }
   </style>
 </head>
 
@@ -96,40 +102,53 @@
 <main>
   <div class="list">
 
-   <a href="SERVICIOS%20VARIOS/Servicios.html" class="row">
-  <div class="icon" style="background:#a371f7">S</div>
-  <div class="name">SERVICIOS VARIOS Y LIMPIEZA HOSTELERIA</div>
-  </a>
+    <a href="SERVICIOS%20VARIOS/Servicios.html" class="row">
+      <div class="icon" style="background:#a371f7">S</div>
+      <div class="name">SERVICIOS VARIOS Y LIMPIEZA HOSTELERIA</div>
+    </a>
 
-   <a href="TRABAJADORES/Trabajadores.html" class="row">
+    <a href="TRABAJADORES/Trabajadores.html" class="row">
       <div class="icon" style="background:#2ea043">R</div>
       <div class="name">TRABAJADORES</div>
     </a>
 
-    <div class="row" onclick="selectProject('LIMPIEZA INDUSTRIAL')">
+    <div class="row">
       <div class="icon" style="background:#d29922">L</div>
       <div class="name">LIMPIEZA INDUSTRIAL</div>
     </div>
 
-    <a href="INSTALACION%20Y%20REPARACION/Instalacion%20y%20reparacion.html" class="row">
+    <!-- INSTALACION Y REPARACION -->
+    <div class="row" onclick="toggleInstalacion()">
       <div class="icon" style="background:#f0883e">I</div>
       <div class="name">INSTALACION Y REPARACION</div>
     </div>
-    
-   <div class="row" onclick="selectProject('TRADER')">
+
+    <div id="submenu-instalacion" class="submenu">
+      <a href="INSTALACION%20Y%20REPARACION/plano.html" class="row">
+        <div class="icon" style="background:#58a6ff">P</div>
+        <div class="name">PLANO</div>
+      </a>
+
+      <a href="INSTALACION%20Y%20REPARACION/costes.html" class="row">
+        <div class="icon" style="background:#ff7b72">€</div>
+        <div class="name">COSTES</div>
+      </a>
+    </div>
+
+    <div class="row">
       <div class="icon" style="background:#ff5a52">T</div>
       <div class="name">TRADER</div>
     </div>
+
   </div>
 </main>
 
 <script>
-  function selectProject(name){
-    alert("Proyecto seleccionado: " + name);
-    // aquí luego enlazamos a costes.html?proyecto=...
+  function toggleInstalacion(){
+    const sub = document.getElementById("submenu-instalacion");
+    sub.style.display = sub.style.display === "block" ? "none" : "block";
   }
 </script>
 
 </body>
 </html>
-<!-- deploy-2026-02-02 -->
