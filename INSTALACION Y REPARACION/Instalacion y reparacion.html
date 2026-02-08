@@ -62,9 +62,25 @@
   input:focus, select:focus{ border-color:#4b5563; box-shadow:0 0 0 2px rgba(46,160,67,.15); }
   .muted{ color:var(--muted); font-size:12px; line-height:1.35; }
 
-  #stageWrap{ background:var(--panel); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
-  svg{ width:100%; height: calc(100vh - 120px); display:block; background:#0b1220; }
+ #stageWrap{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
 
+  /* 👇 CLAVE */
+  display:flex;
+  flex-direction:column;
+  min-height: calc(100vh - 120px);
+}
+
+svg{
+  width:100%;
+  flex:1 1 auto;     /* 👈 ocupa todo el espacio restante */
+  height:100%;       /* 👈 sin cálculos raros */
+  display:block;
+  background:#0b1220;
+}
   /* Grid */
   .gridline{ stroke:#1f2733; stroke-width:1; }
 
@@ -203,6 +219,8 @@
 
   <button id="btnRot90">Rotar 90°</button>
   <button id="btnDelete">Eliminar</button>
+
+  <button id="addTexto">+ Texto</button>
 
 
   <button id="btnExportSvg">Exportar SVG</button>
@@ -600,6 +618,15 @@
         g.appendChild(l);
       }
       addLabel("FLEXIBLE · Ø…");
+      } else if(kind==="texto"){
+  setWH(320,90);
+  const box = rect(0,0,320,90,10);
+  box.classList.add("shape");
+  box.setAttribute("fill","rgba(255,255,255,.02)");
+  box.setAttribute("stroke","rgba(201,209,217,.45)");
+  box.setAttribute("stroke-dasharray","6 4");
+  g.appendChild(box);
+  addLabel("NOTA: escribe aquí la explicación…");
     } else if(kind==="codo90"){
       const R=90, W=50, ang=90;
       const obj = elbowPath(ang, R, W);
@@ -800,6 +827,7 @@
   document.getElementById("addT").onclick=()=>add("tee");
   document.getElementById("addRed").onclick=()=>add("red");
   document.getElementById("addRejilla").onclick=()=>add("rejilla");
+  document.getElementById("addTexto").onclick = ()=>add("texto");
 
   document.getElementById("btnRot90").onclick=()=>{
     if(!selected) return;
@@ -818,19 +846,16 @@
  
 
  // Export SVG (con estilos + fondo oscuro)
+// Export SVG (con estilos + fondo oscuro)
 document.getElementById("btnExportSvg").onclick = () => {
 
-  // 1) clonar el SVG
   const clone = svg.cloneNode(true);
 
-  // 2) quitar overlay (caja/handles)
   const ov = clone.querySelector("#overlay");
   if (ov) ov.remove();
 
-  // 3) quitar selección
   clone.querySelectorAll(".selected").forEach(n => n.classList.remove("selected"));
 
-  // 4) insertar fondo oscuro para que se vea igual que en pantalla
   const vb = clone.viewBox.baseVal;
   const bg = document.createElementNS(NS, "rect");
   bg.setAttribute("x", vb.x);
@@ -840,13 +865,11 @@ document.getElementById("btnExportSvg").onclick = () => {
   bg.setAttribute("fill", "#0b1220");
   clone.insertBefore(bg, clone.firstChild);
 
-  // 5) incrustar los estilos del <style> del HTML dentro del SVG
   const css = document.querySelector("style")?.textContent || "";
   const styleEl = document.createElementNS(NS, "style");
   styleEl.textContent = css;
   clone.insertBefore(styleEl, clone.firstChild);
 
-  // 6) descargar
   const data = new XMLSerializer().serializeToString(clone);
   const blob = new Blob([data], { type: "image/svg+xml" });
 
@@ -856,7 +879,6 @@ document.getElementById("btnExportSvg").onclick = () => {
   a.click();
   URL.revokeObjectURL(a.href);
 };
-
   // Save / Load JSON (con alias)
   const kindMap = {
     "t":"tee", "tee":"tee",
