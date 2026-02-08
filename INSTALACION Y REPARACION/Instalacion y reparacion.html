@@ -212,6 +212,7 @@ textarea{
 </div>
 
 <script>
+  
 (() => {
   const NS = "http://www.w3.org/2000/svg";
   const svg = document.getElementById("svg");
@@ -225,6 +226,40 @@ textarea{
   const inpW = document.getElementById("w");
   const inpH = document.getElementById("h");
   const fileLoad = document.getElementById("fileLoad");
+    // ===== MODAL EDITOR MULTILÍNEA =====
+  const textModal = document.getElementById("textModal");
+  const textModalArea = document.getElementById("textModalArea");
+  const textModalOk = document.getElementById("textModalOk");
+  const textModalCancel = document.getElementById("textModalCancel");
+
+  let modalTargetText = null;
+
+  function openTextModal(t){
+    modalTargetText = t;
+    textModalArea.value = getSvgText(t);
+    textModal.classList.remove("hidden");
+    setTimeout(()=>textModalArea.focus(), 0);
+  }
+  function closeTextModal(){
+    textModal.classList.add("hidden");
+    modalTargetText = null;
+  }
+
+  textModalCancel.onclick = closeTextModal;
+  textModal.onclick = (e)=>{ if(e.target === textModal) closeTextModal(); };
+
+  textModalOk.onclick = ()=>{
+    if(!modalTargetText) return closeTextModal();
+    setSvgText(modalTargetText, textModalArea.value);
+    inpLabel.value = textModalArea.value; // sincroniza panel izq
+    closeTextModal();
+  };
+
+  window.addEventListener("keydown",(e)=>{
+    if(textModal.classList.contains("hidden")) return;
+    if(e.key === "Escape") closeTextModal();
+    if(e.key === "Enter" && (e.ctrlKey || e.metaKey)) textModalOk.click();
+  });
 
   const el = (n)=>document.createElementNS(NS,n);
   const rect = (x,y,w,h,rx=10)=>{ const r=el("rect"); r.setAttribute("x",x); r.setAttribute("y",y); r.setAttribute("width",w); r.setAttribute("height",h); r.setAttribute("rx",rx); r.setAttribute("ry",rx); return r; };
@@ -370,24 +405,10 @@ function getSvgText(t){
       drag={ g, startX:p.x, startY:p.y, ox:+g.dataset.x, oy:+g.dataset.y };
     });
 
-    g.addEventListener("dblclick",()=>{
-  const t=g.querySelector('[data-role="label"]');
+   g.addEventListener("dblclick",()=>{
+  const t = g.querySelector('[data-role="label"]');
   if(!t) return;
-
-  const current = [...t.querySelectorAll("tspan")].map(s=>s.textContent).join("\n");
-  const val = prompt("Editar texto (usa ENTER para salto de línea):", current);
-  if(val===null) return;
-
-  t.innerHTML = "";
-  val.split("\n").forEach((ln,i)=>{
-    const sp = el("tspan");
-    sp.setAttribute("x","10");
-    sp.setAttribute("dy", i===0 ? "0" : "18");
-    sp.textContent = ln;
-    t.appendChild(sp);
-  });
-
-  inpLabel.value = val;
+  openTextModal(t);
 });
   }
 
@@ -890,6 +911,52 @@ document.getElementById("btnExportSvg").onclick = () => {
   // ===== INIT =====
  // add("conducto");
 })();
+  /* ===== MODAL MULTILÍNEA ===== */
+.modal{
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.55);
+  display:flex; align-items:center; justify-content:center;
+  видно:visible;
+  z-index:9999;
+}
+.modal.hidden{ display:none; }
+.modalCard{
+  width:min(720px,92vw);
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:14px;
+  box-shadow:0 15px 50px rgba(0,0,0,.55);
+}
+.modalTitle{ font-weight:700; margin-bottom:10px; }
+#textModalArea{
+  width:100%;
+  min-height:180px;
+  resize:vertical;
+  background:#0b1220;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px;
+  font-family:inherit;
+  font-size:13px;
+  outline:none;
+}
+.modalBtns{
+  display:flex; gap:10px; justify-content:flex-end;
+  margin-top:10px;
+}
 </script>
+  <!-- ===== EDITOR MULTILÍNEA (MODAL) ===== -->
+<div id="textModal" class="modal hidden">
+  <div class="modalCard">
+    <div class="modalTitle">Editar texto (multilínea)</div>
+    <textarea id="textModalArea" rows="8" spellcheck="false"></textarea>
+    <div class="modalBtns">
+      <button id="textModalCancel" type="button">Cancelar</button>
+      <button id="textModalOk" type="button">Aceptar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
