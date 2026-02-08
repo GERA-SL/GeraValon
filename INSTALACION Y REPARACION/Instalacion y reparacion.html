@@ -14,6 +14,13 @@
     --c-fil:#a371f7; --c-carbon:#9da7b3;
     --c-piece:#ff7b72; --c-duct:#c9d1d9; --c-grille:#79c0ff;
   }
+  .sh-row{
+  white-space:nowrap;
+}
+
+.sh-right{
+  min-width:420px;
+}
   *{ box-sizing:border-box; }
   body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial; background:var(--bg); color:var(--text); }
 
@@ -179,25 +186,29 @@
 
   <!-- ENCABEZADO PARA PRESUPUESTO -->
   <div id="stageHeader">
-    <div class="sh-left">
-      <div class="sh-logo">
-        <img id="logoGera" src="logo-gera.png" alt="GERA" />
-      </div>
+   <div class="sh-left">
+  <div class="sh-logo">
+    LOGO
+  </div>
 
-      <div class="sh-company">
-        <div class="sh-company-name">GERA S.L.</div>
-        <div class="sh-company-line">CIF: ________ · Tel: ________ · Email: ________</div>
-        <div class="sh-company-line">Dirección: _________________________________</div>
-      </div>
-    </div>
+  <div class="sh-company">
+    <div class="sh-line strong">GESTIÓN ECOLÓGICA DE RESIDUOS AVALON</div>
+    <div class="sh-line">G.E.R.A. S.L.</div>
+    <div class="sh-line">B18600049</div>
+    <div class="sh-line">DISEÑO 38 - 18330</div>
+    <div class="sh-line">CHAUCHINA - GRANADA</div>
+  </div>
+</div>
 
-    <div class="sh-right">
-      <div class="sh-row"><span class="k">Establecimiento:</span> <span id="shEst">__________________</span></div>
-      <div class="sh-row"><span class="k">Dirección:</span> <span id="shDir">__________________</span></div>
-      <div class="sh-row"><span class="k">Fecha:</span> <span id="shFecha">__/__/____</span></div>
-      <div class="sh-row"><span class="k">Ing. / Replanteo:</span> <span id="shIng">Enrique Lugones</span></div>
-      <div class="sh-copy">© <span id="shYear"></span> GERA S.L. · Documento interno para presupuesto</div>
-    </div>
+<div class="sh-right">
+  <div class="sh-row"><span>ESTABLECIMIENTO</span> ________________________________</div>
+  <div class="sh-row"><span>CIF</span> _____________________________________________</div>
+  <div class="sh-row"><span>DIRECCIÓN</span> _______________________________________</div>
+  <div class="sh-row">
+    <span>CP</span> _____________
+    <span style="margin-left:14px">LOCALIDAD</span> ______________________
+  </div>
+</div>
   </div>
 
   <!-- LIENZO -->
