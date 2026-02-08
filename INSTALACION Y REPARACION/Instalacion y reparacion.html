@@ -234,7 +234,7 @@ svg{
  function drawGrid(step=40){
   gridG.innerHTML="";
   const vb = svg.viewBox.baseVal;
-  const y0 = HEADER_H;
+  const y0 = 0;
 
   for(let x=0;x<=vb.width;x+=step){
     const l=line(x,y0,x,vb.height);
