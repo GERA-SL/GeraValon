@@ -233,7 +233,7 @@ svg{
   const circle = (cx,cy,r)=>{ const c=el("circle"); c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r); return c; };
   const path = (d)=>{ const p=el("path"); p.setAttribute("d",d); return p; };
   const text = (x,y,txt)=>{ const t=el("text"); t.setAttribute("x",x); t.setAttribute("y",y); t.textContent=txt; t.dataset.role="label"; return t; };
-  const HEADER_H = 180;
+  const HEADER_H = 200;
   
  function drawGrid(step=40){
   gridG.innerHTML="";
@@ -388,30 +388,38 @@ function renderDocHeader(){
   g.appendChild(sep);
 
  // LOGO REAL (desde la misma carpeta)
-const logoBox = rect(40,40,220,100,10);
+const logoBox = rect(30,30,260,120,10);
 logoBox.setAttribute("fill","rgba(255,255,255,.02)");
 logoBox.setAttribute("stroke","rgba(255,255,255,.12)");
 logoBox.setAttribute("stroke-dasharray","6 4");
 g.appendChild(logoBox);
 
-// imagen dentro del SVG
 const img = document.createElementNS(NS, "image");
-// para máxima compatibilidad en SVG exportado:
-img.setAttribute("href", "logotipo.jpg");     // o "logo.png"
-img.setAttribute("x", "48");
-img.setAttribute("y", "48");
-img.setAttribute("width", "204");
-img.setAttribute("height", "84");
+img.setAttribute("href", "logotipo.jpg");
+img.setAttribute("x", "40");
+img.setAttribute("y", "40");
+img.setAttribute("width", "240");
+img.setAttribute("height", "100");
 img.setAttribute("preserveAspectRatio", "xMidYMid meet");
 g.appendChild(img);
 
   // columna GERA
-  const t1 = text(290,55,"GESTIÓN ECOLÓGICA");
-  const t2 = text(290,75,"DE RESIDUOS");
-  const t3 = text(290,95,"AVALON");
-  const t4 = text(290,115,"G.E.R.A. S.L.");
-  const t5 = text(290,135,"B18600049");
-  const t6 = text(290,155,"DISEÑO 38 - 18330 · CHAUCHINA - GRANADA");
+  const xC = 320; // más a la derecha (por logo más grande)
+
+const t1 = text(xC, 55, "GESTIÓN ECOLÓGICA DE RESIDUOS AVALON");
+t1.setAttribute("fill","#e6edf3");
+t1.setAttribute("font-weight","800");
+t1.setAttribute("font-size","18");
+
+const t2 = text(xC, 80, "G.E.R.A. S.L.  ·  B18600049");
+t2.setAttribute("fill","#e6edf3");
+t2.setAttribute("font-weight","600");
+
+const t3 = text(xC, 105, "DISEÑO 38 - 18330 · CHAUCHINA - GRANADA");
+t3.setAttribute("fill","rgba(230,237,243,.85)");
+t3.setAttribute("font-weight","500");
+
+g.append(t1,t2,t3);
   [t1,t2,t3,t4,t5,t6].forEach(t=>{ t.setAttribute("fill","#e6edf3"); t.setAttribute("font-weight","700"); });
   t6.setAttribute("font-weight","500");
   g.append(t1,t2,t3,t4,t5,t6);
@@ -517,7 +525,8 @@ g.appendChild(img);
     const g = el("g");
     g.classList.add("item");
     g.dataset.kind = kind;
-    g.dataset.x="140"; g.dataset.y="140";
+   g.dataset.x="140"; 
+  g.dataset.y=String(HEADER_H + 40); // empieza bajo la cabecera
     g.dataset.r="0"; g.dataset.sx="1"; g.dataset.sy="1";
 
     const setWH = (w,h)=>{ g.dataset.w=String(w); g.dataset.h=String(h); };
@@ -792,7 +801,7 @@ g.appendChild(img);
     const g=makeItem(kind);
     const n=itemsG.children.length;
     g.dataset.x = 140 + (n*18)%360;
-    g.dataset.y = 140 + (n*18)%260;
+  g.dataset.y = (HEADER_H + 40) + (n*18)%260;
     applyTransform(g);
     itemsG.appendChild(g);
     select(g);
