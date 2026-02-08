@@ -321,14 +321,24 @@
     });
 
     g.addEventListener("dblclick",()=>{
-      const t=g.querySelector('[data-role="label"]');
-      if(!t) return;
-      const val=prompt("Editar propiedades:", t.textContent);
-      if(val!==null){
-        t.textContent=val;
-        inpLabel.value=val;
-      }
-    });
+  const t=g.querySelector('[data-role="label"]');
+  if(!t) return;
+
+  const current = [...t.querySelectorAll("tspan")].map(s=>s.textContent).join("\n");
+  const val = prompt("Editar texto (usa ENTER para salto de línea):", current);
+  if(val===null) return;
+
+  t.innerHTML = "";
+  val.split("\n").forEach((ln,i)=>{
+    const sp = el("tspan");
+    sp.setAttribute("x","10");
+    sp.setAttribute("dy", i===0 ? "0" : "18");
+    sp.textContent = ln;
+    t.appendChild(sp);
+  });
+
+  inpLabel.value = val;
+});
   }
 
   function drawOverlay(g){
@@ -481,17 +491,32 @@
         g.appendChild(l);
       }
       addLabel("FLEXIBLE · Ø…");
-      } else if(kind==="texto"){
-  setWH(320,90);
+     } else if(kind==="texto"){
+  setWH(520,160);
 
-  const box = rect(0,0,320,90,10);
-  box.classList.add("shape");
-  box.setAttribute("fill","rgba(255,255,255,.02)");
-  box.setAttribute("stroke","rgba(201,209,217,.45)");
-  box.setAttribute("stroke-dasharray","6 4");
-  g.appendChild(box);
+  // caja invisible (solo para poder seleccionar/redimensionar)
+  const hit = rect(0,0,520,160,0);
+  hit.classList.add("shape");
+  hit.setAttribute("fill","transparent");
+  hit.setAttribute("stroke","transparent");
+  g.appendChild(hit);
 
-  addLabel("NOTA: escribe aquí…");
+  // texto multilínea
+  const t = el("text");
+  t.setAttribute("x","10");
+  t.setAttribute("y","22");
+  t.dataset.role="label";
+
+  const lines = "ESCRIBE AQUÍ...\nLÍNEA 2\nLÍNEA 3".split("\n");
+  lines.forEach((ln,i)=>{
+    const sp = el("tspan");
+    sp.setAttribute("x","10");
+    sp.setAttribute("dy", i===0 ? "0" : "18");
+    sp.textContent = ln;
+    t.appendChild(sp);
+  });
+
+  g.appendChild(t);
     } else if(kind==="codo90"){
       const R=90, W=50, ang=90;
       const obj = elbowPath(ang, R, W);
