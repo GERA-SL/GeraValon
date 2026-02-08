@@ -284,41 +284,7 @@ svg{
 
   <div id="stageWrap">
 
-  <!-- ENCABEZADO PARA PRESUPUESTO -->
  
-  <div id="stageHeader">
-
-  <!-- COLUMNA IZQUIERDA · GERA -->
-  <div class="sh-col sh-left">
-
-    <div class="sh-logo">
-      <img src="logotipo.jpg" alt="logo GERA">
-    </div>
-
-    <div class="sh-company">
-      <div class="sh-line strong">GESTIÓN ECOLÓGICA DE RESIDUOS AVALON</div>
-      <div class="sh-line">G.E.R.A. S.L.</div>
-      <div class="sh-line">B18600049</div>
-      <div class="sh-line">DISEÑO 38 - 18330</div>
-      <div class="sh-line">CHAUCHINA - GRANADA</div>
-    </div>
-
-  </div>
-
-  <!-- COLUMNA DERECHA · ESTABLECIMIENTO -->
-  <div class="sh-col sh-right">
-
-    <div class="sh-row"><span>ESTABLECIMIENTO</span> ________________________________</div>
-    <div class="sh-row"><span>CIF</span> _____________________________________________</div>
-    <div class="sh-row"><span>DIRECCIÓN</span> _______________________________________</div>
-    <div class="sh-row">
-      <span>CP</span> _____________
-      <span class="ml">LOCALIDAD</span> ______________________
-    </div>
-
-  </div>
-
-</div>
 
   <!-- LIENZO -->
  <svg id="svg" viewBox="0 0 1600 950" xmlns="http://www.w3.org/2000/svg">
@@ -506,16 +472,23 @@ function renderDocHeader(){
   sep.setAttribute("stroke-width","1");
   g.appendChild(sep);
 
-  // caja logo (placeholder)
-  const logoBox = rect(40,40,220,100,10);
-  logoBox.setAttribute("fill","rgba(255,255,255,.03)");
-  logoBox.setAttribute("stroke","rgba(255,255,255,.12)");
-  logoBox.setAttribute("stroke-dasharray","6 4");
-  g.appendChild(logoBox);
+ // LOGO REAL (desde la misma carpeta)
+const logoBox = rect(40,40,220,100,10);
+logoBox.setAttribute("fill","rgba(255,255,255,.02)");
+logoBox.setAttribute("stroke","rgba(255,255,255,.12)");
+logoBox.setAttribute("stroke-dasharray","6 4");
+g.appendChild(logoBox);
 
-  const logoTxt = text(120,100,"LOGO");
-  logoTxt.setAttribute("fill","rgba(255,255,255,.35)");
-  g.appendChild(logoTxt);
+// imagen dentro del SVG
+const img = document.createElementNS(NS, "image");
+// para máxima compatibilidad en SVG exportado:
+img.setAttribute("href", "logotipo.jpg");     // o "logo.png"
+img.setAttribute("x", "48");
+img.setAttribute("y", "48");
+img.setAttribute("width", "204");
+img.setAttribute("height", "84");
+img.setAttribute("preserveAspectRatio", "xMidYMid meet");
+g.appendChild(img);
 
   // columna GERA
   const t1 = text(290,55,"GESTIÓN ECOLÓGICA");
