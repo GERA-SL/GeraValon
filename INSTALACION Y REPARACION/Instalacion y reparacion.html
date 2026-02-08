@@ -62,16 +62,12 @@
   border-radius:12px;
   overflow:hidden;
 
-  /* 👇 CLAVE */
-  display:flex;
-  flex-direction:column;
-  min-height: calc(100vh - 120px);
+  height: calc(100vh - 120px);  /* ✅ en vez de min-height */
 }
 
 svg{
   width:100%;
-  flex:1 1 auto;     /* 👈 ocupa todo el espacio restante */
-  height:100%;       /* 👈 sin cálculos raros */
+  height:100%;      /* ✅ rellena el stageWrap */
   display:block;
   background:#0b1220;
 }
