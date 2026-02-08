@@ -148,16 +148,21 @@ svg{
 }
 
 .sh-logo{
-  width:180px;
-  height:80px;
-  border:1px dashed #30363d;
+  width:140px;           /* ancho fijo del hueco */
+  height:80px;           /* alto fijo del hueco */
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#6b7280;
-  font-size:12px;
-  letter-spacing:1px;
-  flex-shrink:0;
+  border:1px dashed var(--border);
+  border-radius:8px;
+  overflow:hidden;       /* CLAVE: recorta si se pasa */
+}
+
+.sh-logo img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;    /* no deformar */
+  display:block;
 }
 
 .sh-company{
