@@ -176,12 +176,38 @@
   </div>
 
   <div id="stageWrap">
-    <svg id="svg" viewBox="0 0 1600 950" xmlns="http://www.w3.org/2000/svg">
-      <g id="grid"></g>
-      <g id="items"></g>
-      <g id="overlay"></g>
-    </svg>
+
+  <!-- ENCABEZADO PARA PRESUPUESTO -->
+  <div id="stageHeader">
+    <div class="sh-left">
+      <div class="sh-logo">
+        <img id="logoGera" src="logo-gera.png" alt="GERA" />
+      </div>
+
+      <div class="sh-company">
+        <div class="sh-company-name">GERA S.L.</div>
+        <div class="sh-company-line">CIF: ________ · Tel: ________ · Email: ________</div>
+        <div class="sh-company-line">Dirección: _________________________________</div>
+      </div>
+    </div>
+
+    <div class="sh-right">
+      <div class="sh-row"><span class="k">Establecimiento:</span> <span id="shEst">__________________</span></div>
+      <div class="sh-row"><span class="k">Dirección:</span> <span id="shDir">__________________</span></div>
+      <div class="sh-row"><span class="k">Fecha:</span> <span id="shFecha">__/__/____</span></div>
+      <div class="sh-row"><span class="k">Ing. / Replanteo:</span> <span id="shIng">Enrique Lugones</span></div>
+      <div class="sh-copy">© <span id="shYear"></span> GERA S.L. · Documento interno para presupuesto</div>
+    </div>
   </div>
+
+  <!-- LIENZO -->
+  <svg id="svg" viewBox="0 0 1600 950" xmlns="http://www.w3.org/2000/svg">
+    <g id="grid"></g>
+    <g id="items"></g>
+    <g id="overlay"></g>
+  </svg>
+
+</div>
 </div>
 
 <script>
