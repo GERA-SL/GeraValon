@@ -81,10 +81,7 @@ svg{
   display:block;
   background:#0b1220;
 }
-  <g id="docHeader"></g>
-<g id="grid"></g>
-<g id="items"></g>
-<g id="overlay"></g>
+ 
   /* Grid */
   .gridline{ stroke:#1f2733; stroke-width:1; }
 
@@ -295,7 +292,7 @@ svg{
   <div class="sh-col sh-left">
 
     <div class="sh-logo">
-      <img src="logotipo.jpg" alt"logo GERA">
+      <img src="logotipo.jpg" alt="logo GERA">
     </div>
 
     <div class="sh-company">
@@ -324,11 +321,12 @@ svg{
 </div>
 
   <!-- LIENZO -->
-  <svg id="svg" viewBox="0 0 1600 950" xmlns="http://www.w3.org/2000/svg">
-    <g id="grid"></g>
-    <g id="items"></g>
-    <g id="overlay"></g>
-  </svg>
+ <svg id="svg" viewBox="0 0 1600 950" xmlns="http://www.w3.org/2000/svg">
+  <g id="docHeader"></g>
+  <g id="grid"></g>
+  <g id="items"></g>
+  <g id="overlay"></g>
+</svg>
 
 </div>
 </div>
@@ -356,18 +354,22 @@ svg{
   const text = (x,y,txt)=>{ const t=el("text"); t.setAttribute("x",x); t.setAttribute("y",y); t.textContent=txt; t.dataset.role="label"; return t; };
   const HEADER_H = 180;
   
-  function drawGrid(step=40){
+ function drawGrid(step=40){
   gridG.innerHTML="";
   const vb = svg.viewBox.baseVal;
-
-  // grid empieza bajo el header
   const y0 = HEADER_H;
 
   for(let x=0;x<=vb.width;x+=step){
-    const l=line(x,y0,x,vb.height); l.classList.add("gridline"); gridG.appendChild(l);
+    const l=line(x,y0,x,vb.height);
+    l.setAttribute("stroke","#1f2733");
+    l.setAttribute("stroke-width","1");
+    gridG.appendChild(l);
   }
   for(let y=y0;y<=vb.height;y+=step){
-    const l=line(0,y,vb.width,y); l.classList.add("gridline"); gridG.appendChild(l);
+    const l=line(0,y,vb.width,y);
+    l.setAttribute("stroke","#1f2733");
+    l.setAttribute("stroke-width","1");
+    gridG.appendChild(l);
   }
 }
   drawGrid(40);
