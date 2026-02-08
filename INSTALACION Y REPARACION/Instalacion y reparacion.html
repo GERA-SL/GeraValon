@@ -99,6 +99,22 @@
     #stageWrap{ border:none; }
     svg{ height: auto; background:white !important; }
   }
+  input, select, textarea{
+  width:100%;
+  background:#0b1220;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px 10px;
+  outline:none;
+  font-family:inherit;
+  font-size:13px;
+}
+
+textarea{
+  resize:vertical;
+  min-height:90px;
+}
 </style>
 </head>
 <body>
@@ -155,7 +171,7 @@
 
       <div>
         <label>Texto / Propiedades (seleccionado)</label>
-        <input id="label" placeholder="Ej: Q=2500 m³/h · Ø315 · F400 · filtros=4…"/>
+       <textarea id="label" rows="4" placeholder="Ej: CAMPANA 3 FILTROS&#10;Q=2500 m³/h&#10;Ø315 · F400"></textarea>
       </div>
 
       <div class="row">
