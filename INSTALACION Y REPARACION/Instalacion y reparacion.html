@@ -30,7 +30,7 @@
   button:hover{ filter:brightness(1.08); }
  .wrap{
   display:grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 260px 1fr;   /* 👈 ancho inicial del panel */
   gap:12px;
   padding:12px;
 }
@@ -40,11 +40,11 @@
   border-radius:12px;
   padding:12px;
 
-  resize: horizontal;
-  overflow: auto;
-
-  min-width:220px;
-  max-width:420px;
+  width:260px;              /* 👈 abre estrecho SIEMPRE */
+  min-width:220px;          /* 👈 mínimo al arrastrar */
+  max-width:360px;          /* 👈 máximo al arrastrar */
+  resize: horizontal;       /* 👈 redimensionable */
+  overflow:auto;
 }
   .grid{ display:grid; gap:10px; }
   .row{ display:flex; gap:10px; align-items:center; }
