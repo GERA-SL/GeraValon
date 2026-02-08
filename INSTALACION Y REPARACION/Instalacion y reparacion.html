@@ -115,6 +115,11 @@ textarea{
   resize:vertical;
   min-height:90px;
 }
+  /* Caja “invisible” para el texto (sin bordes) */
+.hitbox{
+  fill:transparent;
+  stroke:none;
+}
 </style>
 </head>
 <body>
@@ -223,7 +228,33 @@ textarea{
   const line = (x1,y1,x2,y2)=>{ const l=el("line"); l.setAttribute("x1",x1); l.setAttribute("y1",y1); l.setAttribute("x2",x2); l.setAttribute("y2",y2); return l; };
   const circle = (cx,cy,r)=>{ const c=el("circle"); c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r); return c; };
   const path = (d)=>{ const p=el("path"); p.setAttribute("d",d); return p; };
-  const text = (x,y,txt)=>{ const t=el("text"); t.setAttribute("x",x); t.setAttribute("y",y); t.textContent=txt; t.dataset.role="label"; return t; };
+  const text = (x,y,txt)=>{
+  const t = el("text");
+  t.setAttribute("x", x);
+  t.setAttribute("y", y);
+  t.dataset.role="label";
+  setSvgText(t, txt);
+  return t;
+};
+
+function setSvgText(t, val){
+  const s = String(val ?? "");
+  t.innerHTML = "";
+  const lines = s.split(/\r?\n/);
+  lines.forEach((ln,i)=>{
+    const sp = el("tspan");
+    sp.setAttribute("x", t.getAttribute("x") || "10");
+    sp.setAttribute("dy", i===0 ? "0" : "18");
+    sp.textContent = ln;
+    t.appendChild(sp);
+  });
+}
+
+function getSvgText(t){
+  const spans = [...t.querySelectorAll("tspan")];
+  if(spans.length) return spans.map(s=>s.textContent).join("\n");
+  return t.textContent || "";
+}
 
   function drawGrid(step=40){
     gridG.innerHTML="";
