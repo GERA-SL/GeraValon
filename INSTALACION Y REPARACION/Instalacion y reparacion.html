@@ -120,6 +120,9 @@ textarea{
   fill:transparent;
   stroke:none;
 }
+  .selected .hitbox{
+  stroke: none !important;
+}
 </style>
 </head>
 <body>
@@ -543,9 +546,8 @@ function getSvgText(t){
 
   // caja invisible (solo para poder seleccionar/redimensionar)
   const hit = rect(0,0,520,160,0);
-  hit.classList.add("shape");
-  hit.setAttribute("fill","transparent");
-  hit.setAttribute("stroke","transparent");
+ hit.classList.add("hitbox");
+hit.setAttribute("pointer-events","all");
   g.appendChild(hit);
 
   // texto multilínea
