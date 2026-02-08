@@ -1,1 +1,853 @@
 
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SERVICIOS VARIOS – GeraValon</title>
+
+  <!-- Anti-caché (ayuda con GitHub Pages + navegador) -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0d1117;
+      --panel:#161b22;
+      --border:#30363d;
+      --text:#e6edf3;
+      --muted:#8b949e;
+      --hover:#0f1623;
+      --project:#a371f7;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:'Inter', system-ui, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    header{
+      padding:18px 24px;
+      border-bottom:1px solid var(--border);
+      background:var(--panel);
+    }
+
+    .header-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      max-width:900px;
+      margin:0 auto;
+    }
+
+    .icon{
+      width:30px;
+      height:30px;
+      border-radius:6px;
+      background:var(--project);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:14px;
+      color:#0b0f14;
+    }
+
+    h1{
+      margin:0;
+      font-size:20px;
+      font-weight:600;
+      letter-spacing:.4px;
+    }
+
+    main{
+      max-width:900px;
+      margin:0 auto;
+      padding:24px;
+    }
+
+    .block{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:20px;
+      margin-bottom:24px;
+    }
+
+    .block-title{
+      font-size:14px;
+      font-weight:600;
+      margin-bottom:16px;
+      color:var(--muted);
+      letter-spacing:.3px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-bottom:16px;
+    }
+
+    label{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    input, select{
+      background:#0f1623;
+      border:1px solid var(--border);
+      border-radius:8px;
+      padding:10px 12px;
+      color:var(--text);
+      font-size:14px;
+    }
+
+    input:focus, select:focus{
+      outline:none;
+      border-color:var(--project);
+    }
+
+    select:disabled, input:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .row-fields{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:16px;
+    }
+
+    @media (max-width: 700px){
+      .row-fields{ grid-template-columns: 1fr; }
+    }
+
+    .btn-row{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+      flex-wrap:wrap;
+    }
+
+    button{
+      border:1px solid var(--border);
+      background:#0f1623;
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:8px;
+      font-size:13px;
+      cursor:pointer;
+    }
+    button:hover{ border-color:var(--project); }
+    button:disabled{ opacity:.55; cursor:not-allowed; }
+
+    .hint{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* ====== BLOQUE 3 TABLA RESUMEN ====== */
+    table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:10px;
+      border:1px solid var(--border);
+    }
+    th, td{
+      border-bottom:1px solid var(--border);
+      padding:10px 10px;
+      font-size:13px;
+      vertical-align:top;
+    }
+    th{
+      text-align:left;
+      color:var(--muted);
+      font-weight:600;
+      background:rgba(255,255,255,.02);
+    }
+    tr:hover td{ background:rgba(255,255,255,.02); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    /* ====== MODAL ====== */
+    .modal-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:999;
+    }
+    .modal{
+      width:min(900px, 100%);
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(163,113,247,.10), rgba(0,0,0,0));
+    }
+    .modal-title{
+      margin:0;
+      font-size:14px;
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+    .modal-sub{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+    .modal-body{
+      padding:16px;
+      max-height:75vh;
+      overflow:auto;
+    }
+    .modal-footer{
+      padding:12px 16px;
+      border-top:1px solid var(--border);
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      background:rgba(255,255,255,.01);
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 700px){
+      .grid-2{ grid-template-columns: 1fr; }
+    }
+
+    .small{
+      font-size:12px;
+      color:var(--muted);
+      margin: 4px 0 10px;
+    }
+
+    .section-title{
+      margin: 10px 0 10px;
+      font-size:13px;
+      color:var(--muted);
+      font-weight:600;
+      letter-spacing:.2px;
+    }
+
+    .mini-table{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:10px;
+      overflow:hidden;
+    }
+    .mini-table .row{
+      display:grid;
+      grid-template-columns: 1.2fr .6fr;
+      gap:10px;
+      padding:10px;
+      border-bottom:1px solid var(--border);
+      align-items:center;
+    }
+    .mini-table .row:last-child{ border-bottom:none; }
+    .mini-table .row-3{
+      grid-template-columns: .6fr 1.4fr;
+    }
+    .mini-table .head{
+      background:rgba(255,255,255,.02);
+      font-weight:600;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .pill{
+      display:inline-block;
+      border:1px solid var(--border);
+      background:#0f1623;
+      padding:6px 8px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--text);
+      margin:4px 6px 0 0;
+    }
+    @media print{
+  header,
+  #bloque-export,
+  button,
+  .hint{
+    display:none !important;
+  }
+
+  body{
+    background:#fff !important;
+    color:#000 !important;
+  }
+
+  .block{
+    border:1px solid #bbb !important;
+    background:#fff !important;
+  }
+
+  input, select{
+    border:none !important;
+    background:transparent !important;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-row">
+    <div class="icon">S</div>
+    <h1>SERVICIOS VARIOS</h1>
+  </div>
+</header>
+
+<main>
+
+  <!-- BLOQUE 1 -->
+  <div class="block">
+    <div class="block-title">DATOS GENERALES</div>
+    <div class="row-fields">
+      <div class="field">
+        <label for="fecha">FECHA</label>
+        <input type="date" id="fecha">
+      </div>
+      <div class="field">
+        <label for="cliente">CLIENTE</label>
+        <input type="text" id="cliente" placeholder="Nombre del cliente">
+      </div>
+      <div class="field">
+        <label for="ref">REFERENCIA (opcional)</label>
+        <input type="text" id="ref" placeholder="Ej. Parte / pedido / etc.">
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="block">
+    <div class="block-title">TIPO DE SERVICIO</div>
+
+    <div id="lineas-servicio">
+      <div class="row-fields linea-servicio">
+        <div class="field">
+          <label>CATEGORÍA</label>
+          <select class="categoria" onchange="actualizarSubtipoLinea(this)">
+            <option value="">Selecciona categoría</option>
+            <option value="filtracion">FILTRACIÓN</option>
+            <option value="extraccion">SISTEMA DE EXTRACCIÓN</option>
+            <option value="grasa">SEPARADOR DE GRASA</option>
+            <option value="ventilacion">VENTILACIÓN</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>SUBTIPO</label>
+          <select class="subtipo" disabled>
+            <option value="">Selecciona primero una categoría</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>DETALLE</label>
+          <input type="text" class="detalle" placeholder="Observaciones / notas">
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="button" onclick="agregarLinea()">GENERAR OTRA LÍNEA</button>
+      <button type="button" onclick="aceptarLineas()">ACEPTAR</button>
+      <button type="button" onclick="resetTodo()">REINICIAR</button>
+    </div>
+
+    <div class="hint">
+      Añade varias tareas (líneas). “ACEPTAR” elimina vacías y abre el menú de gastos UNA sola vez (por obra).
+    </div>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="block">
+    <div class="block-title">RESUMEN</div>
+
+    <div id="resumen-vacio" class="hint">Aún no hay resumen. Pulsa ACEPTAR en el Bloque 2.</div>
+
+    <div id="resumen-tabla" style="display:none;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:34%;">TAREAS (OBRA)</th>
+            <th style="width:28%;">PERSONAL (13€/h)</th>
+            <th style="width:18%;">DESPLAZAMIENTO (0,26€/km)</th>
+            <th style="width:12%;">ÚTILES</th>
+            <th style="width:8%;">TOTAL €</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-resumen"></tbody>
+      </table>
+
+      <div class="hint" style="margin-top:12px;">
+        TOTAL = Personal + Km + Útiles + Material + Otros.
+      </div>
+    </div>
+  </div>
+   <!-- BLOQUE 4 -->
+<div class="block" id="bloque-export">
+  <div class="block-title">EXPORTAR</div>
+
+  <div class="btn-row">
+    <button type="button" id="btnPdf">GENERAR PDF</button>
+  </div>
+
+  <div class="hint">
+    Abre el diálogo del navegador → “Guardar como PDF”.
+  </div>
+</div>
+</main>
+
+<!-- MODAL GASTOS (UNA SOLA VEZ) -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">GASTOS DE LA OBRA</div>
+        <div class="modal-sub">Se aplican a todas las tareas del Bloque 2</div>
+      </div>
+      <div class="mono" id="modalTotalesTop">Total: 0,00 €</div>
+    </div>
+
+    <div class="modal-body">
+      <div class="section-title">TAREAS INCLUIDAS</div>
+      <div class="small" id="modalTareas"></div>
+
+      <div class="section-title">OPERARIOS</div>
+      <div class="mini-table" id="tablaOperarios">
+        <div class="row head">
+          <div>OPERARIO</div>
+          <div>HORAS</div>
+        </div>
+      </div>
+
+      <div class="section-title">DESPLAZAMIENTO</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>KM</label>
+          <input type="number" id="km" min="0" step="0.1" placeholder="0" oninput="recalcularTotalesModal()">
+        </div>
+        <div class="field">
+          <label>TIPO</label>
+          <select id="tipoKm" onchange="recalcularTotalesModal()">
+            <option value="">(opcional)</option>
+            <option value="coche">Coche</option>
+            <option value="furgoneta">Furgoneta</option>
+            <option value="moto">Moto</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section-title">DESGASTE ÚTILES (FIJO POR OBRA)</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>€</label>
+          <input type="number" id="fijoUtiles" min="0" step="0.01" placeholder="0" oninput="recalcularTotalesModal()">
+        </div>
+        <div class="field">
+          <label>Nota (opcional)</label>
+          <input type="text" id="notaUtiles" placeholder="Ej. fregonas, cubos, espátulas..." oninput="recalcularTotalesModal()">
+        </div>
+      </div>
+
+      <div class="section-title">GASTO DE MATERIAL</div>
+      <div class="mini-table" id="tablaMaterial">
+        <div class="row head row-3">
+          <div>€</div>
+          <div>CONCEPTO</div>
+        </div>
+      </div>
+
+      <div class="section-title">OTROS GASTOS</div>
+      <div class="mini-table" id="tablaOtros">
+        <div class="row head row-3">
+          <div>€</div>
+          <div>CONCEPTO</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" onclick="cerrarModal(false)">Cancelar</button>
+      <button type="button" onclick="aceptarGastosObra()">ACEPTAR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ====== CONSTANTES DE COSTE ====== */
+  const COSTE_HORA = 13;
+  const COSTE_KM = 0.26;
+  const FIJO_UTENSILIOS = 3.00;
+
+  /* SUBTIPOS */
+  const subtipos = {
+    filtracion: ["FILTROS DE CAMPANA","FILTROS DE FILTRONIC","CARCASA DE FILTRONIC"],
+    extraccion: ["CAMPANA","CAJA DE VENTILACION","CONDUCTOS","COCINA","OTROS"],
+    grasa: ["MENOS DE 80 LITROS","MAYOR DE 80 LITROS"],
+    ventilacion: ["CAJA DE VENTILACION","CONDUCTOS","REJILLAS","OTROS"]
+  };
+
+  function categoriaLabel(catVal){
+    switch(catVal){
+      case "filtracion": return "FILTRACIÓN";
+      case "extraccion": return "SISTEMA DE EXTRACCIÓN";
+      case "grasa": return "SEPARADOR DE GRASA";
+      case "ventilacion": return "VENTILACIÓN";
+      default: return "CATEGORÍA";
+    }
+  }
+
+  function actualizarSubtipoLinea(selectCategoria){
+    const linea = selectCategoria.closest(".linea-servicio");
+    const subtipoSel = linea.querySelector(".subtipo");
+    const categoria = selectCategoria.value;
+
+    subtipoSel.innerHTML = "";
+
+    if(!categoria || !subtipos[categoria]){
+      subtipoSel.disabled = true;
+      subtipoSel.innerHTML = "<option value=''>Selecciona primero una categoría</option>";
+      return;
+    }
+
+    subtipoSel.disabled = false;
+
+    const first = document.createElement("option");
+    first.value = "";
+    first.textContent = "Selecciona subtipo";
+    subtipoSel.appendChild(first);
+
+    subtipos[categoria].forEach(opcion => {
+      const opt = document.createElement("option");
+      opt.value = opcion;
+      opt.textContent = opcion;
+      subtipoSel.appendChild(opt);
+    });
+  }
+
+  function agregarLinea(){
+    const contenedor = document.getElementById("lineas-servicio");
+    const base = contenedor.querySelector(".linea-servicio");
+    const nueva = base.cloneNode(true);
+
+    nueva.querySelector(".categoria").value = "";
+    const st = nueva.querySelector(".subtipo");
+    st.innerHTML = "<option value=''>Selecciona primero una categoría</option>";
+    st.disabled = true;
+    nueva.querySelector(".detalle").value = "";
+
+    contenedor.appendChild(nueva);
+  }
+
+  function lineaEstaVacia(linea){
+    const cat = (linea.querySelector(".categoria")?.value || "").trim();
+    const sub = (linea.querySelector(".subtipo")?.value || "").trim();
+    const det = (linea.querySelector(".detalle")?.value || "").trim();
+    if(cat === "" && sub === "" && det === "") return true;
+    if(cat === "" && sub === "" && det.length < 2) return true;
+    return false;
+  }
+
+  /* ====== ACEPTAR: limpiar + abrir modal UNA VEZ ====== */
+  let tareasObra = [];
+  const modalOverlay = document.getElementById("modalOverlay");
+  const modalTareas = document.getElementById("modalTareas");
+  const tablaOperarios = document.getElementById("tablaOperarios");
+  const tablaMaterial = document.getElementById("tablaMaterial");
+  const tablaOtros = document.getElementById("tablaOtros");
+  const modalTotalesTop = document.getElementById("modalTotalesTop");
+
+  const operarios = [
+    "",
+    "DAVID JUAREZ",
+    "DANIEL PRIETO",
+    "SEILA MARTIN",
+    "SANDRA CASTRILLON",
+    "ENRIQUE LUGONES",
+    "JAIRO ZARZA",
+    "ANTONIO ADROVER"
+  ];
+
+  function aceptarLineas(){
+    const contenedor = document.getElementById("lineas-servicio");
+    Array.from(contenedor.querySelectorAll(".linea-servicio"))
+      .forEach(l => { if(lineaEstaVacia(l)) l.remove(); });
+
+    const restantes = Array.from(contenedor.querySelectorAll(".linea-servicio"));
+    if(restantes.length === 0){
+      alert("No hay líneas válidas. Escribe al menos una tarea.");
+      return;
+    }
+
+    document.querySelectorAll("#lineas-servicio select, #lineas-servicio input")
+      .forEach(el => el.disabled = true);
+
+    tareasObra = restantes.map(linea => {
+      const catVal = linea.querySelector(".categoria").value;
+      const subVal = linea.querySelector(".subtipo").value;
+      const detVal = (linea.querySelector(".detalle").value || "").trim();
+      const catLabel = categoriaLabel(catVal);
+      const label = `${catLabel} – ${subVal || "(sin subtipo)"}`;
+      return { label, detVal };
+    });
+
+    abrirModalObra();
+  }
+
+  function limpiarFilas(tabla, cabe=1){
+    const rows = Array.from(tabla.querySelectorAll(".row"));
+    rows.forEach((r, idx) => { if(idx >= cabe) r.remove(); });
+  }
+
+  function abrirModalObra(){
+    modalTareas.innerHTML = tareasObra.map(t => `<span class="pill">${escapeHtml(t.label)}</span>`).join("");
+
+    document.getElementById("km").value = "";
+    document.getElementById("tipoKm").value = "";
+    document.getElementById("fijoUtiles").value = FIJO_UTENSILIOS.toFixed(2);
+    document.getElementById("notaUtiles").value = "";
+
+    limpiarFilas(tablaOperarios, 1);
+    for(let r=0; r<5; r++){
+      const row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML = `
+        <div>
+          <select class="op-nombre" onchange="recalcularTotalesModal()">
+            ${operarios.map(o => `<option value="${escapeHtml(o)}">${escapeHtml(o || "(vacío)")}</option>`).join("")}
+          </select>
+        </div>
+        <div><input type="number" class="op-horas" min="0" step="0.25" placeholder="0" oninput="recalcularTotalesModal()"></div>
+      `;
+      tablaOperarios.appendChild(row);
+    }
+
+    limpiarFilas(tablaMaterial, 1);
+    for(let r=0; r<5; r++){
+      const row = document.createElement("div");
+      row.className = "row row-3";
+      row.innerHTML = `
+        <div><input type="number" class="mat-eur" min="0" step="0.01" placeholder="0" oninput="recalcularTotalesModal()"></div>
+        <div><input type="text" class="mat-con" placeholder="Concepto"></div>
+      `;
+      tablaMaterial.appendChild(row);
+    }
+
+    limpiarFilas(tablaOtros, 1);
+    for(let r=0; r<5; r++){
+      const row = document.createElement("div");
+      row.className = "row row-3";
+      row.innerHTML = `
+        <div><input type="number" class="otr-eur" min="0" step="0.01" placeholder="0" oninput="recalcularTotalesModal()"></div>
+        <div><input type="text" class="otr-con" placeholder="Concepto"></div>
+      `;
+      tablaOtros.appendChild(row);
+    }
+
+    modalOverlay.style.display = "flex";
+    recalcularTotalesModal();
+  }
+
+  function cerrarModal(confirmado){
+    modalOverlay.style.display = "none";
+    if(!confirmado){
+      document.querySelectorAll("#lineas-servicio select, #lineas-servicio input").forEach(el => el.disabled = false);
+      alert("Cancelado. Bloque 2 reabierto para corregir.");
+    }
+  }
+
+  function aceptarGastosObra(){
+    const data = leerDatosModal();
+    modalOverlay.style.display = "none";
+    construirResumenObra(data);
+    alert("Gastos guardados. Revisa el Bloque 3 (Resumen).");
+  }
+
+  function leerDatosModal(){
+    const opRows = Array.from(tablaOperarios.querySelectorAll(".row")).slice(1);
+    const ops = opRows.map(r => {
+      const nombre = r.querySelector(".op-nombre").value.trim();
+      const horas = parseFloat(r.querySelector(".op-horas").value || "0");
+      return { nombre, horas: isNaN(horas) ? 0 : horas };
+    }).filter(x => (x.nombre && x.nombre !== "") || x.horas > 0);
+
+    const totalHoras = ops.reduce((s,x)=> s + (x.horas || 0), 0);
+    const costePersonal = totalHoras * COSTE_HORA;
+
+    const km = parseFloat(document.getElementById("km").value || "0");
+    const kmVal = isNaN(km) ? 0 : km;
+    const tipoKm = document.getElementById("tipoKm").value || "";
+    const costeKm = kmVal * COSTE_KM;
+
+    const fijoUtiles = parseFloat(document.getElementById("fijoUtiles").value || "0");
+    const fijoUtilesVal = isNaN(fijoUtiles) ? 0 : fijoUtiles;
+    const notaUtiles = (document.getElementById("notaUtiles").value || "").trim();
+
+    const matRows = Array.from(tablaMaterial.querySelectorAll(".row")).slice(1);
+    const material = matRows.map(r => {
+      const eur = parseFloat(r.querySelector(".mat-eur").value || "0");
+      const con = (r.querySelector(".mat-con").value || "").trim();
+      return { eur: isNaN(eur) ? 0 : eur, con };
+    }).filter(x => x.eur > 0 || x.con.length > 0);
+
+    const otrRows = Array.from(tablaOtros.querySelectorAll(".row")).slice(1);
+    const otros = otrRows.map(r => {
+      const eur = parseFloat(r.querySelector(".otr-eur").value || "0");
+      const con = (r.querySelector(".otr-con").value || "").trim();
+      return { eur: isNaN(eur) ? 0 : eur, con };
+    }).filter(x => x.eur > 0 || x.con.length > 0);
+
+    const totalMaterial = material.reduce((s,x)=> s + (x.eur||0), 0);
+    const totalOtros = otros.reduce((s,x)=> s + (x.eur||0), 0);
+
+    const total = costePersonal + costeKm + fijoUtilesVal + totalMaterial + totalOtros;
+
+    return {
+      tareas: tareasObra,
+      operarios: ops,
+      totalHoras,
+      costePersonal,
+      km: kmVal,
+      tipoKm,
+      costeKm,
+      fijoUtiles: fijoUtilesVal,
+      notaUtiles,
+      totalMaterial,
+      totalOtros,
+      total,
+      material,
+      otros
+    };
+  }
+
+  function recalcularTotalesModal(){
+    try{
+      const d = leerDatosModal();
+      modalTotalesTop.textContent =
+        `Total: ${fmtEur(d.total)} | Personal: ${fmtEur(d.costePersonal)} | Km: ${fmtEur(d.costeKm)} | Útiles: ${fmtEur(d.fijoUtiles)}`;
+    } catch(e){
+      modalTotalesTop.textContent = "Total: 0,00 €";
+    }
+  }
+
+  function construirResumenObra(data){
+    const tbody = document.getElementById("tbody-resumen");
+    tbody.innerHTML = "";
+
+    const tareasHtml = data.tareas.map(t => {
+      const det = t.detVal ? `<div class="small">${escapeHtml(t.detVal)}</div>` : "";
+      return `<div><b>${escapeHtml(t.label)}</b>${det}</div>`;
+    }).join("<div style='height:8px'></div>");
+
+    const personalHtml = (data.operarios.length)
+      ? data.operarios.map(o => `${escapeHtml(o.nombre || "(sin nombre)")}: ${fmt(o.horas)}h`).join("<br>")
+        + `<div class="small" style="margin-top:6px;"><b>Total horas:</b> ${fmt(data.totalHoras)}h</div>`
+        + `<div class="small"><b>Coste personal:</b> ${fmtEur(data.costePersonal)}</div>`
+      : "<span style='color:var(--muted)'>—</span>";
+
+    const despHtml = (data.km > 0)
+      ? `${fmt(data.km)} km ${data.tipoKm ? "(" + escapeHtml(data.tipoKm) + ")" : ""}`
+        + `<div class="small" style="margin-top:6px;"><b>Coste km:</b> ${fmtEur(data.costeKm)}</div>`
+      : "<span style='color:var(--muted)'>—</span>";
+
+    const utilesHtml = `${fmtEur(data.fijoUtiles)}${data.notaUtiles ? `<div class="small">${escapeHtml(data.notaUtiles)}</div>` : ""}`;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${tareasHtml}</td>
+      <td>${personalHtml}</td>
+      <td>${despHtml}</td>
+      <td>${utilesHtml}<div class="small" style="margin-top:8px;"><b>Material:</b> ${fmtEur(data.totalMaterial)}<br><b>Otros:</b> ${fmtEur(data.totalOtros)}</div></td>
+      <td class="mono"><b>${fmtEur(data.total)}</b></td>
+    `;
+    tbody.appendChild(tr);
+
+    document.getElementById("resumen-vacio").style.display = "none";
+    document.getElementById("resumen-tabla").style.display = "block";
+  }
+
+  function fmt(n){
+    const x = Number(n || 0);
+    return (Math.round(x*100)/100).toFixed(2).replace(".", ",");
+  }
+  function fmtEur(n){ return `${fmt(n)} €`; }
+
+  function escapeHtml(str){
+    const s = String(str);
+    return s
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#039;");
+  }
+
+  function resetTodo(){
+    document.querySelectorAll("#lineas-servicio select, #lineas-servicio input").forEach(el => el.disabled = false);
+
+    const contenedor = document.getElementById("lineas-servicio");
+    const lineas = Array.from(contenedor.querySelectorAll(".linea-servicio"));
+    lineas.forEach((l, idx) => { if(idx>0) l.remove(); });
+
+    const base = contenedor.querySelector(".linea-servicio");
+    base.querySelector(".categoria").value = "";
+    const st = base.querySelector(".subtipo");
+    st.innerHTML = "<option value=''>Selecciona primero una categoría</option>";
+    st.disabled = true;
+    base.querySelector(".detalle").value = "";
+
+    document.getElementById("tbody-resumen").innerHTML = "";
+    document.getElementById("resumen-vacio").style.display = "block";
+    document.getElementById("resumen-tabla").style.display = "none";
+
+    tareasObra = [];
+  }
+ // ===== BOTÓN GENERAR PDF =====
+window.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("btnPdf");
+
+  if(!btn) return;
+
+  btn.addEventListener("click", () => {
+    // cerrar modal si estuviera abierto
+    if(typeof modalOverlay !== "undefined"){
+      modalOverlay.style.display = "none";
+    }
+
+    window.print(); // ← abre Guardar como PDF
+  });
+});
+</script>
+
+</body>
+</html>
