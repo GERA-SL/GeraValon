@@ -27,8 +27,24 @@
     padding:8px 10px; border-radius:10px; cursor:pointer; font-weight:650; font-size:13px;
   }
   button:hover{ filter:brightness(1.08); }
-  .wrap{ display:grid; grid-template-columns: 380px 1fr; gap:12px; padding:12px; }
-  .panel{ background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px; }
+ .wrap{
+  display:grid;
+  grid-template-columns: auto 1fr;
+  gap:12px;
+  padding:12px;
+}
+  .panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+
+  resize: horizontal;
+  overflow: auto;
+
+  min-width:220px;
+  max-width:420px;
+}
   .grid{ display:grid; gap:10px; }
   .row{ display:flex; gap:10px; align-items:center; }
   label{ color:var(--muted); font-size:12px; display:block; margin-bottom:4px; }
