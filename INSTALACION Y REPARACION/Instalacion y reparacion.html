@@ -122,6 +122,8 @@
   <button id="btnRot90">Rotar 90°</button>
   <button id="btnDelete">Eliminar</button>
 
+   <button id="addTexto">+ Texto</button>
+
 
   <button id="btnExportSvg">Exportar SVG</button>
   <button id="btnSave">Guardar JSON</button>
@@ -479,6 +481,17 @@
         g.appendChild(l);
       }
       addLabel("FLEXIBLE · Ø…");
+      } else if(kind==="texto"){
+  setWH(320,90);
+
+  const box = rect(0,0,320,90,10);
+  box.classList.add("shape");
+  box.setAttribute("fill","rgba(255,255,255,.02)");
+  box.setAttribute("stroke","rgba(201,209,217,.45)");
+  box.setAttribute("stroke-dasharray","6 4");
+  g.appendChild(box);
+
+  addLabel("NOTA: escribe aquí…");
     } else if(kind==="codo90"){
       const R=90, W=50, ang=90;
       const obj = elbowPath(ang, R, W);
@@ -679,6 +692,8 @@
   document.getElementById("addT").onclick=()=>add("tee");
   document.getElementById("addRed").onclick=()=>add("red");
   document.getElementById("addRejilla").onclick=()=>add("rejilla");
+
+  document.getElementById("addTexto").onclick=()=>add("texto");
 
   document.getElementById("btnRot90").onclick=()=>{
     if(!selected) return;
