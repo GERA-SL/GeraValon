@@ -81,6 +81,10 @@ svg{
   display:block;
   background:#0b1220;
 }
+  <g id="docHeader"></g>
+<g id="grid"></g>
+<g id="items"></g>
+<g id="overlay"></g>
   /* Grid */
   .gridline{ stroke:#1f2733; stroke-width:1; }
 
@@ -350,13 +354,22 @@ svg{
   const circle = (cx,cy,r)=>{ const c=el("circle"); c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r); return c; };
   const path = (d)=>{ const p=el("path"); p.setAttribute("d",d); return p; };
   const text = (x,y,txt)=>{ const t=el("text"); t.setAttribute("x",x); t.setAttribute("y",y); t.textContent=txt; t.dataset.role="label"; return t; };
-
+  const HEADER_H = 180;
+  
   function drawGrid(step=40){
-    gridG.innerHTML="";
-    const vb = svg.viewBox.baseVal;
-    for(let x=0;x<=vb.width;x+=step){ const l=line(x,0,x,vb.height); l.classList.add("gridline"); gridG.appendChild(l); }
-    for(let y=0;y<=vb.height;y+=step){ const l=line(0,y,vb.width,y); l.classList.add("gridline"); gridG.appendChild(l); }
+  gridG.innerHTML="";
+  const vb = svg.viewBox.baseVal;
+
+  // grid empieza bajo el header
+  const y0 = HEADER_H;
+
+  for(let x=0;x<=vb.width;x+=step){
+    const l=line(x,y0,x,vb.height); l.classList.add("gridline"); gridG.appendChild(l);
   }
+  for(let y=y0;y<=vb.height;y+=step){
+    const l=line(0,y,vb.width,y); l.classList.add("gridline"); gridG.appendChild(l);
+  }
+}
   drawGrid(40);
 
   function snap(v){ const s=parseInt(snapSel.value,10); return s? Math.round(v/s)*s : v; }
@@ -472,7 +485,85 @@ svg{
       }
     });
   }
+function renderDocHeader(){
+  const g = document.getElementById("docHeader");
+  g.innerHTML = "";
 
+  const vb = svg.viewBox.baseVal;
+
+  // fondo del header
+  const bg = rect(0,0,vb.width,HEADER_H,0);
+  bg.setAttribute("fill","#0b1220");
+  bg.setAttribute("stroke","rgba(255,255,255,.08)");
+  bg.setAttribute("stroke-width","1");
+  g.appendChild(bg);
+
+  // línea separadora
+  const sep = line(0,HEADER_H, vb.width, HEADER_H);
+  sep.setAttribute("stroke","rgba(255,255,255,.12)");
+  sep.setAttribute("stroke-width","1");
+  g.appendChild(sep);
+
+  // caja logo (placeholder)
+  const logoBox = rect(40,40,220,100,10);
+  logoBox.setAttribute("fill","rgba(255,255,255,.03)");
+  logoBox.setAttribute("stroke","rgba(255,255,255,.12)");
+  logoBox.setAttribute("stroke-dasharray","6 4");
+  g.appendChild(logoBox);
+
+  const logoTxt = text(120,100,"LOGO");
+  logoTxt.setAttribute("fill","rgba(255,255,255,.35)");
+  g.appendChild(logoTxt);
+
+  // columna GERA
+  const t1 = text(290,55,"GESTIÓN ECOLÓGICA");
+  const t2 = text(290,75,"DE RESIDUOS");
+  const t3 = text(290,95,"AVALON");
+  const t4 = text(290,115,"G.E.R.A. S.L.");
+  const t5 = text(290,135,"B18600049");
+  const t6 = text(290,155,"DISEÑO 38 - 18330 · CHAUCHINA - GRANADA");
+  [t1,t2,t3,t4,t5,t6].forEach(t=>{ t.setAttribute("fill","#e6edf3"); t.setAttribute("font-weight","700"); });
+  t6.setAttribute("font-weight","500");
+  g.append(t1,t2,t3,t4,t5,t6);
+
+  // columna establecimiento (líneas)
+  const xR = 860;
+  const label = (y, txt, w=520) => {
+    const tt = text(xR, y, txt);
+    tt.setAttribute("fill","rgba(230,237,243,.85)");
+    tt.setAttribute("font-weight","700");
+    g.appendChild(tt);
+
+    const ln = line(xR+160, y-4, xR+160+w, y-4);
+    ln.setAttribute("stroke","rgba(230,237,243,.75)");
+    ln.setAttribute("stroke-width","2");
+    g.appendChild(ln);
+  };
+
+  label(55, "ESTABLECIMIENTO");
+  label(95, "CIF");
+  label(135, "DIRECCIÓN");
+  // CP + LOCALIDAD
+  const cp = text(xR, 165, "CP");
+  cp.setAttribute("fill","rgba(230,237,243,.85)");
+  cp.setAttribute("font-weight","700");
+  g.appendChild(cp);
+
+  const ln1 = line(xR+60, 161, xR+210, 161);
+  ln1.setAttribute("stroke","rgba(230,237,243,.75)");
+  ln1.setAttribute("stroke-width","2");
+  g.appendChild(ln1);
+
+  const loc = text(xR+260, 165, "LOCALIDAD");
+  loc.setAttribute("fill","rgba(230,237,243,.85)");
+  loc.setAttribute("font-weight","700");
+  g.appendChild(loc);
+
+  const ln2 = line(xR+400, 161, xR+680, 161);
+  ln2.setAttribute("stroke","rgba(230,237,243,.75)");
+  ln2.setAttribute("stroke-width","2");
+  g.appendChild(ln2);
+}
   function drawOverlay(g){
     clearOverlay();
 
@@ -948,6 +1039,8 @@ document.getElementById("btnExportSvg").onclick = () => {
 
   // ===== INIT =====
  // add("conducto");
+  renderDocHeader();
+drawGrid(40);
 })();
 </script>
 </body>
