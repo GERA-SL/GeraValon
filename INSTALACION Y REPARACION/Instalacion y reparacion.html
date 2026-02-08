@@ -233,7 +233,7 @@ svg{
   const circle = (cx,cy,r)=>{ const c=el("circle"); c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r); return c; };
   const path = (d)=>{ const p=el("path"); p.setAttribute("d",d); return p; };
   const text = (x,y,txt)=>{ const t=el("text"); t.setAttribute("x",x); t.setAttribute("y",y); t.textContent=txt; t.dataset.role="label"; return t; };
-  const HEADER_H = 400;
+  const HEADER_H = 120;
   
  function drawGrid(step=40){
   gridG.innerHTML="";
