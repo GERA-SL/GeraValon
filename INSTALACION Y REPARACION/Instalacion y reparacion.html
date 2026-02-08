@@ -911,41 +911,7 @@ document.getElementById("btnExportSvg").onclick = () => {
   // ===== INIT =====
  // add("conducto");
 })();
-  /* ===== MODAL MULTILÍNEA ===== */
-.modal{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.55);
-  display:flex; align-items:center; justify-content:center;
-  видно:visible;
-  z-index:9999;
-}
-.modal.hidden{ display:none; }
-.modalCard{
-  width:min(720px,92vw);
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:14px;
-  box-shadow:0 15px 50px rgba(0,0,0,.55);
-}
-.modalTitle{ font-weight:700; margin-bottom:10px; }
-#textModalArea{
-  width:100%;
-  min-height:180px;
-  resize:vertical;
-  background:#0b1220;
-  color:var(--text);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:10px;
-  font-family:inherit;
-  font-size:13px;
-  outline:none;
-}
-.modalBtns{
-  display:flex; gap:10px; justify-content:flex-end;
-  margin-top:10px;
-}
+ 
 </script>
   <!-- ===== EDITOR MULTILÍNEA (MODAL) ===== -->
 <div id="textModal" class="modal hidden">
