@@ -152,7 +152,6 @@
     }
     .btn-warn:hover{ background:rgba(210,153,34,.20); }
 
-    /* Tabla de líneas */
     .lines{
       width:100%;
       border:1px solid var(--border);
@@ -165,7 +164,6 @@
       padding:10px;
       align-items:center;
     }
-    /* 6 columnas: asa + fecha + trabajo + categoría + horas + delete */
     .lines .head, .lines .row{
       grid-template-columns: 44px 160px 1.4fr 260px 110px 44px;
     }
@@ -242,7 +240,6 @@
     .sum-line:last-child{ border-bottom:none; }
     .sum-strong{ font-weight:700; color:var(--text); }
 
-    /* === DRAG HANDLE (☰) === */
     .drag-handle{
       width:36px;
       height:36px;
@@ -259,26 +256,18 @@
     .drag-handle:active{ cursor:grabbing; }
     .row.dragging{ opacity:.55; }
 
-    /* ===== IMPRESIÓN OPTIMIZADA ===== */
+    #fileLoader{ display:none; }
+
     @media print{
       @page{ size:A4; margin:12mm; }
-
       body{ background:white; color:black; font-size:11px; }
-
       header{ position:static; padding:6px 0; }
-
-      /* ❌ ocultar formularios */
       #block1, #block2, #block4, .no-print{ display:none !important; }
-
-      /* ✅ mostrar bloque impresión */
       .print-only{ display:block !important; }
-
       header .top{ flex-direction:row; justify-content:space-between; }
       header h1{ font-size:14px; }
       header .sub{ font-size:11px; }
-
       #block3{ margin-top:6px; page-break-inside:avoid; }
-
       .print-grid{
         display:grid;
         grid-template-columns: 1fr 1fr;
@@ -289,7 +278,6 @@
         border-bottom:1px dotted #ccc;
         padding:3px 0;
       }
-
       .block{ border-color:#ddd; }
       .block-title{ color:#333; }
       .sum-card{ background:#fafafa; border-color:#ddd; }
@@ -311,7 +299,6 @@
 
 <main>
 
-  <!-- BLOQUE 1 -->
   <section class="block" id="block1">
     <div class="block-title">BLOQUE 1 · SELECCIÓN</div>
     <div class="block-body">
@@ -348,12 +335,11 @@
       </div>
 
       <div class="muted" style="margin-top:10px;">
-        Consejo: rellena Bloque 1 y luego añade líneas en Bloque 2. Después “Aceptar y pasar a resumen”.
+        Rellena Bloque 1, añade líneas, genera resumen y guarda/carga el parte en JSON.
       </div>
     </div>
   </section>
 
-  <!-- BLOQUE 2 -->
   <section class="block" id="block2">
     <div class="block-title">
       <span>BLOQUE 2 · PARTES DE TRABAJO</span>
@@ -381,7 +367,6 @@
     </div>
   </section>
 
-  <!-- BLOQUE 3 -->
   <section class="block" id="block3">
     <div class="block-title">
       <span>BLOQUE 3 · RESUMEN</span>
@@ -402,21 +387,21 @@
 
       <div class="btn-row no-print">
         <button type="button" id="btnPdf">GENERAR PDF</button>
+        <button type="button" class="btn-primary" id="btnSaveJson">GUARDAR JSON</button>
+        <button type="button" class="btn-warn" id="btnLoadJson">CARGAR JSON</button>
+        <input type="file" id="fileLoader" accept=".json,application/json">
       </div>
 
       <div class="muted no-print" style="margin-top:10px;">
-        Se abrirá el diálogo del navegador → “Guardar como PDF”.
+        JSON = copia completa del parte para guardarla y abrirla después.
       </div>
     </div>
   </section>
 
-  <!-- BLOQUE 4 -->
   <section class="block" id="block4">
     <div class="block-title">BLOQUE 4 · COSTE REAL / SALARIO MES</div>
 
     <div class="block-body grid cols-2">
-
-      <!-- IZQUIERDA -->
       <div>
         <label><b>Coste real trabajador</b></label>
 
@@ -431,7 +416,6 @@
         <div class="muted" id="lResultado"></div>
       </div>
 
-      <!-- DERECHA -->
       <div>
         <label><b>Cuánto pagar este mes</b></label>
 
@@ -445,11 +429,9 @@
 
         <div class="muted" id="rResultado"></div>
       </div>
-
     </div>
   </section>
 
-  <!-- BLOQUE PDF SOLO IMPRESIÓN -->
   <section class="block print-only" id="blockPrintLines">
     <div class="block-title">PARTES DEL MES (resumen)</div>
     <div class="block-body">
@@ -460,7 +442,6 @@
 </main>
 
 <script>
-  // ====== CONFIG ======
   const CATEGORIES = [
     "LIMPIEZA HOSTELERIA",
     "LIMPIEZA INDUSTRIAL",
@@ -471,7 +452,6 @@
     "REPLANTEOS Y OTRAS ACTIVIDADES"
   ];
 
-  // ====== HELPERS ======
   const $ = (id) => document.getElementById(id);
 
   function todayISO(){
@@ -505,7 +485,13 @@
     $("lineCount").textContent = `${count} línea${count===1?"":"s"}`;
   }
 
-  // ====== ROWS ======
+  function decimalHoursToTime(hours){
+    const safeHours = Number(hours) || 0;
+    const h = Math.floor(safeHours);
+    const m = Math.round((safeHours - h) * 60);
+    return String(h).padStart(2,"0") + ":" + String(m).padStart(2,"0");
+  }
+
   let rowId = 0;
 
   function addRow(prefill={}){
@@ -516,7 +502,6 @@
     wrap.dataset.rowId = String(rowId);
     wrap.draggable = false;
 
-    // Asa ☰
     const handle = document.createElement("div");
     handle.className = "drag-handle no-print";
     handle.textContent = "☰";
@@ -531,28 +516,23 @@
       wrap.classList.remove("dragging");
     });
 
-    // Fecha
     const inpDate = document.createElement("input");
     inpDate.type = "date";
     inpDate.value = prefill.date || todayISO();
 
-    // Trabajo
     const inpJob = document.createElement("input");
     inpJob.type = "text";
     inpJob.placeholder = "Ej: Limpieza campana / mantenimiento / recogida...";
     inpJob.value = prefill.job || "";
 
-    // Categoría
     const selCat = makeCategorySelect(prefill.cat || CATEGORIES[0]);
 
-    // Horas (duración)
     const inpHours = document.createElement("input");
     inpHours.type = "time";
     inpHours.step = "60";
     inpHours.value = prefill.hours || "00:00";
     inpHours.title = "Duración (HH:MM)";
 
-    // Delete
     const btnDel = document.createElement("button");
     btnDel.type = "button";
     btnDel.className = "icon-btn btn-danger no-print";
@@ -561,13 +541,11 @@
     btnDel.addEventListener("click", ()=>{
       wrap.remove();
       updateLineCount();
-      // si ya hay bloque de € generado, lo recalculamos
       if(LAST_GASTO_REAL > 0 && document.getElementById("blockMoney")){
         renderMoneyByCategoryBlock();
       }
     });
 
-    // Orden columnas (6)
     wrap.appendChild(handle);
     wrap.appendChild(inpDate);
     wrap.appendChild(inpJob);
@@ -583,43 +561,56 @@
     const data = [];
 
     for(const row of $("rows").children){
-      const [d, job, cat, hrs] = row.querySelectorAll("input, select");
+      const inputs = row.querySelectorAll("input, select");
+      const d = inputs[0];
+      const job = inputs[1];
+      const cat = inputs[2];
+      const hrs = inputs[3];
 
       const hhmm = (hrs.value || "00:00").split(":");
       const h = parseInt(hhmm[0] || "0", 10);
       const m = parseInt(hhmm[1] || "0", 10);
-
       const hours = h + (m / 60);
 
       data.push({
         date: d.value || "",
         job: job.value || "",
         cat: cat.value || "",
-        hours: hours
+        hours: Number(hours.toFixed(2)),
+        hours_hhmm: hrs.value || "00:00"
       });
     }
 
     return data;
   }
 
-  // ====== SUMMARY (horas y %)
+  function calculateSummary(rows){
+    const byCat = {};
+    CATEGORIES.forEach(c => byCat[c] = 0);
+
+    let total = 0;
+    for(const r of rows){
+      const h = Math.max(0, Number(r.hours) || 0);
+      if(byCat[r.cat] === undefined) byCat[r.cat] = 0;
+      byCat[r.cat] += h;
+      total += h;
+    }
+
+    return {
+      total_hours: Number(total.toFixed(2)),
+      by_category: byCat
+    };
+  }
+
   function buildSummary(){
     const month = parseInt($("month").value,10);
     const year = parseInt($("year").value,10);
     const worker = $("worker").value;
 
     const rows = getRowsData().filter(r => (r.job.trim() !== "" || r.hours > 0 || r.cat));
-
-    const byCat = {};
-    CATEGORIES.forEach(c => byCat[c] = 0);
-
-    let total = 0;
-    for(const r of rows){
-      const h = Math.max(0, r.hours || 0);
-      if(byCat[r.cat] === undefined) byCat[r.cat] = 0;
-      byCat[r.cat] += h;
-      total += h;
-    }
+    const summary = calculateSummary(rows);
+    const byCat = summary.by_category;
+    const total = summary.total_hours;
 
     $("sumMeta").textContent = `${worker} · ${String(month).padStart(2,'0')}/${year}`;
 
@@ -662,10 +653,8 @@
     $("block3").scrollIntoView({behavior:"smooth", block:"start"});
   }
 
-  // ====== PRINT LINES ======
   function buildPrintLines(){
     const rows = getRowsData().filter(r => r.hours > 0);
-
     const container = $("printLines");
     container.innerHTML = "";
 
@@ -681,34 +670,22 @@
     container.appendChild(table);
   }
 
-  // ====== PDF ======
   function generatePdf(){
+    buildPrintLines();
     window.print();
   }
 
-  // ====== BLOQUE € POR ACTIVIDAD (usa gasto mensual real calculado en btnLeft) ======
-  let LAST_GASTO_REAL = 0;  // € (13/12)
-  let LAST_COSTE_HORA = 0;  // €/h
+  let LAST_GASTO_REAL = 0;
+  let LAST_COSTE_HORA = 0;
 
   function renderMoneyByCategoryBlock(){
-    if(!LAST_GASTO_REAL || LAST_GASTO_REAL <= 0){
-      return;
-    }
+    if(!LAST_GASTO_REAL || LAST_GASTO_REAL <= 0) return;
 
     const rows = getRowsData().filter(r => (r.job.trim() !== "" || r.hours > 0 || r.cat));
+    const summary = calculateSummary(rows);
+    const byCat = summary.by_category;
+    const totalH = summary.total_hours;
 
-    const byCat = {};
-    CATEGORIES.forEach(c => byCat[c] = 0);
-
-    let totalH = 0;
-    for(const r of rows){
-      const h = Math.max(0, r.hours || 0);
-      if(byCat[r.cat] === undefined) byCat[r.cat] = 0;
-      byCat[r.cat] += h;
-      totalH += h;
-    }
-
-    // crear / actualizar bloque antes de PARTES DEL MES
     let block = document.getElementById("blockMoney");
     if(!block){
       block = document.createElement("section");
@@ -741,27 +718,23 @@
       }
     }
 
-    // meta
     const month = $("month").value;
     const year = $("year").value;
     const worker = $("worker").value;
     block.querySelector("#moneyMeta").textContent = `${worker} · ${String(month).padStart(2,'0')}/${year}`;
 
-    // € por categoría (porcentaje de horas)
     const moneyByCatEl = block.querySelector("#moneyByCat");
     moneyByCatEl.innerHTML = "";
 
     CATEGORIES.forEach(cat=>{
       const pct = totalH > 0 ? (byCat[cat] / totalH) : 0;
       const euros = LAST_GASTO_REAL * pct;
-
       const line = document.createElement("div");
       line.className = "sum-line";
       line.innerHTML = `<span>${cat}</span><span class="sum-strong">${euros.toFixed(2)} €</span>`;
       moneyByCatEl.appendChild(line);
     });
 
-    // datos base
     const baseEl = block.querySelector("#moneyBase");
     baseEl.innerHTML = "";
 
@@ -781,14 +754,127 @@
     baseEl.appendChild(b3);
   }
 
-  // ====== INIT ======
+  function generateJSON(){
+    const rows = getRowsData();
+    const summary = calculateSummary(rows);
+
+    return {
+      app: "GeraValon Trabajadores",
+      version: "1.1-json",
+      saved_at: new Date().toISOString(),
+      worker: $("worker").value,
+      month: parseInt($("month").value, 10),
+      year: parseInt($("year").value, 10),
+      lines: rows,
+      summary: summary,
+      cost_block: {
+        gasto_nomina_mes: parseFloat($("lGasto").value || 0),
+        horas_mensuales: parseFloat($("lHoras").value || 0),
+        gasto_mensual_real_13_12: LAST_GASTO_REAL || 0,
+        coste_hora_real: LAST_COSTE_HORA || 0
+      },
+      pay_block: {
+        precio_hora: parseFloat($("rPrecio").value || 0),
+        horas_mes: parseFloat($("rHoras").value || 0)
+      }
+    };
+  }
+
+  function buildJsonFileName(){
+    const worker = $("worker").value || "TRABAJADOR";
+    const month = String($("month").value || "00").padStart(2, "0");
+    const year = $("year").value || "0000";
+    return `${worker}_${year}_${month}.json`;
+  }
+
+  function downloadJSON(){
+    const data = generateJSON();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = buildJsonFileName();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+  }
+
+  function loadJSON(file){
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+      try{
+        const data = JSON.parse(e.target.result);
+
+        if(data.worker) $("worker").value = data.worker;
+        if(data.month) $("month").value = String(data.month);
+        if(data.year) $("year").value = String(data.year);
+
+        $("rows").innerHTML = "";
+        rowId = 0;
+
+        if(Array.isArray(data.lines) && data.lines.length > 0){
+          data.lines.forEach(line=>{
+            addRow({
+              date: line.date || todayISO(),
+              job: line.job || "",
+              cat: line.cat || CATEGORIES[0],
+              hours: line.hours_hhmm || decimalHoursToTime(line.hours || 0)
+            });
+          });
+        }else{
+          addRow();
+        }
+
+        if(data.cost_block){
+          $("lGasto").value = data.cost_block.gasto_nomina_mes || "";
+          $("lHoras").value = data.cost_block.horas_mensuales || "160";
+          LAST_GASTO_REAL = Number(data.cost_block.gasto_mensual_real_13_12 || 0);
+          LAST_COSTE_HORA = Number(data.cost_block.coste_hora_real || 0);
+        }
+
+        if(data.pay_block){
+          $("rPrecio").value = data.pay_block.precio_hora || "";
+          $("rHoras").value = data.pay_block.horas_mes || "";
+        }
+
+        updateLineCount();
+        buildSummary();
+        buildPrintLines();
+
+        if(LAST_GASTO_REAL > 0){
+          renderMoneyByCategoryBlock();
+        }
+
+        $("statusPill").textContent = "JSON cargado";
+        $("statusPill").style.borderColor = "rgba(46,160,67,.55)";
+        $("statusPill").style.color = "var(--text)";
+      }catch(err){
+        alert("No se pudo cargar el JSON. Revisa que sea un archivo válido.");
+        console.error(err);
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
   setDefaultMonthYear();
   addRow();
 
   $("btnAdd").addEventListener("click", ()=> addRow());
   $("btnPdf").addEventListener("click", generatePdf);
+  $("btnSaveJson").addEventListener("click", downloadJSON);
+  $("btnLoadJson").addEventListener("click", ()=> $("fileLoader").click());
 
-  // IZQUIERDA (Coste real trabajador)
+  $("fileLoader").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(file) loadJSON(file);
+    e.target.value = "";
+  });
+
   $("btnLeft").addEventListener("click", ()=>{
     const gasto = parseFloat($("lGasto").value||0);
     const horas = parseFloat($("lHoras").value||0);
@@ -808,28 +894,23 @@
       `Gasto mensual real: <b>${gastoReal.toFixed(2)} €</b><br>
        Coste hora real: <b>${costeHora.toFixed(2)} €/h</b>`;
 
-    // ✅ genera/actualiza el bloque de € por actividad
     renderMoneyByCategoryBlock();
   });
 
-  // DERECHA (Cuánto pagar este mes)
   $("btnRight").addEventListener("click", ()=>{
     const precio = parseFloat($("rPrecio").value||0);
     const horas = parseFloat($("rHoras").value||0);
-
     const total = precio*horas;
 
     $("rResultado").innerHTML =
       `Debe cobrar: <b>${total.toFixed(2)} €</b>`;
   });
 
-  // Resumen
   $("btnSummary").addEventListener("click", ()=>{
     buildSummary();
     buildPrintLines();
   });
 
-  // Recalcular € automático si ya hay gasto calculado
   $("rows").addEventListener("input", ()=>{
     if(LAST_GASTO_REAL > 0 && document.getElementById("blockMoney")){
       renderMoneyByCategoryBlock();
@@ -841,7 +922,6 @@
     }
   });
 
-  // Drag & Drop
   $("rows").addEventListener("dragover", (e)=>{
     e.preventDefault();
 
@@ -855,7 +935,6 @@
       $("rows").insertBefore(dragging, after);
     }
 
-    // si ya hay bloque €, actualiza al mover
     if(LAST_GASTO_REAL > 0 && document.getElementById("blockMoney")){
       renderMoneyByCategoryBlock();
     }
