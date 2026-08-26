@@ -1,1 +1,1660 @@
 
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Productos químicos</title>
+
+  <style>
+    :root{
+      --bg:#0d1117;
+      --panel:#161b22;
+      --border:#30363d;
+      --text:#e6edf3;
+      --muted:#8b949e;
+      --accent:#2f81f7;
+      --good:#238636;
+      --danger:#da3633;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    header{
+      padding:18px 22px;
+      background:var(--panel);
+      border-bottom:1px solid var(--border);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    header h1{
+      margin:0;
+      font-size:21px;
+    }
+
+    main{
+      max-width:1500px;
+      margin:0 auto;
+      padding:18px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 330px;
+      gap:18px;
+    }
+
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:10px;
+      overflow:hidden;
+    }
+
+    .panel h2{
+      margin:0;
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      font-size:15px;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+    }
+
+    button,
+    .btn{
+      border:1px solid var(--border);
+      background:#21262d;
+      color:var(--text);
+      padding:8px 11px;
+      border-radius:7px;
+      cursor:pointer;
+      font-weight:600;
+    }
+
+    .primary{
+      background:var(--accent);
+    }
+
+    .good{
+      background:var(--good);
+    }
+
+    .danger{
+      background:var(--danger);
+    }
+
+    .table-wrap{
+      overflow:auto;
+      max-height:65vh;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    th,
+    td{
+      border-bottom:1px solid var(--border);
+      padding:8px;
+      vertical-align:middle;
+    }
+
+    th{
+      background:#11161d;
+      color:var(--muted);
+      font-size:11px;
+      text-align:left;
+    }
+
+    input,
+    select{
+      width:100%;
+      background:#0d1117;
+      color:var(--text);
+      border:1px solid var(--border);
+      border-radius:6px;
+      padding:7px;
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .stock-list{
+      padding:10px;
+    }
+
+    .stock-item{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      padding:11px 8px;
+      border-bottom:1px solid var(--border);
+    }
+
+    .stock-item .name{
+      font-weight:600;
+    }
+
+    .stock-item .qty{
+      font-weight:700;
+    }
+
+    .status{
+      padding:12px 14px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .backup-box{
+      padding:14px;
+    }
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.65);
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:20;
+    }
+
+    .modal.open{
+      display:flex;
+    }
+
+    .modal-card{
+      width:min(900px, 100%);
+      max-height:90vh;
+      overflow:auto;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:12px;
+    }
+
+    .modal-head{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .modal-body{
+      padding:14px 16px;
+    }
+
+    .inv-row{
+      display:grid;
+      grid-template-columns:1fr 130px 90px 140px;
+      gap:8px;
+      align-items:center;
+      padding:8px 0;
+      border-bottom:1px solid var(--border);
+    }
+
+    @media(max-width:1000px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <h1>PRODUCTOS QUÍMICOS</h1>
+    <div class="muted">Entradas, stock actual e inventario mensual</div>
+  </div>
+
+  <div id="saveState">Sin guardar</div>
+</header>
+
+<main>
+
+  <div class="grid">
+
+    <!-- TABLA DE ENTRADAS -->
+    <section class="panel">
+
+      <h2>ENTRADAS DE PRODUCTOS</h2>
+
+      <div class="toolbar">
+
+        <button class="primary" onclick="addRow()">
+          + Añadir línea
+        </button>
+
+        <button class="good" onclick="openInventory()">
+          Inventario mensual
+        </button>
+
+        <button onclick="downloadJSON()">
+          Descargar JSON
+        </button>
+
+        <label class="btn">
+          Cargar JSON
+
+          <input
+            id="jsonFile"
+            type="file"
+            accept=".json,application/json"
+            hidden
+          >
+
+        </label>
+
+      </div>
+
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>FECHA</th>
+
+              <th>PRODUCTO</th>
+
+              <th>CANTIDAD</th>
+
+              <th>UNIDAD</th>
+
+              <th>PRECIO €</th>
+
+              <th>RESPONSABLE</th>
+
+              <th>FICHA DE SEGURIDAD</th>
+
+              <th>BORRAR</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="rows"></tbody>
+
+        </table>
+
+      </div>
+
+
+      <div
+        class="status"
+        id="lastBackup"
+      >
+
+        Última copia: —
+
+      </div>
+
+    </section>
+
+
+    <!-- COLUMNA DERECHA -->
+    <aside>
+
+      <section class="panel">
+
+        <h2>STOCK ACTUAL</h2>
+
+        <div
+          id="stockList"
+          class="stock-list"
+        ></div>
+
+      </section>
+
+
+      <section
+        class="panel"
+        style="margin-top:18px"
+      >
+
+        <h2>COPIA / JSON</h2>
+
+        <div class="backup-box">
+
+          <div
+            class="muted"
+            style="margin-bottom:8px"
+          >
+
+            Cada cambio se guarda en este navegador.
+
+          </div>
+
+          <button
+            style="width:100%; margin-bottom:8px"
+            onclick="downloadJSON()"
+          >
+
+            Descargar copia actual
+
+          </button>
+
+
+          <button
+            style="width:100%"
+            onclick="restoreLastSnapshot()"
+          >
+
+            Restaurar última copia
+
+          </button>
+
+        </div>
+
+      </section>
+
+    </aside>
+
+  </div>
+
+</main>
+
+
+<!-- VENTANA INVENTARIO MENSUAL -->
+<div
+  id="inventoryModal"
+  class="modal"
+>
+
+  <div class="modal-card">
+
+    <div class="modal-head">
+
+      <strong>
+        INVENTARIO MENSUAL
+      </strong>
+
+      <button onclick="closeInventory()">
+        Cerrar
+      </button>
+
+    </div>
+
+
+    <div class="modal-body">
+
+      <p class="muted">
+
+        Escribe la cantidad física que queda de cada producto.
+
+      </p>
+
+
+      <div
+        class="inv-row"
+        style="font-weight:700; color:var(--muted)"
+      >
+
+        <div>Producto</div>
+
+        <div>Stock calculado</div>
+
+        <div>Unidad</div>
+
+        <div>Stock físico final</div>
+
+      </div>
+
+
+      <div id="inventoryRows"></div>
+
+
+      <div
+        style="
+          margin-top:14px;
+          display:flex;
+          gap:8px;
+          justify-content:flex-end;
+        "
+      >
+
+        <button onclick="closeInventory()">
+          Cancelar
+        </button>
+
+        <button
+          class="good"
+          onclick="saveInventory()"
+        >
+
+          Guardar inventario
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  const KEY =
+    "gera_quimicos_v1";
+
+  const SNAP =
+    "gera_quimicos_snapshots_v1";
+
+
+  let state = {
+
+    rows: [],
+
+    products: [],
+
+    responsibles: [],
+
+    stockAdjustments: {},
+
+    inventories: [],
+
+    updatedAt: null
+
+  };
+
+
+  function save(reason){
+
+    state.updatedAt =
+      new Date().toISOString();
+
+
+    localStorage.setItem(
+      KEY,
+      JSON.stringify(state)
+    );
+
+
+    const arr =
+      JSON.parse(
+        localStorage.getItem(SNAP) || "[]"
+      );
+
+
+    arr.push({
+
+      time: state.updatedAt,
+
+      reason: reason,
+
+      state:
+        JSON.parse(
+          JSON.stringify(state)
+        )
+
+    });
+
+
+    while(arr.length > 50){
+
+      arr.shift();
+
+    }
+
+
+    localStorage.setItem(
+      SNAP,
+      JSON.stringify(arr)
+    );
+
+
+    document.getElementById(
+      "saveState"
+    ).textContent =
+      "Guardado";
+
+
+    document.getElementById(
+      "lastBackup"
+    ).textContent =
+      "Última copia: "
+      + new Date(
+          state.updatedAt
+        ).toLocaleString(
+          "es-ES"
+        )
+      + " · "
+      + reason;
+
+  }
+
+
+  function addRow(doSave = true){
+
+    state.rows.push({
+
+      id:
+        crypto.randomUUID
+          ? crypto.randomUUID()
+          : String(
+              Date.now()
+              + Math.random()
+            ),
+
+      date:
+        new Date()
+          .toISOString()
+          .slice(0,10),
+
+      product: "",
+
+      qty: "",
+
+      unit: "L",
+
+      price: "",
+
+      responsible: "",
+
+      fdsName: ""
+
+    });
+
+
+    if(doSave){
+
+      save(
+        "Añadir línea"
+      );
+
+    }
+
+
+    render();
+
+  }
+
+
+  function removeRow(id){
+
+    if(
+      !confirm(
+        "¿Borrar esta línea?"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    state.rows =
+      state.rows.filter(
+        r => r.id !== id
+      );
+
+
+    save(
+      "Borrar línea"
+    );
+
+
+    render();
+
+  }
+
+
+  function updateRow(
+    id,
+    field,
+    value
+  ){
+
+    const r =
+      state.rows.find(
+        x => x.id === id
+      );
+
+
+    if(!r){
+
+      return;
+
+    }
+
+
+    if(
+      field === "product"
+      &&
+      value === "__NEW__"
+    ){
+
+      const p =
+        prompt(
+          "Nombre del nuevo producto:"
+        );
+
+
+      if(!p){
+
+        render();
+
+        return;
+
+      }
+
+
+      if(
+        !state.products.includes(p)
+      ){
+
+        state.products.push(p);
+
+      }
+
+
+      r.product = p;
+
+    }
+
+
+    else if(
+      field === "responsible"
+      &&
+      value === "__NEW__"
+    ){
+
+      const p =
+        prompt(
+          "Nombre del nuevo responsable:"
+        );
+
+
+      if(!p){
+
+        render();
+
+        return;
+
+      }
+
+
+      if(
+        !state.responsibles.includes(p)
+      ){
+
+        state.responsibles.push(p);
+
+      }
+
+
+      r.responsible = p;
+
+    }
+
+
+    else{
+
+      r[field] = value;
+
+    }
+
+
+    save(
+      "Modificar "
+      + field
+    );
+
+
+    render();
+
+  }
+
+
+  function attachPDF(
+    id,
+    input
+  ){
+
+    const f =
+      input.files
+      &&
+      input.files[0];
+
+
+    if(!f){
+
+      return;
+
+    }
+
+
+    if(
+      f.type
+      !== "application/pdf"
+    ){
+
+      alert(
+        "Selecciona un PDF"
+      );
+
+      return;
+
+    }
+
+
+    const r =
+      state.rows.find(
+        x => x.id === id
+      );
+
+
+    r.fdsName =
+      f.name;
+
+
+    save(
+      "Asociar FDS"
+    );
+
+
+    render();
+
+  }
+
+
+  function stock(){
+
+    const t = {};
+
+
+    state.products.forEach(
+      p => t[p] = 0
+    );
+
+
+    state.rows.forEach(
+      r => {
+
+        if(
+          !r.product
+        ){
+
+          return;
+
+        }
+
+
+        t[r.product] =
+          (
+            t[r.product]
+            || 0
+          )
+          +
+          (
+            Number(r.qty)
+            || 0
+          );
+
+      }
+    );
+
+
+    Object.entries(
+      state.stockAdjustments
+    ).forEach(
+      ([p,v]) => {
+
+        t[p] =
+          Number(v);
+
+      }
+    );
+
+
+    return t;
+
+  }
+
+
+  function unitFor(p){
+
+    const r =
+      [...state.rows]
+      .reverse()
+      .find(
+        x =>
+          x.product === p
+      );
+
+
+    return r?.unit || "L";
+
+  }
+
+
+  function esc(s){
+
+    return String(
+      s ?? ""
+    ).replace(
+      /[&<>"']/g,
+      m => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m])
+    );
+
+  }
+
+
+  function render(){
+
+    const tb =
+      document.getElementById(
+        "rows"
+      );
+
+
+    tb.innerHTML = "";
+
+
+    state.rows.forEach(
+      r => {
+
+        const tr =
+          document.createElement(
+            "tr"
+          );
+
+
+        tr.innerHTML = `
+
+          <td>
+
+            <input
+              type="date"
+              value="${esc(r.date)}"
+              onchange="
+                updateRow(
+                  '${r.id}',
+                  'date',
+                  this.value
+                )
+              "
+            >
+
+          </td>
+
+
+          <td>
+
+            <select
+              onchange="
+                updateRow(
+                  '${r.id}',
+                  'product',
+                  this.value
+                )
+              "
+            >
+
+              <option value="">
+                Seleccionar...
+              </option>
+
+
+              ${
+
+                state.products
+                .map(
+                  p => `
+
+                    <option
+                      ${p === r.product
+                        ? "selected"
+                        : ""
+                      }
+                    >
+
+                      ${esc(p)}
+
+                    </option>
+
+                  `
+                )
+                .join("")
+
+              }
+
+
+              <option value="__NEW__">
+                + Crear nuevo producto
+              </option>
+
+            </select>
+
+          </td>
+
+
+          <td>
+
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value="${esc(r.qty)}"
+              onchange="
+                updateRow(
+                  '${r.id}',
+                  'qty',
+                  this.value
+                )
+              "
+            >
+
+          </td>
+
+
+          <td>
+
+            <select
+              onchange="
+                updateRow(
+                  '${r.id}',
+                  'unit',
+                  this.value
+                )
+              "
+            >
+
+              <option
+                value="L"
+                ${r.unit === "L"
+                  ? "selected"
+                  : ""
+                }
+              >
+                L
+              </option>
+
+
+              <option
+                value="kg"
+                ${r.unit === "kg"
+                  ? "selected"
+                  : ""
+                }
+              >
+                kg
+              </option>
+
+            </select>
+
+          </td>
+
+
+          <td>
+
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value="${esc(r.price)}"
+              onchange="
+                updateRow(
+                  '${r.id}',
+                  'price',
+                  this.value
+                )
+              "
+            >
+
+          </td>
+
+
+          <td>
+
+            <select
+              onchange="
+                updateRow(
+                  '${r.id}',
+                  'responsible',
+                  this.value
+                )
+              "
+            >
+
+              <option value="">
+                Seleccionar...
+              </option>
+
+
+              ${
+
+                state.responsibles
+                .map(
+                  p => `
+
+                    <option
+                      ${p === r.responsible
+                        ? "selected"
+                        : ""
+                      }
+                    >
+
+                      ${esc(p)}
+
+                    </option>
+
+                  `
+                )
+                .join("")
+
+              }
+
+
+              <option value="__NEW__">
+                + Nuevo responsable
+              </option>
+
+            </select>
+
+          </td>
+
+
+          <td>
+
+            <input
+              type="file"
+              accept="application/pdf"
+              onchange="
+                attachPDF(
+                  '${r.id}',
+                  this
+                )
+              "
+            >
+
+
+            <div class="muted">
+
+              ${
+                r.fdsName
+                  ? "Asociada: "
+                    + esc(r.fdsName)
+                  : "Sin FDS"
+              }
+
+            </div>
+
+          </td>
+
+
+          <td>
+
+            <button
+              class="danger"
+              onclick="
+                removeRow(
+                  '${r.id}'
+                )
+              "
+            >
+
+              Borrar
+
+            </button>
+
+          </td>
+
+        `;
+
+
+        tb.appendChild(tr);
+
+      }
+    );
+
+
+    const s =
+      stock();
+
+
+    const box =
+      document.getElementById(
+        "stockList"
+      );
+
+
+    if(
+      Object.keys(s).length
+    ){
+
+      box.innerHTML =
+
+        Object.entries(s)
+        .map(
+          ([p,q]) => `
+
+            <div class="stock-item">
+
+              <div>
+
+                <div class="name">
+                  ${esc(p)}
+                </div>
+
+                <div class="muted">
+                  Existencia actual
+                </div>
+
+              </div>
+
+
+              <div class="qty">
+
+                ${
+                  Number(q)
+                  .toLocaleString(
+                    "es-ES",
+                    {
+                      maximumFractionDigits:2
+                    }
+                  )
+                }
+
+                ${esc(unitFor(p))}
+
+              </div>
+
+            </div>
+
+          `
+        )
+        .join("");
+
+    }
+
+    else{
+
+      box.innerHTML =
+        '<div class="muted">Aún no hay productos.</div>';
+
+    }
+
+  }
+
+
+  function openInventory(){
+
+    const holder =
+      document.getElementById(
+        "inventoryRows"
+      );
+
+
+    const s =
+      stock();
+
+
+    holder.innerHTML = "";
+
+
+    Object.entries(s)
+    .forEach(
+      ([p,q]) => {
+
+        const d =
+          document.createElement(
+            "div"
+          );
+
+
+        d.className =
+          "inv-row";
+
+
+        d.innerHTML = `
+
+          <div>
+            <b>${esc(p)}</b>
+          </div>
+
+
+          <div>
+
+            ${
+              Number(q)
+              .toLocaleString(
+                "es-ES",
+                {
+                  maximumFractionDigits:2
+                }
+              )
+            }
+
+          </div>
+
+
+          <div>
+
+            ${esc(unitFor(p))}
+
+          </div>
+
+
+          <div>
+
+            <input
+              data-product="${esc(p)}"
+              data-unit="${esc(unitFor(p))}"
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="Cantidad real"
+            >
+
+          </div>
+
+        `;
+
+
+        holder.appendChild(d);
+
+      }
+    );
+
+
+    document.getElementById(
+      "inventoryModal"
+    ).classList.add(
+      "open"
+    );
+
+  }
+
+
+  function closeInventory(){
+
+    document.getElementById(
+      "inventoryModal"
+    ).classList.remove(
+      "open"
+    );
+
+  }
+
+
+  function saveInventory(){
+
+    const s =
+      stock();
+
+
+    const inputs =
+      [
+        ...document.querySelectorAll(
+          "#inventoryRows input[data-product]"
+        )
+      ];
+
+
+    const details = [];
+
+
+    inputs.forEach(
+      i => {
+
+        if(
+          i.value === ""
+        ){
+
+          return;
+
+        }
+
+
+        const p =
+          i.dataset.product;
+
+
+        const final =
+          Number(i.value);
+
+
+        const before =
+          Number(
+            s[p] || 0
+          );
+
+
+        state.stockAdjustments[p] =
+          final;
+
+
+        details.push({
+
+          product: p,
+
+          unit:
+            i.dataset.unit,
+
+          before: before,
+
+          final: final,
+
+          consumed:
+            Math.max(
+              0,
+              before - final
+            )
+
+        });
+
+      }
+    );
+
+
+    state.inventories.push({
+
+      date:
+        new Date()
+        .toISOString(),
+
+      details:
+        details
+
+    });
+
+
+    save(
+      "Inventario mensual"
+    );
+
+
+    closeInventory();
+
+
+    render();
+
+
+    alert(
+      "Inventario guardado"
+    );
+
+  }
+
+
+  function downloadJSON(){
+
+    const blob =
+      new Blob(
+
+        [
+          JSON.stringify(
+            {
+              exportedAt:
+                new Date()
+                .toISOString(),
+
+              data:
+                state
+            },
+
+            null,
+
+            2
+          )
+        ],
+
+        {
+          type:
+            "application/json"
+        }
+
+      );
+
+
+    const a =
+      document.createElement(
+        "a"
+      );
+
+
+    a.href =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    a.download =
+      "GERA_Quimicos_"
+      +
+      new Date()
+      .toISOString()
+      .replace(
+        /[:.]/g,
+        "-"
+      )
+      +
+      ".json";
+
+
+    a.click();
+
+
+    URL.revokeObjectURL(
+      a.href
+    );
+
+  }
+
+
+  document.getElementById(
+    "jsonFile"
+  ).addEventListener(
+    "change",
+
+    async e => {
+
+      const f =
+        e.target.files[0];
+
+
+      if(!f){
+
+        return;
+
+      }
+
+
+      try{
+
+        const obj =
+          JSON.parse(
+            await f.text()
+          );
+
+
+        const inc =
+          obj.data || obj;
+
+
+        if(
+          !inc.rows
+        ){
+
+          throw new Error(
+            "Formato no válido"
+          );
+
+        }
+
+
+        if(
+          !confirm(
+            "Esto sustituirá los datos actuales. ¿Continuar?"
+          )
+        ){
+
+          return;
+
+        }
+
+
+        state = inc;
+
+
+        save(
+          "Restaurar desde JSON"
+        );
+
+
+        render();
+
+      }
+
+      catch(err){
+
+        alert(
+          err.message
+        );
+
+      }
+
+
+      e.target.value = "";
+
+    }
+  );
+
+
+  function restoreLastSnapshot(){
+
+    const arr =
+      JSON.parse(
+        localStorage.getItem(
+          SNAP
+        )
+        || "[]"
+      );
+
+
+    if(
+      arr.length < 2
+    ){
+
+      alert(
+        "No hay copia anterior"
+      );
+
+      return;
+
+    }
+
+
+    const prev =
+      arr[
+        arr.length - 2
+      ];
+
+
+    if(
+      !confirm(
+        "¿Restaurar la copia anterior?"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    state =
+      prev.state;
+
+
+    save(
+      "Restaurar copia"
+    );
+
+
+    render();
+
+  }
+
+
+  (function(){
+
+    try{
+
+      const saved =
+        localStorage.getItem(
+          KEY
+        );
+
+
+      if(saved){
+
+        state =
+          Object.assign(
+            state,
+            JSON.parse(saved)
+          );
+
+      }
+
+    }
+
+    catch(e){}
+
+
+    if(
+      !state.rows.length
+    ){
+
+      addRow(false);
+
+    }
+
+
+    render();
+
+  })();
+
+</script>
+
+</body>
+</html>
