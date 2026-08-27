@@ -17,11 +17,10 @@
       --accent:#2f81f7;
       --good:#238636;
       --danger:#da3633;
+      --hover:#21262d;
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{box-sizing:border-box;}
 
     body{
       margin:0;
@@ -31,7 +30,7 @@
     }
 
     header{
-      padding:18px 22px;
+      padding:16px 12px;
       background:var(--panel);
       border-bottom:1px solid var(--border);
       display:flex;
@@ -47,15 +46,16 @@
     }
 
     main{
-      max-width:1500px;
-      margin:0 auto;
-      padding:18px;
+      width:100%;
+      max-width:none;
+      margin:0;
+      padding:10px 10px 10px 4px;
     }
 
     .grid{
       display:grid;
-      grid-template-columns:minmax(0, 1fr) 330px;
-      gap:18px;
+      grid-template-columns:minmax(0, 1fr) 300px;
+      gap:12px;
     }
 
     .panel{
@@ -67,7 +67,7 @@
 
     .panel h2{
       margin:0;
-      padding:14px 16px;
+      padding:12px 14px;
       border-bottom:1px solid var(--border);
       font-size:15px;
     }
@@ -76,7 +76,7 @@
       display:flex;
       gap:8px;
       flex-wrap:wrap;
-      padding:12px 14px;
+      padding:10px 12px;
       border-bottom:1px solid var(--border);
     }
 
@@ -85,45 +85,63 @@
       border:1px solid var(--border);
       background:#21262d;
       color:var(--text);
-      padding:8px 11px;
+      padding:7px 10px;
       border-radius:7px;
       cursor:pointer;
       font-weight:600;
     }
 
+    button:hover,
+    .btn:hover{
+      background:#30363d;
+    }
+
     .primary{
       background:var(--accent);
+      border-color:var(--accent);
     }
 
     .good{
       background:var(--good);
+      border-color:var(--good);
     }
 
     .danger{
-      background:var(--danger);
+      background:transparent;
+      border:none;
+      font-size:18px;
+      padding:4px 6px;
+    }
+
+    .save-btn{
+      background:var(--good);
+      border:none;
+      font-size:16px;
+      padding:5px 8px;
     }
 
     .table-wrap{
       overflow:auto;
-      max-height:65vh;
+      max-height:68vh;
     }
 
     table{
       width:100%;
       border-collapse:collapse;
+      table-layout:fixed;
     }
 
     th,
     td{
       border-bottom:1px solid var(--border);
-      padding:8px;
+      padding:6px;
       vertical-align:middle;
     }
 
     th{
       background:#11161d;
       color:var(--muted);
-      font-size:11px;
+      font-size:10px;
       text-align:left;
     }
 
@@ -134,43 +152,86 @@
       color:var(--text);
       border:1px solid var(--border);
       border-radius:6px;
-      padding:7px;
+      padding:6px;
+      font-size:12px;
     }
 
     .muted{
       color:var(--muted);
-      font-size:12px;
+      font-size:11px;
+    }
+
+    .status{
+      padding:10px 12px;
+      border-top:1px solid var(--border);
+      color:var(--muted);
+      font-size:11px;
     }
 
     .stock-list{
-      padding:10px;
+      padding:8px;
     }
 
     .stock-item{
       display:grid;
       grid-template-columns:1fr auto;
       gap:8px;
-      padding:11px 8px;
+      padding:10px 6px;
       border-bottom:1px solid var(--border);
+      align-items:center;
     }
 
     .stock-item .name{
       font-weight:600;
+      font-size:13px;
     }
 
     .stock-item .qty{
       font-weight:700;
+      font-size:13px;
     }
 
-    .status{
-      padding:12px 14px;
-      border-top:1px solid var(--border);
-      color:var(--muted);
-      font-size:12px;
+    .stock-actions{
+      display:flex;
+      align-items:center;
+      gap:6px;
     }
 
     .backup-box{
-      padding:14px;
+      padding:12px;
+    }
+
+    .fds-box{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      align-items:flex-start;
+    }
+
+    .fds-link{
+      color:#58a6ff;
+      font-weight:700;
+      text-decoration:none;
+      font-size:12px;
+    }
+
+    .fds-link:hover{
+      text-decoration:underline;
+    }
+
+    .fds-ok{
+      color:#3fb950;
+      font-size:11px;
+      font-weight:700;
+    }
+
+    .fds-empty{
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .saved-row{
+      background:#101820;
     }
 
     .modal{
@@ -211,17 +272,26 @@
 
     .inv-row{
       display:grid;
-      grid-template-columns:1fr 130px 90px 140px;
+      grid-template-columns:1fr 120px 70px 140px;
       gap:8px;
       align-items:center;
       padding:8px 0;
       border-bottom:1px solid var(--border);
     }
 
-    @media(max-width:1000px){
-      .grid{
-        grid-template-columns:1fr;
-      }
+    .col-fecha{ width:105px; }
+    .col-producto{ width:185px; }
+    .col-empresa{ width:130px; }
+    .col-cantidad{ width:78px; }
+    .col-unidad{ width:62px; }
+    .col-precio{ width:78px; }
+    .col-responsable{ width:120px; }
+    .col-fds{ width:180px; }
+    .col-guardar{ width:58px; }
+    .col-borrar{ width:48px; }
+
+    @media(max-width:1100px){
+      .grid{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -238,201 +308,127 @@
 </header>
 
 <main>
-
   <div class="grid">
 
-    <!-- TABLA DE ENTRADAS -->
     <section class="panel">
-
       <h2>ENTRADAS DE PRODUCTOS</h2>
 
       <div class="toolbar">
-
-        <button class="primary" onclick="addRow()">
-          + Añadir línea
-        </button>
-
-        <button class="good" onclick="openInventory()">
-          Inventario mensual
-        </button>
-
-        <button onclick="downloadJSON()">
-          Descargar JSON
-        </button>
+        <button class="primary" onclick="addRow()">+ Añadir línea</button>
+        <button class="good" onclick="openInventory()">Inventario mensual</button>
+        <button onclick="downloadJSON()">Descargar JSON</button>
 
         <label class="btn">
           Cargar JSON
-
-          <input
-            id="jsonFile"
-            type="file"
-            accept=".json,application/json"
-            hidden
-          >
-
+          <input id="jsonFile" type="file" accept=".json,application/json" hidden>
         </label>
-
       </div>
 
-
       <div class="table-wrap">
-
         <table>
 
+          <colgroup>
+            <col class="col-fecha">
+            <col class="col-producto">
+            <col class="col-empresa">
+            <col class="col-cantidad">
+            <col class="col-unidad">
+            <col class="col-precio">
+            <col class="col-responsable">
+            <col class="col-fds">
+            <col class="col-guardar">
+            <col class="col-borrar">
+          </colgroup>
+
           <thead>
-
             <tr>
-
               <th>FECHA</th>
-
               <th>PRODUCTO</th>
-
-              <th>CANTIDAD</th>
-
-              <th>UNIDAD</th>
-
+              <th>EMPRESA</th>
+              <th>CANT.</th>
+              <th>UND.</th>
               <th>PRECIO €</th>
-
               <th>RESPONSABLE</th>
-
               <th>FICHA DE SEGURIDAD</th>
-
-              <th>BORRAR</th>
-
+              <th>GUARDAR</th>
+              <th></th>
             </tr>
-
           </thead>
 
           <tbody id="rows"></tbody>
-
         </table>
-
       </div>
 
-
-      <div
-        class="status"
-        id="lastBackup"
-      >
-
+      <div class="status" id="lastBackup">
         Última copia: —
-
       </div>
-
     </section>
 
-
-    <!-- COLUMNA DERECHA -->
     <aside>
 
       <section class="panel">
-
         <h2>STOCK ACTUAL</h2>
-
-        <div
-          id="stockList"
-          class="stock-list"
-        ></div>
-
+        <div id="stockList" class="stock-list"></div>
       </section>
 
-
-      <section
-        class="panel"
-        style="margin-top:18px"
-      >
-
+      <section class="panel" style="margin-top:12px">
         <h2>COPIA / JSON</h2>
 
         <div class="backup-box">
 
-          <div
-            class="muted"
-            style="margin-bottom:8px"
-          >
-
+          <div class="muted" style="margin-bottom:8px">
             Cada cambio se guarda en este navegador.
-
           </div>
 
           <button
-            style="width:100%; margin-bottom:8px"
+            style="width:100%;margin-bottom:8px"
             onclick="downloadJSON()"
           >
-
             Descargar copia actual
-
           </button>
-
 
           <button
             style="width:100%"
             onclick="restoreLastSnapshot()"
           >
-
             Restaurar última copia
-
           </button>
 
         </div>
-
       </section>
 
     </aside>
 
   </div>
-
 </main>
 
 
-<!-- VENTANA INVENTARIO MENSUAL -->
-<div
-  id="inventoryModal"
-  class="modal"
->
+<div id="inventoryModal" class="modal">
 
   <div class="modal-card">
 
     <div class="modal-head">
-
-      <strong>
-        INVENTARIO MENSUAL
-      </strong>
-
-      <button onclick="closeInventory()">
-        Cerrar
-      </button>
-
+      <strong>INVENTARIO MENSUAL</strong>
+      <button onclick="closeInventory()">Cerrar</button>
     </div>
-
 
     <div class="modal-body">
 
       <p class="muted">
-
         Escribe la cantidad física que queda de cada producto.
-
       </p>
-
 
       <div
         class="inv-row"
-        style="font-weight:700; color:var(--muted)"
+        style="font-weight:700;color:var(--muted)"
       >
-
         <div>Producto</div>
-
         <div>Stock calculado</div>
-
         <div>Unidad</div>
-
         <div>Stock físico final</div>
-
       </div>
 
-
       <div id="inventoryRows"></div>
-
 
       <div
         style="
@@ -442,53 +438,54 @@
           justify-content:flex-end;
         "
       >
-
-        <button onclick="closeInventory()">
-          Cancelar
-        </button>
-
-        <button
-          class="good"
-          onclick="saveInventory()"
-        >
-
-          Guardar inventario
-
-        </button>
-
+        <button onclick="closeInventory()">Cancelar</button>
+        <button class="good" onclick="saveInventory()">Guardar inventario</button>
       </div>
 
     </div>
-
   </div>
-
 </div>
 
 
 <script>
 
-  const KEY =
-    "gera_quimicos_v1";
+  /*
+    IMPORTANTE:
+    Se mantienen exactamente las mismas claves V2.
+    Los datos existentes del navegador se conservan.
+  */
 
-  const SNAP =
-    "gera_quimicos_snapshots_v1";
+  const KEY = "gera_quimicos_v2";
+  const SNAP = "gera_quimicos_snapshots_v2";
 
 
   let state = {
-
     rows: [],
-
     products: [],
-
     responsibles: [],
-
+    companies: [],
     stockAdjustments: {},
-
     inventories: [],
-
     updatedAt: null
-
   };
+
+
+  function todayLocal(){
+
+    const d = new Date();
+
+    const y = d.getFullYear();
+
+    const m =
+      String(d.getMonth() + 1)
+      .padStart(2,"0");
+
+    const day =
+      String(d.getDate())
+      .padStart(2,"0");
+
+    return `${y}-${m}-${day}`;
+  }
 
 
   function save(reason){
@@ -496,85 +493,74 @@
     state.updatedAt =
       new Date().toISOString();
 
-
     localStorage.setItem(
       KEY,
       JSON.stringify(state)
     );
 
-
     const arr =
       JSON.parse(
-        localStorage.getItem(SNAP) || "[]"
+        localStorage.getItem(SNAP)
+        || "[]"
       );
 
-
     arr.push({
-
       time: state.updatedAt,
-
       reason: reason,
-
-      state:
-        JSON.parse(
-          JSON.stringify(state)
-        )
-
+      state: JSON.parse(JSON.stringify(state))
     });
 
+    /*
+      Conservamos las últimas 50 copias
+      para que no crezca indefinidamente.
+    */
 
     while(arr.length > 50){
-
       arr.shift();
-
     }
-
 
     localStorage.setItem(
       SNAP,
       JSON.stringify(arr)
     );
 
-
     document.getElementById(
       "saveState"
     ).textContent =
       "Guardado";
 
-
     document.getElementById(
       "lastBackup"
     ).textContent =
       "Última copia: "
-      + new Date(
-          state.updatedAt
-        ).toLocaleString(
-          "es-ES"
-        )
-      + " · "
-      + reason;
-
+      +
+      new Date(state.updatedAt)
+      .toLocaleString("es-ES")
+      +
+      " · "
+      +
+      reason;
   }
 
 
-  function addRow(doSave = true){
+  function addRow(){
 
     state.rows.push({
 
       id:
         crypto.randomUUID
-          ? crypto.randomUUID()
-          : String(
-              Date.now()
-              + Math.random()
-            ),
+        ? crypto.randomUUID()
+        : String(
+            Date.now()
+            +
+            Math.random()
+          ),
 
-      date:
-        new Date()
-          .toISOString()
-          .slice(0,10),
+      date: todayLocal(),
 
       product: "",
+
+      company: "",
 
       qty: "",
 
@@ -584,22 +570,15 @@
 
       responsible: "",
 
-      fdsName: ""
+      fdsName: "",
+
+      fdsData: "",
+
+      saved: false
 
     });
 
-
-    if(doSave){
-
-      save(
-        "Añadir línea"
-      );
-
-    }
-
-
     render();
-
   }
 
 
@@ -607,28 +586,117 @@
 
     if(
       !confirm(
-        "¿Borrar esta línea?"
+        "¿Eliminar esta línea?"
       )
     ){
-
       return;
-
     }
-
 
     state.rows =
       state.rows.filter(
         r => r.id !== id
       );
 
-
     save(
-      "Borrar línea"
+      "Eliminar línea"
     );
 
+    render();
+  }
+
+
+  /*
+    NUEVO:
+    ELIMINAR UN PRODUCTO COMPLETO DESDE STOCK ACTUAL
+  */
+
+  function removeProduct(product){
+
+    const associatedRows =
+      state.rows.filter(
+        r => r.product === product
+      ).length;
+
+    let message =
+      '¿Eliminar "' +
+      product +
+      '" del stock?';
+
+    if(associatedRows > 0){
+
+      message +=
+        "\n\nTambién se eliminarán " +
+        associatedRows +
+        (
+          associatedRows === 1
+          ? " entrada asociada."
+          : " entradas asociadas."
+        );
+
+    }
+
+    message +=
+      "\n\nEsta acción solo afectará a este producto.";
+
+    if(
+      !confirm(message)
+    ){
+      return;
+    }
+
+
+    state.products =
+      state.products.filter(
+        p => p !== product
+      );
+
+
+    state.rows =
+      state.rows.filter(
+        r => r.product !== product
+      );
+
+
+    if(
+      state.stockAdjustments
+      &&
+      Object.prototype.hasOwnProperty.call(
+        state.stockAdjustments,
+        product
+      )
+    ){
+      delete state.stockAdjustments[product];
+    }
+
+
+    /*
+      También quitamos el producto de inventarios
+      históricos para evitar que reaparezca
+      como referencia de una prueba eliminada.
+    */
+
+    state.inventories =
+      state.inventories.map(
+        inv => ({
+
+          ...inv,
+
+          details:
+            Array.isArray(inv.details)
+            ? inv.details.filter(
+                d => d.product !== product
+              )
+            : []
+
+        })
+      );
+
+
+    save(
+      "Eliminar producto: " + product
+    );
 
     render();
-
   }
 
 
@@ -643,11 +711,8 @@
         x => x.id === id
       );
 
-
     if(!r){
-
       return;
-
     }
 
 
@@ -662,24 +727,16 @@
           "Nombre del nuevo producto:"
         );
 
-
       if(!p){
-
         render();
-
         return;
-
       }
-
 
       if(
         !state.products.includes(p)
       ){
-
         state.products.push(p);
-
       }
-
 
       r.product = p;
 
@@ -697,45 +754,121 @@
           "Nombre del nuevo responsable:"
         );
 
-
       if(!p){
-
         render();
-
         return;
-
       }
-
 
       if(
         !state.responsibles.includes(p)
       ){
-
         state.responsibles.push(p);
-
       }
-
 
       r.responsible = p;
 
     }
 
 
-    else{
+    else if(
+      field === "company"
+      &&
+      value === "__NEW__"
+    ){
 
-      r[field] = value;
+      const p =
+        prompt(
+          "Nombre de la nueva empresa:"
+        );
+
+      if(!p){
+        render();
+        return;
+      }
+
+      if(
+        !state.companies.includes(p)
+      ){
+        state.companies.push(p);
+      }
+
+      r.company = p;
 
     }
 
 
+    else{
+
+      r[field] =
+        value;
+
+    }
+
+    r.saved =
+      false;
+
+    render();
+  }
+
+
+  function saveRow(id){
+
+    const r =
+      state.rows.find(
+        x => x.id === id
+      );
+
+    if(!r){
+      return;
+    }
+
+
+    if(!r.date){
+
+      alert(
+        "Falta la fecha."
+      );
+
+      return;
+    }
+
+
+    if(!r.product){
+
+      alert(
+        "Falta seleccionar el producto."
+      );
+
+      return;
+    }
+
+
+    if(
+      !r.qty
+      ||
+      Number(r.qty) <= 0
+    ){
+
+      alert(
+        "Introduce una cantidad válida."
+      );
+
+      return;
+    }
+
+
+    r.saved =
+      true;
+
+
     save(
-      "Modificar "
-      + field
+      "Guardar entrada: "
+      +
+      r.product
     );
 
 
     render();
-
   }
 
 
@@ -751,43 +884,118 @@
 
 
     if(!f){
-
       return;
-
     }
 
 
     if(
-      f.type
-      !== "application/pdf"
+      f.type !== "application/pdf"
     ){
 
       alert(
-        "Selecciona un PDF"
+        "Selecciona un archivo PDF."
       );
 
       return;
-
     }
 
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      function(e){
+
+        const r =
+          state.rows.find(
+            x => x.id === id
+          );
+
+        if(!r){
+          return;
+        }
+
+        r.fdsName =
+          f.name;
+
+        r.fdsData =
+          e.target.result;
+
+        r.saved =
+          false;
+
+        render();
+
+      };
+
+
+    reader.readAsDataURL(f);
+  }
+
+
+  function openFDS(id){
 
     const r =
       state.rows.find(
         x => x.id === id
       );
 
+    if(
+      !r
+      ||
+      !r.fdsData
+    ){
 
-    r.fdsName =
-      f.name;
+      alert(
+        "No hay FDS asociada."
+      );
+
+      return;
+    }
 
 
-    save(
-      "Asociar FDS"
-    );
+    const win =
+      window.open();
+
+    win.location =
+      r.fdsData;
+  }
 
 
-    render();
+  function downloadFDS(id){
 
+    const r =
+      state.rows.find(
+        x => x.id === id
+      );
+
+    if(
+      !r
+      ||
+      !r.fdsData
+    ){
+
+      alert(
+        "No hay FDS asociada."
+      );
+
+      return;
+    }
+
+
+    const a =
+      document.createElement("a");
+
+    a.href =
+      r.fdsData;
+
+    a.download =
+      r.fdsName
+      ||
+      "FDS.pdf";
+
+    a.click();
   }
 
 
@@ -806,10 +1014,10 @@
 
         if(
           !r.product
+          ||
+          !r.saved
         ){
-
           return;
-
         }
 
 
@@ -830,6 +1038,7 @@
 
     Object.entries(
       state.stockAdjustments
+      || {}
     ).forEach(
       ([p,v]) => {
 
@@ -841,7 +1050,6 @@
 
 
     return t;
-
   }
 
 
@@ -851,13 +1059,11 @@
       [...state.rows]
       .reverse()
       .find(
-        x =>
-          x.product === p
+        x => x.product === p
       );
 
 
     return r?.unit || "L";
-
   }
 
 
@@ -875,7 +1081,6 @@
         "'":"&#039;"
       }[m])
     );
-
   }
 
 
@@ -887,7 +1092,8 @@
       );
 
 
-    tb.innerHTML = "";
+    tb.innerHTML =
+      "";
 
 
     state.rows.forEach(
@@ -897,6 +1103,13 @@
           document.createElement(
             "tr"
           );
+
+
+        if(r.saved){
+          tr.classList.add(
+            "saved-row"
+          );
+        }
 
 
         tr.innerHTML = `
@@ -934,7 +1147,6 @@
                 Seleccionar...
               </option>
 
-
               ${
 
                 state.products
@@ -942,14 +1154,13 @@
                   p => `
 
                     <option
+                      value="${esc(p)}"
                       ${p === r.product
                         ? "selected"
                         : ""
                       }
                     >
-
                       ${esc(p)}
-
                     </option>
 
                   `
@@ -958,9 +1169,55 @@
 
               }
 
+              <option value="__NEW__">
+                + Nuevo producto
+              </option>
+
+            </select>
+
+          </td>
+
+
+          <td>
+
+            <select
+              onchange="
+                updateRow(
+                  '${r.id}',
+                  'company',
+                  this.value
+                )
+              "
+            >
+
+              <option value="">
+                Seleccionar...
+              </option>
+
+              ${
+
+                state.companies
+                .map(
+                  p => `
+
+                    <option
+                      value="${esc(p)}"
+                      ${p === r.company
+                        ? "selected"
+                        : ""
+                      }
+                    >
+                      ${esc(p)}
+                    </option>
+
+                  `
+                )
+                .join("")
+
+              }
 
               <option value="__NEW__">
-                + Crear nuevo producto
+                + Nueva empresa
               </option>
 
             </select>
@@ -1008,7 +1265,6 @@
               >
                 L
               </option>
-
 
               <option
                 value="kg"
@@ -1060,7 +1316,6 @@
                 Seleccionar...
               </option>
 
-
               ${
 
                 state.responsibles
@@ -1068,14 +1323,13 @@
                   p => `
 
                     <option
+                      value="${esc(p)}"
                       ${p === r.responsible
                         ? "selected"
                         : ""
                       }
                     >
-
                       ${esc(p)}
-
                     </option>
 
                   `
@@ -1083,7 +1337,6 @@
                 .join("")
 
               }
-
 
               <option value="__NEW__">
                 + Nuevo responsable
@@ -1096,25 +1349,59 @@
 
           <td>
 
-            <input
-              type="file"
-              accept="application/pdf"
-              onchange="
-                attachPDF(
-                  '${r.id}',
-                  this
-                )
-              "
-            >
-
-
-            <div class="muted">
+            <div class="fds-box">
 
               ${
-                r.fdsName
-                  ? "Asociada: "
-                    + esc(r.fdsName)
-                  : "Sin FDS"
+                r.fdsData
+
+                ? `
+
+                  <div class="fds-ok">
+                    📄 FDS DISPONIBLE
+                  </div>
+
+                  <a
+                    href="#"
+                    class="fds-link"
+                    onclick="
+                      openFDS('${r.id}');
+                      return false;
+                    "
+                  >
+                    Ver PDF
+                  </a>
+
+                  <a
+                    href="#"
+                    class="fds-link"
+                    onclick="
+                      downloadFDS('${r.id}');
+                      return false;
+                    "
+                  >
+                    Descargar
+                  </a>
+
+                `
+
+                : `
+
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    onchange="
+                      attachPDF(
+                        '${r.id}',
+                        this
+                      )
+                    "
+                  >
+
+                  <div class="fds-empty">
+                    Sin FDS
+                  </div>
+
+                `
               }
 
             </div>
@@ -1122,19 +1409,35 @@
           </td>
 
 
-          <td>
+          <td style="text-align:center">
+
+            <button
+              class="save-btn"
+              title="Guardar"
+              onclick="
+                saveRow(
+                  '${r.id}'
+                )
+              "
+            >
+              💾
+            </button>
+
+          </td>
+
+
+          <td style="text-align:center">
 
             <button
               class="danger"
+              title="Eliminar línea"
               onclick="
                 removeRow(
                   '${r.id}'
                 )
               "
             >
-
-              Borrar
-
+              🗑️
             </button>
 
           </td>
@@ -1147,6 +1450,11 @@
       }
     );
 
+
+    /*
+      STOCK ACTUAL
+      Ahora incluye una papelera para cada producto.
+    */
 
     const s =
       stock();
@@ -1183,19 +1491,32 @@
               </div>
 
 
-              <div class="qty">
+              <div class="stock-actions">
 
-                ${
-                  Number(q)
-                  .toLocaleString(
-                    "es-ES",
-                    {
-                      maximumFractionDigits:2
-                    }
-                  )
-                }
+                <div class="qty">
 
-                ${esc(unitFor(p))}
+                  ${
+                    Number(q)
+                    .toLocaleString(
+                      "es-ES",
+                      {
+                        maximumFractionDigits:2
+                      }
+                    )
+                  }
+
+                  ${esc(unitFor(p))}
+
+                </div>
+
+
+                <button
+                  class="danger"
+                  title="Eliminar producto del stock"
+                  onclick='removeProduct(${JSON.stringify(p)})'
+                >
+                  🗑️
+                </button>
 
               </div>
 
@@ -1229,7 +1550,8 @@
       stock();
 
 
-    holder.innerHTML = "";
+    holder.innerHTML =
+      "";
 
 
     Object.entries(s)
@@ -1252,7 +1574,6 @@
             <b>${esc(p)}</b>
           </div>
 
-
           <div>
 
             ${
@@ -1267,13 +1588,9 @@
 
           </div>
 
-
           <div>
-
             ${esc(unitFor(p))}
-
           </div>
-
 
           <div>
 
@@ -1331,7 +1648,8 @@
       ];
 
 
-    const details = [];
+    const details =
+      [];
 
 
     inputs.forEach(
@@ -1340,9 +1658,7 @@
         if(
           i.value === ""
         ){
-
           return;
-
         }
 
 
@@ -1356,7 +1672,8 @@
 
         const before =
           Number(
-            s[p] || 0
+            s[p]
+            || 0
           );
 
 
@@ -1371,9 +1688,11 @@
           unit:
             i.dataset.unit,
 
-          before: before,
+          before:
+            before,
 
-          final: final,
+          final:
+            final,
 
           consumed:
             Math.max(
@@ -1494,9 +1813,7 @@
 
 
       if(!f){
-
         return;
-
       }
 
 
@@ -1509,7 +1826,9 @@
 
 
         const inc =
-          obj.data || obj;
+          obj.data
+          ||
+          obj;
 
 
         if(
@@ -1528,13 +1847,12 @@
             "Esto sustituirá los datos actuales. ¿Continuar?"
           )
         ){
-
           return;
-
         }
 
 
-        state = inc;
+        state =
+          inc;
 
 
         save(
@@ -1555,7 +1873,8 @@
       }
 
 
-      e.target.value = "";
+      e.target.value =
+        "";
 
     }
   );
@@ -1568,7 +1887,8 @@
         localStorage.getItem(
           SNAP
         )
-        || "[]"
+        ||
+        "[]"
       );
 
 
@@ -1596,9 +1916,7 @@
         "¿Restaurar la copia anterior?"
       )
     ){
-
       return;
-
     }
 
 
@@ -1645,7 +1963,7 @@
       !state.rows.length
     ){
 
-      addRow(false);
+      addRow();
 
     }
 
