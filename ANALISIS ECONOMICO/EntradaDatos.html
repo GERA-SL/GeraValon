@@ -2,153 +2,167 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entrada de datos - Análisis Económico</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<title>Entrada de datos - Análisis Económico</title>
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f3f4f6;
-      color: #1f2937;
-    }
+<style>
 
-    .pagina {
-      width: 100%;
-      min-height: 100vh;
-      padding: 30px;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    .cabecera {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-    }
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:#f3f4f6;
+  color:#1f2937;
+}
 
-    .cabecera h1 {
-      margin: 0;
-      font-size: 28px;
-    }
+.pagina{
+  padding:24px;
+}
 
-    .volver {
-      text-decoration: none;
-      background: #374151;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+.cabecera{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
 
-    .panel {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-      overflow: hidden;
-    }
+.cabecera h1{
+  margin:0;
+  font-size:24px;
+}
 
-    .tabla-contenedor {
-      max-height: 600px;
-      overflow-y: auto;
-    }
+.volver{
+  text-decoration:none;
+  background:#374151;
+  color:white;
+  padding:8px 14px;
+  border-radius:6px;
+  font-size:13px;
+  font-weight:bold;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 950px;
-    }
+/* PANEL ENTRADA */
 
-    thead th {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: #1f2937;
-      color: white;
-      text-align: left;
-      padding: 14px;
-      font-size: 14px;
-    }
+.panel-entrada{
+  background:white;
+  border-radius:10px;
+  padding:14px;
+  margin-bottom:18px;
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
 
-    tbody td {
-      padding: 12px 14px;
-      border-bottom: 1px solid #e5e7eb;
-      vertical-align: middle;
-    }
+.titulo-seccion{
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
 
-    tbody tr:hover {
-      background: #f9fafb;
-    }
+.linea-entrada{
+  display:grid;
 
-    select,
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
-      background: white;
-      font-size: 14px;
-    }
+  grid-template-columns:
+    110px
+    190px
+    110px
+    240px
+    120px
+    40px
+    40px;
 
-    input[type="number"] {
-      text-align: right;
-    }
+  gap:6px;
+  align-items:center;
+}
 
-    .acciones {
-      display: flex;
-      gap: 8px;
-      white-space: nowrap;
-    }
+select,
+input{
+  width:100%;
+  height:32px;
+  padding:4px 7px;
+  border:1px solid #d1d5db;
+  border-radius:5px;
+  font-size:12px;
+  background:white;
+}
 
-    button {
-      border: 0;
-      border-radius: 6px;
-      padding: 9px 14px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+input[type="number"]{
+  text-align:right;
+}
 
-    .btn-guardar {
-      background: #16a34a;
-      color: white;
-    }
+.boton-icono{
+  width:34px;
+  height:32px;
+  border:0;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:17px;
+}
 
-    .btn-eliminar {
-      background: #dc2626;
-      color: white;
-    }
+.guardar{
+  background:#16a34a;
+  color:white;
+}
 
-    .btn-nueva {
-      background: #2563eb;
-      color: white;
-      margin: 18px;
-      padding: 12px 20px;
-      font-size: 15px;
-    }
+.limpiar{
+  background:#dc2626;
+  color:white;
+}
 
-    .total {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 15px;
-      padding: 18px;
-      border-top: 1px solid #e5e7eb;
-      font-size: 18px;
-      font-weight: bold;
-    }
+/* TABLA */
 
-    #totalGeneral {
-      font-size: 24px;
-    }
+.panel-tabla{
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+}
 
-    .guardada {
-      background: #ecfdf5;
-    }
-  </style>
+.tabla-contenedor{
+  height:560px;
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+
+thead th{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#1f2937;
+  color:white;
+  text-align:left;
+  padding:9px 10px;
+}
+
+tbody td{
+  padding:8px 10px;
+  border-bottom:1px solid #e5e7eb;
+}
+
+tbody tr:hover{
+  background:#f9fafb;
+}
+
+.cantidad-tabla{
+  text-align:right;
+  font-weight:bold;
+}
+
+.vacio{
+  text-align:center;
+  padding:35px !important;
+  color:#9ca3af;
+}
+
+</style>
 </head>
 
 <body>
@@ -156,99 +170,194 @@
 <div class="pagina">
 
   <div class="cabecera">
+
     <h1>ENTRADA DE DATOS</h1>
 
     <a href="Analisis.html" class="volver">
       ← VOLVER
     </a>
+
   </div>
 
-  <div class="panel">
+
+  <!-- ENTRADA -->
+
+  <div class="panel-entrada">
+
+    <div class="titulo-seccion">
+      INTRODUCIR GASTO
+    </div>
+
+    <div class="linea-entrada">
+
+
+      <!-- MES -->
+
+      <select id="mes">
+
+        <option value="">MES</option>
+
+        <option>ENERO</option>
+        <option>FEBRERO</option>
+        <option>MARZO</option>
+        <option>ABRIL</option>
+        <option>MAYO</option>
+        <option>JUNIO</option>
+        <option>JULIO</option>
+        <option>AGOSTO</option>
+        <option>SEPTIEMBRE</option>
+        <option>OCTUBRE</option>
+        <option>NOVIEMBRE</option>
+        <option>DICIEMBRE</option>
+
+      </select>
+
+
+      <!-- CUENTA -->
+
+      <select id="cuenta">
+
+        <option value="62800006 - GASOIL">
+          62800006 - GASOIL
+        </option>
+
+      </select>
+
+
+      <!-- ORIGEN -->
+
+      <select id="origen">
+
+        <option value="">
+          ORIGEN
+        </option>
+
+        <option>GERA</option>
+        <option>SIG</option>
+        <option>DAVID</option>
+
+      </select>
+
+
+      <!-- PROYECTO -->
+
+      <select id="proyecto">
+
+        <option value="">
+          PROYECTO
+        </option>
+
+        <option>
+          RECICLAJE DE ACEITES Y GRASAS
+        </option>
+
+        <option>
+          LIMPIEZA INDUSTRIAL
+        </option>
+
+        <option>
+          LIMPIEZA HOSTELERIA
+        </option>
+
+        <option>
+          SERVICIOS VARIOS
+        </option>
+
+        <option>
+          INSTALACION Y REPARACION
+        </option>
+
+        <option>
+          GASTOS GENERALES
+        </option>
+
+        <option>
+          TRADER
+        </option>
+
+      </select>
+
+
+      <!-- CANTIDAD -->
+
+      <input
+        id="cantidad"
+        type="number"
+        step="0.01"
+        min="0"
+        placeholder="0,00 €"
+      >
+
+
+      <!-- GUARDAR -->
+
+      <button
+        class="boton-icono guardar"
+        onclick="guardarGasto()"
+        title="Guardar">
+        💾
+      </button>
+
+
+      <!-- LIMPIAR -->
+
+      <button
+        class="boton-icono limpiar"
+        onclick="limpiarEntrada()"
+        title="Limpiar">
+        🗑️
+      </button>
+
+
+    </div>
+
+  </div>
+
+
+
+  <!-- TABLA HISTORICA -->
+
+  <div class="panel-tabla">
 
     <div class="tabla-contenedor">
 
       <table>
 
         <thead>
+
           <tr>
-            <th style="width:26%">CUENTA CONTABLE</th>
-            <th style="width:14%">ORIGEN</th>
-            <th style="width:27%">PROYECTO</th>
-            <th style="width:15%">CANTIDAD</th>
-            <th style="width:18%">ACCIONES</th>
+
+            <th style="width:12%">
+              MES
+            </th>
+
+            <th style="width:22%">
+              CUENTA CONTABLE
+            </th>
+
+            <th style="width:12%">
+              ORIGEN
+            </th>
+
+            <th>
+              PROYECTO
+            </th>
+
+            <th style="width:14%; text-align:right">
+              CANTIDAD
+            </th>
+
           </tr>
+
         </thead>
 
-        <tbody id="tablaDatos">
 
-          <tr>
-            <td>
-              <select class="cuenta">
-                <option value="62800006">62800006 - GASOIL</option>
-              </select>
-            </td>
+        <tbody id="tablaGastos">
 
-            <td>
-              <select class="origen">
-                <option value="">Seleccionar</option>
-                <option value="GERA">GERA</option>
-                <option value="SIG">SIG</option>
-                <option value="DAVID">DAVID</option>
-              </select>
-            </td>
+          <tr id="filaVacia">
 
-            <td>
-              <select class="proyecto">
-                <option value="">Seleccionar proyecto</option>
-                <option value="RECICLAJE DE ACEITES Y GRASAS">
-                  RECICLAJE DE ACEITES Y GRASAS
-                </option>
-                <option value="LIMPIEZA INDUSTRIAL">
-                  LIMPIEZA INDUSTRIAL
-                </option>
-                <option value="LIMPIEZA HOSTELERIA">
-                  LIMPIEZA HOSTELERIA
-                </option>
-                <option value="SERVICIOS VARIOS">
-                  SERVICIOS VARIOS
-                </option>
-                <option value="INSTALACION Y REPARACION">
-                  INSTALACION Y REPARACION
-                </option>
-                <option value="GASTOS GENERALES">
-                  GASTOS GENERALES
-                </option>
-                <option value="TRADER">
-                  TRADER
-                </option>
-              </select>
-            </td>
-
-            <td>
-              <input
-                type="number"
-                class="cantidad"
-                step="0.01"
-                min="0"
-                placeholder="0,00"
-                oninput="calcularTotal()"
-              >
-            </td>
-
-            <td>
-              <div class="acciones">
-                <button
-                  class="btn-guardar"
-                  onclick="guardarLinea(this)">
-                  SALVAR
-                </button>
-
-                <button
-                  class="btn-eliminar"
-                  onclick="eliminarLinea(this)">
-                  ELIMINAR
-                </button>
-              </div>
+            <td colspan="5" class="vacio">
+              Todavía no hay gastos introducidos
             </td>
 
           </tr>
@@ -259,196 +368,132 @@
 
     </div>
 
-    <button class="btn-nueva" onclick="crearLinea()">
-      + CREAR OTRA LÍNEA
-    </button>
-
-    <div class="total">
-      TOTAL INTRODUCIDO:
-      <span id="totalGeneral">0,00 €</span>
-    </div>
-
   </div>
 
 </div>
 
 
+
 <script>
 
-function crearLinea() {
+function guardarGasto(){
 
-  const tabla = document.getElementById("tablaDatos");
+  const mes =
+    document.getElementById("mes").value;
 
-  const fila = document.createElement("tr");
-
-  fila.innerHTML = `
-
-    <td>
-      <select class="cuenta">
-        <option value="62800006">
-          62800006 - GASOIL
-        </option>
-      </select>
-    </td>
-
-    <td>
-      <select class="origen">
-        <option value="">Seleccionar</option>
-        <option value="GERA">GERA</option>
-        <option value="SIG">SIG</option>
-        <option value="DAVID">DAVID</option>
-      </select>
-    </td>
-
-    <td>
-      <select class="proyecto">
-
-        <option value="">
-          Seleccionar proyecto
-        </option>
-
-        <option value="RECICLAJE DE ACEITES Y GRASAS">
-          RECICLAJE DE ACEITES Y GRASAS
-        </option>
-
-        <option value="LIMPIEZA INDUSTRIAL">
-          LIMPIEZA INDUSTRIAL
-        </option>
-
-        <option value="LIMPIEZA HOSTELERIA">
-          LIMPIEZA HOSTELERIA
-        </option>
-
-        <option value="SERVICIOS VARIOS">
-          SERVICIOS VARIOS
-        </option>
-
-        <option value="INSTALACION Y REPARACION">
-          INSTALACION Y REPARACION
-        </option>
-
-        <option value="GASTOS GENERALES">
-          GASTOS GENERALES
-        </option>
-
-        <option value="TRADER">
-          TRADER
-        </option>
-
-      </select>
-    </td>
-
-    <td>
-      <input
-        type="number"
-        class="cantidad"
-        step="0.01"
-        min="0"
-        placeholder="0,00"
-        oninput="calcularTotal()"
-      >
-    </td>
-
-    <td>
-      <div class="acciones">
-
-        <button
-          class="btn-guardar"
-          onclick="guardarLinea(this)">
-          SALVAR
-        </button>
-
-        <button
-          class="btn-eliminar"
-          onclick="eliminarLinea(this)">
-          ELIMINAR
-        </button>
-
-      </div>
-    </td>
-  `;
-
-  tabla.appendChild(fila);
-}
-
-
-function eliminarLinea(boton) {
-
-  const fila = boton.closest("tr");
-
-  fila.remove();
-
-  calcularTotal();
-}
-
-
-function guardarLinea(boton) {
-
-  const fila = boton.closest("tr");
+  const cuenta =
+    document.getElementById("cuenta").value;
 
   const origen =
-    fila.querySelector(".origen").value;
+    document.getElementById("origen").value;
 
   const proyecto =
-    fila.querySelector(".proyecto").value;
+    document.getElementById("proyecto").value;
 
   const cantidad =
     parseFloat(
-      fila.querySelector(".cantidad").value
-    ) || 0;
+      document.getElementById("cantidad").value
+    );
 
 
-  if (!origen) {
+  if(!mes){
+
+    alert("Selecciona el mes.");
+
+    return;
+  }
+
+
+  if(!origen){
+
     alert("Selecciona el origen.");
+
     return;
   }
 
-  if (!proyecto) {
+
+  if(!proyecto){
+
     alert("Selecciona el proyecto.");
+
     return;
   }
 
-  if (cantidad <= 0) {
+
+  if(!cantidad || cantidad <= 0){
+
     alert("Introduce una cantidad.");
+
     return;
   }
 
 
-  fila.classList.add("guardada");
+  const filaVacia =
+    document.getElementById("filaVacia");
 
-  boton.textContent = "SALVADO";
+  if(filaVacia){
 
-  calcularTotal();
+    filaVacia.remove();
+
+  }
+
+
+  const tabla =
+    document.getElementById("tablaGastos");
+
+
+  const fila =
+    document.createElement("tr");
+
+
+  fila.innerHTML = `
+
+    <td>${mes}</td>
+
+    <td>${cuenta}</td>
+
+    <td>${origen}</td>
+
+    <td>${proyecto}</td>
+
+    <td class="cantidad-tabla">
+
+      ${cantidad.toLocaleString(
+        "es-ES",
+        {
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        }
+      )} €
+
+    </td>
+
+  `;
+
+
+  tabla.prepend(fila);
+
+
+  document.getElementById("cantidad").value = "";
+
 }
 
 
-function calcularTotal() {
 
-  const cantidades =
-    document.querySelectorAll(".cantidad");
+function limpiarEntrada(){
 
-  let total = 0;
+  document.getElementById("mes").value = "";
 
-  cantidades.forEach(campo => {
+  document.getElementById("origen").value = "";
 
-    total +=
-      parseFloat(campo.value) || 0;
+  document.getElementById("proyecto").value = "";
 
-  });
+  document.getElementById("cantidad").value = "";
 
-
-  document.getElementById("totalGeneral")
-    .textContent =
-    total.toLocaleString(
-      "es-ES",
-      {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }
-    ) + " €";
 }
 
 </script>
+
 
 </body>
 </html>
