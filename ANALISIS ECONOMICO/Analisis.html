@@ -1,1 +1,407 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Análisis Económico</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    color: #222;
+}
+
+header {
+    background: #1f2937;
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header .grupo {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.contenedor {
+    padding: 25px;
+    max-width: 1500px;
+    margin: auto;
+}
+
+/* =========================
+   RESUMEN GENERAL
+========================= */
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.tarjeta {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.tarjeta .titulo {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.tarjeta .valor {
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.positivo {
+    color: #16803c;
+}
+
+.negativo {
+    color: #c62828;
+}
+
+/* =========================
+   ZONA PRINCIPAL
+========================= */
+
+.principal {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.panel {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.panel h2 {
+    margin-top: 0;
+    font-size: 18px;
+}
+
+/* gráfico provisional */
+
+.grafico {
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #bbb;
+    color: #888;
+    background: #fafafa;
+}
+
+/* =========================
+   BOTONES
+========================= */
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.boton {
+    background: white;
+    border-radius: 10px;
+    padding: 22px;
+    text-decoration: none;
+    color: #222;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.2s;
+}
+
+.boton.activo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.icono {
+    width: 45px;
+    height: 45px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+}
+
+.entrada .icono {
+    background: #2563eb;
+}
+
+.boton .nombre {
+    font-weight: bold;
+}
+
+.boton .descripcion {
+    font-size: 12px;
+    color: #777;
+    margin-top: 4px;
+}
+
+/* botones todavía no disponibles */
+
+.deshabilitado {
+    opacity: 0.45;
+    cursor: default;
+}
+
+/* =========================
+   PIE
+========================= */
+
+.estado {
+    margin-top: 25px;
+    background: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 13px;
+    color: #666;
+}
+
+@media (max-width: 900px) {
+
+    .resumen {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .principal {
+        grid-template-columns: 1fr;
+    }
+
+    .menu {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div>
+        <h1>ANÁLISIS ECONÓMICO</h1>
+        <div class="grupo">GERA · SIG-ENRIQUE · DAVID</div>
+    </div>
+
+    <div>
+        Ejercicio 2026
+    </div>
+
+</header>
+
+
+<div class="contenedor">
+
+    <!-- =========================
+         ESTADO GLOBAL
+    ========================== -->
+
+    <div class="resumen">
+
+        <div class="tarjeta">
+            <div class="titulo">INGRESOS ACUMULADOS</div>
+            <div class="valor">0,00 €</div>
+        </div>
+
+        <div class="tarjeta">
+            <div class="titulo">GASTOS ACUMULADOS</div>
+            <div class="valor">0,00 €</div>
+        </div>
+
+        <div class="tarjeta">
+            <div class="titulo">RESULTADO</div>
+            <div class="valor positivo">0,00 €</div>
+        </div>
+
+        <div class="tarjeta">
+            <div class="titulo">CAJAS / BANCOS</div>
+            <div class="valor">0,00 €</div>
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         INFORMACIÓN GENERAL
+    ========================== -->
+
+    <div class="principal">
+
+        <div class="panel">
+
+            <h2>Estado general</h2>
+
+            <p>
+                Ingresos: <strong>0,00 €</strong>
+            </p>
+
+            <p>
+                Gastos: <strong>0,00 €</strong>
+            </p>
+
+            <p>
+                Resultado: 
+                <strong class="positivo">0,00 €</strong>
+            </p>
+
+            <p>
+                Proyectos activos: <strong>0</strong>
+            </p>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h2>Evolución mensual</h2>
+
+            <div class="grafico">
+                GRÁFICO INGRESOS · GASTOS · RESULTADO
+                <br>
+                ENE — FEB — MAR — ABR — MAY — JUN — JUL — AGO — SEP — OCT — NOV — DIC
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         MENÚ PRINCIPAL
+    ========================== -->
+
+    <div class="menu">
+
+        <!-- ÚNICO BOTÓN ACTIVO -->
+
+        <a href="EntradaDatos.html" class="boton activo entrada">
+
+            <div class="icono">+</div>
+
+            <div>
+                <div class="nombre">ENTRADA DE DATOS</div>
+                <div class="descripcion">
+                    Introducir ingresos y gastos
+                </div>
+            </div>
+
+        </a>
+
+
+        <!-- FUTUROS BOTONES -->
+
+        <div class="boton deshabilitado">
+
+            <div class="icono" style="background:#16a34a">P</div>
+
+            <div>
+                <div class="nombre">PROYECTOS</div>
+                <div class="descripcion">
+                    Productividad y rentabilidad
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="boton deshabilitado">
+
+            <div class="icono" style="background:#9333ea">C</div>
+
+            <div>
+                <div class="nombre">CAJAS Y BANCOS</div>
+                <div class="descripcion">
+                    Tesorería y saldos
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="boton deshabilitado">
+
+            <div class="icono" style="background:#ea580c">M</div>
+
+            <div>
+                <div class="nombre">MOVIMIENTOS</div>
+                <div class="descripcion">
+                    Consulta general
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="boton deshabilitado">
+
+            <div class="icono" style="background:#0891b2">C</div>
+
+            <div>
+                <div class="nombre">CUENTAS</div>
+                <div class="descripcion">
+                    Estructura de cuentas
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="boton deshabilitado">
+
+            <div class="icono" style="background:#475569">E</div>
+
+            <div>
+                <div class="nombre">ENTIDADES</div>
+                <div class="descripcion">
+                    GERA · SIG-ENRIQUE · DAVID
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="estado">
+        Datos acumulados desde el 1 de enero de 2026 · Importes económicos sin IVA
+    </div>
+
+</div>
+
+</body>
+</html>
