@@ -83,6 +83,7 @@ body {
   display: grid;
 
   grid-template-columns:
+    125px
     122px
     122px
     260px
@@ -335,10 +336,11 @@ th.col-cuenta {
   .linea-entrada {
     grid-template-columns:
       120px
-      120px
-      230px
+      115px
+      115px
+      220px
       85px
-      200px
+      190px
       95px
       32px
       32px
@@ -386,59 +388,61 @@ th.col-cuenta {
 
       <select id="modoFecha" onchange="cambiarModoFecha()">
 
-  <option value="periodo">
-    FECHA A FECHA
-  </option>
+        <option value="periodo">
+          FECHA A FECHA
+        </option>
 
-  <option value="mes">
-    MES CONCRETO
-  </option>
+        <option value="mes">
+          MES CONCRETO
+        </option>
 
-</select>
-
-
-<input
-  type="date"
-  id="fechaDesde"
-  min="2026-01-01"
-  max="2026-12-31"
-  title="Inicio del periodo"
->
+      </select>
 
 
-<input
-  type="date"
-  id="fechaHasta"
-  min="2026-01-01"
-  max="2026-12-31"
-  title="Final del periodo"
->
+      <input
+        type="date"
+        id="fechaDesde"
+        min="2026-01-01"
+        max="2026-12-31"
+        title="Inicio del periodo"
+      >
 
-<select
-  id="mesConcreto"
-  style="display:none"
->
 
-  <option value="">MES</option>
+      <input
+        type="date"
+        id="fechaHasta"
+        min="2026-01-01"
+        max="2026-12-31"
+        title="Final del periodo"
+      >
 
-  <option value="0">ENERO</option>
-  <option value="1">FEBRERO</option>
-  <option value="2">MARZO</option>
-  <option value="3">ABRIL</option>
-  <option value="4">MAYO</option>
-  <option value="5">JUNIO</option>
-  <option value="6">JULIO</option>
-  <option value="7">AGOSTO</option>
-  <option value="8">SEPTIEMBRE</option>
-  <option value="9">OCTUBRE</option>
-  <option value="10">NOVIEMBRE</option>
-  <option value="11">DICIEMBRE</option>
 
-</select>
+      <select
+        id="mesConcreto"
+        style="display:none"
+      >
+
+        <option value="">MES</option>
+
+        <option value="0">ENERO</option>
+        <option value="1">FEBRERO</option>
+        <option value="2">MARZO</option>
+        <option value="3">ABRIL</option>
+        <option value="4">MAYO</option>
+        <option value="5">JUNIO</option>
+        <option value="6">JULIO</option>
+        <option value="7">AGOSTO</option>
+        <option value="8">SEPTIEMBRE</option>
+        <option value="9">OCTUBRE</option>
+        <option value="10">NOVIEMBRE</option>
+        <option value="11">DICIEMBRE</option>
+
+      </select>
 
 
       <select id="cuentaEntrada">
       </select>
+
 
       <select id="origen">
 
@@ -635,129 +639,69 @@ th.col-cuenta {
 
 /* =========================================================
    CUENTAS CONTABLES
-   ORDEN ALFABETICO
    ========================================================= */
 
 const cuentas = [
 
   ["62800007","ACCIONA ENERGIA"],
-
   ["62300002","ADOBE"],
-
   ["62800004","AGUA"],
-
   ["62900001","ALARMA"],
-
   ["62100003","ALQUILER MAQUINARIAS"],
-
   ["62100001","ALQUILER NAVE"],
-
   ["62100002","ALQUILER VEHICULO"],
-
   ["62900017","APLAZAMIENTO HACIENDA"],
-
   ["62300006","ASESORIA"],
-
   ["62800002","BASURA"],
-
   ["62600001","COMISIONES BANCARIAS"],
-
   ["60000001","COMPRA DE ACEITE USADO"],
-
   ["60200003","COMPRA DE FILTROS DE CAMPANA RECOGIDA"],
-
   ["60200006","COMPRA PEQUEÑAS HERRAMIENTAS"],
-
   ["62900011","CONSUMIBLE HIGIENE"],
-
   ["62800003","ELECTRICIDAD"],
-
   ["62300003","ENRIQUE LUGONES - SERVICIOS PROFESIONALES INDEPENDIENTES"],
-
   ["60200005","FUNGIBLE"],
-
   ["62800006","GASOIL"],
-
   ["62700001","GASTOS DE REPRESENTACION"],
-
   ["62900023","GASTOS DESPLAZAMIENTO / PARQUING"],
-
   ["64900000","GASTOS SOCIALES"],
-
   ["62900013","GESTION DE RESIDUOS LIQUIDOS"],
-
   ["62900014","GESTION DE RESIDUOS SOLIDOS"],
-
   ["62300001","GESTORÍA"],
-
   ["60200009","GRG"],
-
   ["63100001","HACIENDA - SANCIONES"],
-
   ["62900022","INCENTIVO PRODUCTOS - GASTOS DE RECOGIDA"],
-
   ["66240001","INTERESES HACIENDA"],
-
   ["62300004","ISCC - CERTIFICACION"],
-
   ["62900016","ITV"],
-
   ["62900008","MATERIAL DE OFICINA"],
-
   ["60200001","MATERIALES DE INSTALACION"],
-
   ["60200002","MATERIALES NAVE"],
-
   ["62900005","MPE"],
-
   ["67800002","MULTAS DE TRAFICO"],
-
   ["60200008","OTROS GASTOS RECOGIDA"],
-
   ["62900021","PAPELERÍA"],
-
   ["62900009","PRODUCTOS DE LIMPIEZA"],
-
   ["62900002","RECICLAJE SOLIDOS"],
-
   ["62200001","REPARACION CONSERVACION NAVE"],
-
   ["62200002","REPARACION VEHICULOS"],
-
   ["62900018","SACAS DE OBRA BASURA"],
-
   ["64000006","SALARIO DANIEL PRIETO MARTÍNEZ"],
-
   ["64000003","SALARIO DAVID JAUAREZ LEON"],
-
   ["64000004","SALARIO FRANCISCO GARCIA ROMERA"],
-
   ["64000007","SALARIO JAIRO ZARZA MANTAS"],
-
   ["64000005","SALARIO RENE HUERTAS POVEDANO"],
-
   ["64000009","SALARIO SANDRA CASTRILLON GALEANO"],
-
   ["64000008","SALARIO SEILA MARTIN BARROSO"],
-
   ["64000010","SALARIO SOCIO ANTONIO ADROVER MARTINEZ"],
-
   ["64000011","SALARIO SOCIO MARIA JOSEFA MARTOS CORONADO"],
-
   ["64200002","SEGUROS SOCIALES"],
-
   ["62500002","SEGUROS VEHÍCULOS"],
-
   ["62800005","SERVICIOS DIGITALES / SOFWARE"],
-
   ["62900006","SERVICIOS INFORMATICOS"],
-
   ["62800001","TELEFONIA"],
-
   ["60700000","TRABAJO DE OTRAS EMPRESAS"],
-
   ["62900010","UTILES DE LIMPIEZA"],
-
   ["62900007","VESTUARIO Y EPIS"]
 
 ];
@@ -770,17 +714,11 @@ const cuentas = [
 const proyectos = [
 
   "RECICLAJE DE ACEITES Y GRASAS",
-
   "LIMPIEZA INDUSTRIAL",
-
   "LIMPIEZA HOSTELERIA",
-
   "SERVICIOS VARIOS",
-
   "INSTALACION Y REPARACION",
-
   "GASTOS GENERALES",
-
   "TRADER"
 
 ];
@@ -805,6 +743,8 @@ document.addEventListener(
 
     cargarLocal();
 
+    cambiarModoFecha();
+
     construirTabla();
 
     activarRedimensionador();
@@ -819,17 +759,11 @@ document.addEventListener(
 
 function cargarSelectores(){
 
-  /* -------------------------------------------------------
-     CUENTA ENTRADA
-     ------------------------------------------------------- */
-
   const cuentaEntrada =
     document.getElementById("cuentaEntrada");
 
-
   cuentaEntrada.innerHTML =
     '<option value="">CUENTA CONTABLE</option>';
-
 
   cuentas.forEach(c => {
 
@@ -847,17 +781,11 @@ function cargarSelectores(){
   });
 
 
-  /* -------------------------------------------------------
-     PROYECTO ENTRADA
-     ------------------------------------------------------- */
-
   const proyectoEntrada =
     document.getElementById("proyectoEntrada");
 
-
   proyectoEntrada.innerHTML =
     '<option value="">PROYECTO</option>';
-
 
   proyectos.forEach(p => {
 
@@ -875,17 +803,11 @@ function cargarSelectores(){
   });
 
 
-  /* -------------------------------------------------------
-     FILTRO CUENTA
-     ------------------------------------------------------- */
-
   const filtroCuenta =
     document.getElementById("filtroCuenta");
 
-
   filtroCuenta.innerHTML =
     '<option value="">TODAS LAS CUENTAS</option>';
-
 
   cuentas.forEach(c => {
 
@@ -903,17 +825,11 @@ function cargarSelectores(){
   });
 
 
-  /* -------------------------------------------------------
-     FILTRO PROYECTO
-     ------------------------------------------------------- */
-
   const filtroProyecto =
     document.getElementById("filtroProyecto");
 
-
   filtroProyecto.innerHTML =
     '<option value="">TODOS LOS PROYECTOS</option>';
-
 
   proyectos.forEach(p => {
 
@@ -934,34 +850,170 @@ function cargarSelectores(){
 
 
 /* =========================================================
+   CAMBIAR ENTRE FECHAS Y MES CONCRETO
+   ========================================================= */
+
+function cambiarModoFecha(){
+
+  const modo =
+    document.getElementById("modoFecha").value;
+
+  const fechaDesde =
+    document.getElementById("fechaDesde");
+
+  const fechaHasta =
+    document.getElementById("fechaHasta");
+
+  const mesConcreto =
+    document.getElementById("mesConcreto");
+
+
+  if(modo === "mes"){
+
+    fechaDesde.style.display = "none";
+
+    fechaHasta.style.display = "none";
+
+    mesConcreto.style.display = "block";
+
+  }else{
+
+    fechaDesde.style.display = "block";
+
+    fechaHasta.style.display = "block";
+
+    mesConcreto.style.display = "none";
+
+  }
+
+}
+
+
+/* =========================================================
    GUARDAR MOVIMIENTO
    ========================================================= */
 
 function guardarMovimiento(){
 
-  const desde =
-    document.getElementById("fechaDesde").value;
+  const modoFecha =
+    document.getElementById("modoFecha").value;
 
 
-  const hasta =
-    document.getElementById("fechaHasta").value;
+  let desde = "";
+
+  let hasta = "";
+
+
+  /* -------------------------------------------------------
+     SI ES MES CONCRETO
+     ------------------------------------------------------- */
+
+  if(modoFecha === "mes"){
+
+    const valorMes =
+      document.getElementById("mesConcreto").value;
+
+
+    if(valorMes === ""){
+
+      alert(
+        "Selecciona un mes."
+      );
+
+      return;
+
+    }
+
+
+    const mes =
+      parseInt(valorMes);
+
+
+    const numeroMes =
+      String(
+        mes + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const ultimoDia =
+      new Date(
+        2026,
+        mes + 1,
+        0
+      ).getDate();
+
+
+    desde =
+      "2026-"
+      +
+      numeroMes
+      +
+      "-01";
+
+
+    hasta =
+      "2026-"
+      +
+      numeroMes
+      +
+      "-"
+      +
+      String(
+        ultimoDia
+      ).padStart(
+        2,
+        "0"
+      );
+
+  }
+
+
+  /* -------------------------------------------------------
+     SI ES FECHA A FECHA
+     ------------------------------------------------------- */
+
+  else{
+
+    desde =
+      document.getElementById(
+        "fechaDesde"
+      ).value;
+
+
+    hasta =
+      document.getElementById(
+        "fechaHasta"
+      ).value;
+
+  }
 
 
   const cuenta =
-    document.getElementById("cuentaEntrada").value;
+    document.getElementById(
+      "cuentaEntrada"
+    ).value;
 
 
   const origen =
-    document.getElementById("origen").value;
+    document.getElementById(
+      "origen"
+    ).value;
 
 
   const proyecto =
-    document.getElementById("proyectoEntrada").value;
+    document.getElementById(
+      "proyectoEntrada"
+    ).value;
 
 
   const cantidad =
     parseFloat(
-      document.getElementById("cantidad").value
+      document.getElementById(
+        "cantidad"
+      ).value
     );
 
 
@@ -1033,6 +1085,8 @@ function guardarMovimiento(){
   }
 
 
+  /* ADMITE POSITIVOS Y NEGATIVOS */
+
   if(
     Number.isNaN(cantidad)
     ||
@@ -1040,7 +1094,7 @@ function guardarMovimiento(){
   ){
 
     alert(
-      "Introduce una cantidad válida."
+      "Introduce una cantidad válida distinta de 0."
     );
 
     return;
@@ -1119,7 +1173,6 @@ function guardarMovimiento(){
 
   guardarLocal();
 
-
   construirTabla();
 
 
@@ -1141,9 +1194,6 @@ function guardarMovimiento(){
 
   );
 
-
-  /* dejamos las selecciones para introducir
-     movimientos similares rápidamente */
 
   document.getElementById(
     "cantidad"
@@ -1281,10 +1331,6 @@ function construirTabla(){
         proyecto => {
 
 
-          /* -----------------------------------------------
-             FILTRO CUENTA
-             ----------------------------------------------- */
-
           if(
             filtroCuenta
             &&
@@ -1295,10 +1341,6 @@ function construirTabla(){
           }
 
 
-          /* -----------------------------------------------
-             FILTRO PROYECTO
-             ----------------------------------------------- */
-
           if(
             filtroProyecto
             &&
@@ -1308,10 +1350,6 @@ function construirTabla(){
             return;
           }
 
-
-          /* -----------------------------------------------
-             BUSCADOR
-             ----------------------------------------------- */
 
           const textoFila =
             (
@@ -1338,20 +1376,12 @@ function construirTabla(){
           }
 
 
-          /* -----------------------------------------------
-             VALORES DE LOS 12 MESES
-             ----------------------------------------------- */
-
           const valores =
             calcularFila(
               cuenta[0],
               proyecto
             );
 
-
-          /* -----------------------------------------------
-             SABER SI TIENE ALGUN GASTO
-             ----------------------------------------------- */
 
           const tieneGasto =
             valores.some(
@@ -1362,10 +1392,6 @@ function construirTabla(){
             );
 
 
-          /* -----------------------------------------------
-             OCULTAR COMBINACIONES VACIAS
-             ----------------------------------------------- */
-
           if(
             ocultarVacias
             &&
@@ -1375,10 +1401,6 @@ function construirTabla(){
             return;
           }
 
-
-          /* -----------------------------------------------
-             CREAR FILA
-             ----------------------------------------------- */
 
           const tr =
             document.createElement(
@@ -1543,6 +1565,11 @@ function limpiarEntrada(){
 
   document.getElementById(
     "fechaHasta"
+  ).value = "";
+
+
+  document.getElementById(
+    "mesConcreto"
   ).value = "";
 
 
@@ -1822,7 +1849,6 @@ function cargarJSON(
 
 
         guardarLocal();
-
 
         construirTabla();
 
