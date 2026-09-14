@@ -434,7 +434,6 @@ th.col-cuenta {
         type="number"
         id="cantidad"
         step="0.01"
-        min="0"
         placeholder="CANTIDAD €"
       >
 
@@ -1002,7 +1001,7 @@ function guardarMovimiento(){
   if(
     Number.isNaN(cantidad)
     ||
-    cantidad <= 0
+    cantidad === 0
   ){
 
     alert(
