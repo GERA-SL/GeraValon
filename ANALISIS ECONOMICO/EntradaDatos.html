@@ -384,21 +384,58 @@ th.col-cuenta {
 
     <div class="linea-entrada">
 
-      <input
-        type="date"
-        id="fechaDesde"
-        min="2026-01-01"
-        max="2026-12-31"
-        title="Inicio del periodo"
-      >
+      <select id="modoFecha" onchange="cambiarModoFecha()">
 
-      <input
-        type="date"
-        id="fechaHasta"
-        min="2026-01-01"
-        max="2026-12-31"
-        title="Final del periodo"
-      >
+  <option value="periodo">
+    FECHA A FECHA
+  </option>
+
+  <option value="mes">
+    MES CONCRETO
+  </option>
+
+</select>
+
+
+<input
+  type="date"
+  id="fechaDesde"
+  min="2026-01-01"
+  max="2026-12-31"
+  title="Inicio del periodo"
+>
+
+
+<input
+  type="date"
+  id="fechaHasta"
+  min="2026-01-01"
+  max="2026-12-31"
+  title="Final del periodo"
+>
+
+
+<select
+  id="mesConcreto"
+  style="display:none"
+>
+
+  <option value="">MES</option>
+
+  <option value="0">ENERO</option>
+  <option value="1">FEBRERO</option>
+  <option value="2">MARZO</option>
+  <option value="3">ABRIL</option>
+  <option value="4">MAYO</option>
+  <option value="5">JUNIO</option>
+  <option value="6">JULIO</option>
+  <option value="7">AGOSTO</option>
+  <option value="8">SEPTIEMBRE</option>
+  <option value="9">OCTUBRE</option>
+  <option value="10">NOVIEMBRE</option>
+  <option value="11">DICIEMBRE</option>
+
+</select>
 
 
       <select id="cuentaEntrada">
