@@ -1,1 +1,1666 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GERAVALON · Proyectos</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f3f4f6;
+  color:#1f2937;
+  font-size:12px;
+}
+
+.cabecera{
+  background:#1f2937;
+  color:white;
+  padding:14px 22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.cabecera h1{
+  margin:0;
+  font-size:21px;
+}
+
+.cabecera p{
+  margin:3px 0 0;
+  color:#cbd5e1;
+  font-size:11px;
+}
+
+.volver{
+  text-decoration:none;
+  background:#374151;
+  color:white;
+  padding:7px 12px;
+  border-radius:5px;
+  font-weight:bold;
+}
+
+.pagina{
+  padding:14px;
+}
+
+.panel{
+  background:white;
+  border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  padding:12px;
+  margin-bottom:10px;
+}
+
+.titulo{
+  font-weight:bold;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+/* =========================================================
+   PERIODO
+========================================================= */
+
+.periodo{
+  display:grid;
+  grid-template-columns:180px 140px 140px 1fr;
+  gap:7px;
+  align-items:center;
+}
+
+select,
+input{
+  width:100%;
+  height:30px;
+  border:1px solid #d1d5db;
+  border-radius:4px;
+  padding:3px 6px;
+  background:white;
+  font-size:11px;
+}
+
+.fechas{
+  display:none;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+/* =========================================================
+   PROYECTOS
+========================================================= */
+
+.proyectos{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+}
+
+.proyecto-check{
+  border:1px solid #e5e7eb;
+  border-radius:5px;
+  padding:8px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  cursor:pointer;
+}
+
+.proyecto-check:hover{
+  background:#f9fafb;
+}
+
+.proyecto-check input{
+  width:auto;
+  height:auto;
+}
+
+.acciones{
+  margin-top:8px;
+  display:flex;
+  gap:6px;
+}
+
+button{
+  height:29px;
+  border:0;
+  border-radius:4px;
+  padding:0 11px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:10px;
+}
+
+.btn-azul{
+  background:#2563eb;
+  color:white;
+}
+
+.btn-gris{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+/* =========================================================
+   TARJETAS
+========================================================= */
+
+.tarjetas{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.tarjeta{
+  background:white;
+  border-radius:8px;
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  padding:12px;
+}
+
+.tarjeta .etiqueta{
+  font-size:10px;
+  font-weight:bold;
+  color:#6b7280;
+  margin-bottom:6px;
+}
+
+.tarjeta .numero{
+  font-size:19px;
+  font-weight:bold;
+}
+
+.verde{color:#15803d}
+.rojo{color:#dc2626}
+.azul{color:#2563eb}
+
+/* =========================================================
+   TABLA
+========================================================= */
+
+.tabla-contenedor{
+  overflow:auto;
+}
+
+table{
+  border-collapse:collapse;
+  width:100%;
+  min-width:900px;
+}
+
+th,
+td{
+  border-bottom:1px solid #e5e7eb;
+  border-right:1px solid #e5e7eb;
+  padding:7px 8px;
+}
+
+th{
+  background:#1f2937;
+  color:white;
+  font-size:10px;
+  text-align:center;
+}
+
+td{
+  text-align:right;
+}
+
+td:first-child{
+  text-align:left;
+  font-weight:bold;
+}
+
+.fila-total{
+  background:#f3f4f6;
+  font-weight:bold;
+}
+
+.fila-generales{
+  background:#fff7ed;
+  font-weight:bold;
+}
+
+.fila-final{
+  background:#ecfdf5;
+  font-weight:bold;
+  font-size:13px;
+}
+
+.negativo{
+  color:#dc2626;
+  font-weight:bold;
+}
+
+.positivo{
+  color:#15803d;
+  font-weight:bold;
+}
+
+.nota{
+  margin-top:8px;
+  color:#6b7280;
+  font-size:10px;
+}
+
+@media(max-width:1000px){
+
+  .tarjetas{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .proyectos{
+    grid-template-columns:1fr 1fr;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="cabecera">
+
+  <div>
+    <h1>GERAVALON · PROYECTOS</h1>
+    <p>ANÁLISIS DE RENTABILIDAD · EJERCICIO 2026</p>
+  </div>
+
+  <a href="Analisis.html" class="volver">
+    ← VOLVER
+  </a>
+
+</div>
+
+
+<div class="pagina">
+
+<!-- =====================================================
+     PERIODO
+====================================================== -->
+
+<div class="panel">
+
+  <div class="titulo">
+    PERIODO DE ANÁLISIS
+  </div>
+
+  <div class="periodo">
+
+    <select id="periodo" onchange="cambiarPeriodo()">
+
+      <option value="ANUAL">
+        TODO 2026
+      </option>
+
+      <option value="T1">
+        1.º TRIMESTRE
+      </option>
+
+      <option value="T2">
+        2.º TRIMESTRE
+      </option>
+
+      <option value="T3">
+        3.º TRIMESTRE
+      </option>
+
+      <option value="T4">
+        4.º TRIMESTRE
+      </option>
+
+      <option value="FECHAS">
+        FECHAS PERSONALIZADAS
+      </option>
+
+    </select>
+
+
+    <div class="fechas" id="bloqueFechas">
+
+      <input
+        type="date"
+        id="desde"
+        min="2026-01-01"
+        max="2026-12-31"
+        onchange="calcular()"
+      >
+
+      <input
+        type="date"
+        id="hasta"
+        min="2026-01-01"
+        max="2026-12-31"
+        onchange="calcular()"
+      >
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     SELECCION PROYECTOS
+====================================================== -->
+
+<div class="panel">
+
+  <div class="titulo">
+    PROYECTOS A ANALIZAR
+  </div>
+
+  <div class="proyectos" id="listaProyectos">
+  </div>
+
+  <div class="acciones">
+
+    <button
+      class="btn-azul"
+      onclick="seleccionarTodos()">
+      TODOS
+    </button>
+
+    <button
+      class="btn-gris"
+      onclick="quitarTodos()">
+      NINGUNO
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     TARJETAS
+====================================================== -->
+
+<div class="tarjetas">
+
+  <div class="tarjeta">
+
+    <div class="etiqueta">
+      INGRESOS SELECCIONADOS
+    </div>
+
+    <div
+      class="numero azul"
+      id="totalIngresos">
+      0,00 €
+    </div>
+
+  </div>
+
+
+  <div class="tarjeta">
+
+    <div class="etiqueta">
+      GASTOS DIRECTOS
+    </div>
+
+    <div
+      class="numero"
+      id="totalGastos">
+      0,00 €
+    </div>
+
+  </div>
+
+
+  <div class="tarjeta">
+
+    <div class="etiqueta">
+      RESULTADO DIRECTO
+    </div>
+
+    <div
+      class="numero"
+      id="resultadoDirecto">
+      0,00 €
+    </div>
+
+  </div>
+
+
+  <div class="tarjeta">
+
+    <div class="etiqueta">
+      GASTOS GENERALES
+    </div>
+
+    <div
+      class="numero rojo"
+      id="gastosGenerales">
+      0,00 €
+    </div>
+
+  </div>
+
+
+  <div class="tarjeta">
+
+    <div class="etiqueta">
+      DESPUÉS DE GASTOS GENERALES
+    </div>
+
+    <div
+      class="numero"
+      id="resultadoFinal">
+      0,00 €
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     TABLA
+====================================================== -->
+
+<div class="panel">
+
+  <div class="titulo">
+    RENTABILIDAD POR PROYECTO
+  </div>
+
+  <div class="tabla-contenedor">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>PROYECTO</th>
+          <th>INGRESOS</th>
+          <th>GASTOS DIRECTOS</th>
+          <th>RESULTADO DIRECTO</th>
+          <th>MARGEN</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody id="tablaResultados">
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="nota">
+
+    GASTOS GENERALES se mantiene separado.
+    El resultado final compara los proyectos seleccionados
+    contra todos los Gastos Generales del mismo periodo.
+
+  </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CLAVES
+========================================================= */
+
+const CLAVE_GASTOS =
+  "geravalon_analisis_economico_2026";
+
+const CLAVE_INGRESOS =
+  "geravalon_ingresos_2026";
+
+
+/* =========================================================
+   PROYECTOS
+========================================================= */
+
+const proyectos = [
+
+  "RECICLAJE DE ACEITES Y GRASAS",
+  "LIMPIEZA INDUSTRIAL",
+  "LIMPIEZA HOSTELERIA",
+  "SERVICIOS VARIOS",
+  "INSTALACION Y REPARACION",
+  "TRADER"
+
+];
+
+
+/* =========================================================
+   DATOS
+========================================================= */
+
+let gastos = [];
+let ingresos = [];
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    cargarDatos();
+
+    construirSelectorProyectos();
+
+    seleccionarTodos();
+
+  }
+);
+
+
+/* =========================================================
+   CARGAR DATOS
+========================================================= */
+
+function cargarDatos(){
+
+  try{
+
+    gastos =
+      JSON.parse(
+        localStorage.getItem(
+          CLAVE_GASTOS
+        )
+        ||
+        "[]"
+      );
+
+  }
+
+  catch(error){
+
+    gastos = [];
+
+  }
+
+
+  try{
+
+    ingresos =
+      JSON.parse(
+        localStorage.getItem(
+          CLAVE_INGRESOS
+        )
+        ||
+        "[]"
+      );
+
+  }
+
+  catch(error){
+
+    ingresos = [];
+
+  }
+
+
+  if(!Array.isArray(gastos)){
+    gastos = [];
+  }
+
+  if(!Array.isArray(ingresos)){
+    ingresos = [];
+  }
+
+}
+
+
+/* =========================================================
+   SELECTOR PROYECTOS
+========================================================= */
+
+function construirSelectorProyectos(){
+
+  const contenedor =
+    document.getElementById(
+      "listaProyectos"
+    );
+
+
+  contenedor.innerHTML = "";
+
+
+  proyectos.forEach(
+    (proyecto,index) => {
+
+
+      const label =
+        document.createElement(
+          "label"
+        );
+
+
+      label.className =
+        "proyecto-check";
+
+
+      label.innerHTML = `
+
+        <input
+          type="checkbox"
+          class="checkProyecto"
+          value="${proyecto}"
+          onchange="calcular()"
+        >
+
+        ${proyecto}
+
+      `;
+
+
+      contenedor.appendChild(
+        label
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   TODOS / NINGUNO
+========================================================= */
+
+function seleccionarTodos(){
+
+  document
+    .querySelectorAll(
+      ".checkProyecto"
+    )
+    .forEach(
+      check =>
+        check.checked = true
+    );
+
+
+  calcular();
+
+}
+
+
+function quitarTodos(){
+
+  document
+    .querySelectorAll(
+      ".checkProyecto"
+    )
+    .forEach(
+      check =>
+        check.checked = false
+    );
+
+
+  calcular();
+
+}
+
+
+/* =========================================================
+   PERIODO
+========================================================= */
+
+function cambiarPeriodo(){
+
+  const periodo =
+    document.getElementById(
+      "periodo"
+    ).value;
+
+
+  const bloque =
+    document.getElementById(
+      "bloqueFechas"
+    );
+
+
+  if(periodo === "FECHAS"){
+
+    bloque.style.display =
+      "grid";
+
+  }
+
+  else{
+
+    bloque.style.display =
+      "none";
+
+  }
+
+
+  calcular();
+
+}
+
+
+/* =========================================================
+   OBTENER LIMITES
+========================================================= */
+
+function obtenerLimites(){
+
+  const periodo =
+    document.getElementById(
+      "periodo"
+    ).value;
+
+
+  switch(periodo){
+
+    case "T1":
+
+      return {
+        desde:"2026-01-01",
+        hasta:"2026-03-31"
+      };
+
+
+    case "T2":
+
+      return {
+        desde:"2026-04-01",
+        hasta:"2026-06-30"
+      };
+
+
+    case "T3":
+
+      return {
+        desde:"2026-07-01",
+        hasta:"2026-09-30"
+      };
+
+
+    case "T4":
+
+      return {
+        desde:"2026-10-01",
+        hasta:"2026-12-31"
+      };
+
+
+    case "FECHAS":
+
+      return {
+
+        desde:
+          document.getElementById(
+            "desde"
+          ).value,
+
+        hasta:
+          document.getElementById(
+            "hasta"
+          ).value
+
+      };
+
+
+    default:
+
+      return {
+        desde:"2026-01-01",
+        hasta:"2026-12-31"
+      };
+
+  }
+
+}
+
+
+/* =========================================================
+   PROYECTOS SELECCIONADOS
+========================================================= */
+
+function obtenerProyectosSeleccionados(){
+
+  return Array.from(
+
+    document.querySelectorAll(
+      ".checkProyecto:checked"
+    )
+
+  )
+  .map(
+    check =>
+      check.value
+  );
+
+}
+
+
+/* =========================================================
+   MESES DEL PERIODO DE UN GASTO
+========================================================= */
+
+function obtenerMesesMovimiento(
+  desde,
+  hasta
+){
+
+  if(!desde || !hasta){
+
+    return [];
+
+  }
+
+
+  const inicio =
+    new Date(
+      desde + "T00:00:00"
+    );
+
+
+  const fin =
+    new Date(
+      hasta + "T00:00:00"
+    );
+
+
+  const meses = [];
+
+
+  let anio =
+    inicio.getFullYear();
+
+
+  let mes =
+    inicio.getMonth();
+
+
+  while(
+
+    anio < fin.getFullYear()
+
+    ||
+
+    (
+      anio === fin.getFullYear()
+      &&
+      mes <= fin.getMonth()
+    )
+
+  ){
+
+    if(anio === 2026){
+
+      meses.push(mes);
+
+    }
+
+
+    mes++;
+
+
+    if(mes > 11){
+
+      mes = 0;
+
+      anio++;
+
+    }
+
+  }
+
+
+  return meses;
+
+}
+
+
+/* =========================================================
+   MESES INCLUIDOS EN EL ANALISIS
+========================================================= */
+
+function mesesAnalizados(
+  limites
+){
+
+  if(
+    !limites.desde
+    ||
+    !limites.hasta
+  ){
+
+    return [];
+
+  }
+
+
+  return obtenerMesesMovimiento(
+    limites.desde,
+    limites.hasta
+  );
+
+}
+
+
+/* =========================================================
+   CALCULAR GASTOS DE UN PROYECTO
+========================================================= */
+
+function calcularGastosProyecto(
+  proyecto,
+  limites
+){
+
+  let total = 0;
+
+
+  const mesesPeriodo =
+    mesesAnalizados(
+      limites
+    );
+
+
+  gastos.forEach(
+    movimiento => {
+
+
+      if(
+        movimiento.proyecto !== proyecto
+      ){
+
+        return;
+
+      }
+
+
+      const mesesMovimiento =
+        obtenerMesesMovimiento(
+          movimiento.desde,
+          movimiento.hasta
+        );
+
+
+      if(
+        mesesMovimiento.length === 0
+      ){
+
+        return;
+
+      }
+
+
+      const mensual =
+        Number(
+          movimiento.cantidadTotal
+        )
+        /
+        mesesMovimiento.length;
+
+
+      mesesMovimiento.forEach(
+        mes => {
+
+
+          if(
+            mesesPeriodo.includes(mes)
+          ){
+
+            total += mensual;
+
+          }
+
+        }
+      );
+
+    }
+  );
+
+
+  return total;
+
+}
+
+
+/* =========================================================
+   CALCULAR INGRESOS DE UN PROYECTO
+========================================================= */
+
+function calcularIngresosProyecto(
+  proyecto,
+  limites
+){
+
+  let total = 0;
+
+
+  if(
+    !limites.desde
+    ||
+    !limites.hasta
+  ){
+
+    return 0;
+
+  }
+
+
+  ingresos.forEach(
+    movimiento => {
+
+
+      if(
+        movimiento.proyecto !== proyecto
+      ){
+
+        return;
+
+      }
+
+
+      const fecha =
+        movimiento.fecha;
+
+
+      if(!fecha){
+
+        return;
+
+      }
+
+
+      if(
+        fecha >= limites.desde
+        &&
+        fecha <= limites.hasta
+      ){
+
+        total +=
+          Number(
+            movimiento.cantidadTotal
+          )
+          ||
+          0;
+
+      }
+
+    }
+  );
+
+
+  return total;
+
+}
+
+
+/* =========================================================
+   CALCULAR TODO
+========================================================= */
+
+function calcular(){
+
+  const limites =
+    obtenerLimites();
+
+
+  const seleccionados =
+    obtenerProyectosSeleccionados();
+
+
+  if(
+    !limites.desde
+    ||
+    !limites.hasta
+  ){
+
+    pintarCeros();
+
+    return;
+
+  }
+
+
+  if(
+    limites.hasta
+    <
+    limites.desde
+  ){
+
+    pintarCeros();
+
+    return;
+
+  }
+
+
+  let totalIngresos = 0;
+
+  let totalGastos = 0;
+
+
+  const resultados = [];
+
+
+  seleccionados.forEach(
+    proyecto => {
+
+
+      const ingreso =
+        calcularIngresosProyecto(
+          proyecto,
+          limites
+        );
+
+
+      const gasto =
+        calcularGastosProyecto(
+          proyecto,
+          limites
+        );
+
+
+      const resultado =
+        ingreso - gasto;
+
+
+      const margen =
+        ingreso !== 0
+
+        ?
+
+        (
+          resultado
+          /
+          ingreso
+        )
+        *
+        100
+
+        :
+
+        0;
+
+
+      totalIngresos +=
+        ingreso;
+
+
+      totalGastos +=
+        gasto;
+
+
+      resultados.push({
+
+        proyecto,
+        ingreso,
+        gasto,
+        resultado,
+        margen
+
+      });
+
+    }
+  );
+
+
+  const resultadoDirecto =
+    totalIngresos
+    -
+    totalGastos;
+
+
+  const generales =
+    calcularGastosProyecto(
+      "GASTOS GENERALES",
+      limites
+    );
+
+
+  const resultadoFinal =
+    resultadoDirecto
+    -
+    generales;
+
+
+  pintarTarjetas(
+
+    totalIngresos,
+
+    totalGastos,
+
+    resultadoDirecto,
+
+    generales,
+
+    resultadoFinal
+
+  );
+
+
+  pintarTabla(
+
+    resultados,
+
+    totalIngresos,
+
+    totalGastos,
+
+    resultadoDirecto,
+
+    generales,
+
+    resultadoFinal
+
+  );
+
+}
+
+
+/* =========================================================
+   TARJETAS
+========================================================= */
+
+function pintarTarjetas(
+  ingresos,
+  gastos,
+  directo,
+  generales,
+  final
+){
+
+  document.getElementById(
+    "totalIngresos"
+  ).textContent =
+    formatoEuro(ingresos);
+
+
+  document.getElementById(
+    "totalGastos"
+  ).textContent =
+    formatoEuro(gastos);
+
+
+  document.getElementById(
+    "resultadoDirecto"
+  ).textContent =
+    formatoEuro(directo);
+
+
+  document.getElementById(
+    "gastosGenerales"
+  ).textContent =
+    formatoEuro(generales);
+
+
+  document.getElementById(
+    "resultadoFinal"
+  ).textContent =
+    formatoEuro(final);
+
+
+  aplicarClaseResultado(
+    "resultadoDirecto",
+    directo
+  );
+
+
+  aplicarClaseResultado(
+    "resultadoFinal",
+    final
+  );
+
+}
+
+
+/* =========================================================
+   TABLA RESULTADOS
+========================================================= */
+
+function pintarTabla(
+  resultados,
+  totalIngresos,
+  totalGastos,
+  resultadoDirecto,
+  generales,
+  resultadoFinal
+){
+
+  const tbody =
+    document.getElementById(
+      "tablaResultados"
+    );
+
+
+  tbody.innerHTML = "";
+
+
+  resultados.forEach(
+    r => {
+
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      tr.innerHTML = `
+
+        <td>
+          ${r.proyecto}
+        </td>
+
+        <td>
+          ${formatoEuro(r.ingreso)}
+        </td>
+
+        <td>
+          ${formatoEuro(r.gasto)}
+        </td>
+
+        <td class="${
+          r.resultado >= 0
+          ?
+          "positivo"
+          :
+          "negativo"
+        }">
+
+          ${formatoEuro(r.resultado)}
+
+        </td>
+
+        <td class="${
+          r.margen >= 0
+          ?
+          "positivo"
+          :
+          "negativo"
+        }">
+
+          ${formatoNumero(r.margen)} %
+
+        </td>
+
+      `;
+
+
+      tbody.appendChild(
+        tr
+      );
+
+    }
+  );
+
+
+  const filaTotal =
+    document.createElement(
+      "tr"
+    );
+
+
+  filaTotal.className =
+    "fila-total";
+
+
+  filaTotal.innerHTML = `
+
+    <td>
+      PROYECTOS SELECCIONADOS
+    </td>
+
+    <td>
+      ${formatoEuro(totalIngresos)}
+    </td>
+
+    <td>
+      ${formatoEuro(totalGastos)}
+    </td>
+
+    <td class="${
+      resultadoDirecto >= 0
+      ?
+      "positivo"
+      :
+      "negativo"
+    }">
+
+      ${formatoEuro(resultadoDirecto)}
+
+    </td>
+
+    <td>
+      ${
+        totalIngresos !== 0
+        ?
+        formatoNumero(
+          resultadoDirecto
+          /
+          totalIngresos
+          *
+          100
+        )
+        :
+        "0,00"
+      } %
+
+    </td>
+
+  `;
+
+
+  tbody.appendChild(
+    filaTotal
+  );
+
+
+  const filaGenerales =
+    document.createElement(
+      "tr"
+    );
+
+
+  filaGenerales.className =
+    "fila-generales";
+
+
+  filaGenerales.innerHTML = `
+
+    <td>
+      GASTOS GENERALES
+    </td>
+
+    <td>
+      —
+    </td>
+
+    <td>
+      ${formatoEuro(generales)}
+    </td>
+
+    <td class="negativo">
+      -${formatoEuro(generales)}
+    </td>
+
+    <td>
+      —
+    </td>
+
+  `;
+
+
+  tbody.appendChild(
+    filaGenerales
+  );
+
+
+  const filaFinal =
+    document.createElement(
+      "tr"
+    );
+
+
+  filaFinal.className =
+    "fila-final";
+
+
+  filaFinal.innerHTML = `
+
+    <td>
+      RESULTADO DESPUÉS DE GASTOS GENERALES
+    </td>
+
+    <td>
+      ${formatoEuro(totalIngresos)}
+    </td>
+
+    <td>
+      ${formatoEuro(
+        totalGastos
+        +
+        generales
+      )}
+    </td>
+
+    <td class="${
+      resultadoFinal >= 0
+      ?
+      "positivo"
+      :
+      "negativo"
+    }">
+
+      ${formatoEuro(resultadoFinal)}
+
+    </td>
+
+    <td>
+      ${
+        totalIngresos !== 0
+        ?
+        formatoNumero(
+          resultadoFinal
+          /
+          totalIngresos
+          *
+          100
+        )
+        :
+        "0,00"
+      } %
+
+    </td>
+
+  `;
+
+
+  tbody.appendChild(
+    filaFinal
+  );
+
+}
+
+
+/* =========================================================
+   CERO
+========================================================= */
+
+function pintarCeros(){
+
+  pintarTarjetas(
+    0,0,0,0,0
+  );
+
+
+  document.getElementById(
+    "tablaResultados"
+  ).innerHTML = "";
+
+}
+
+
+/* =========================================================
+   COLOR RESULTADO
+========================================================= */
+
+function aplicarClaseResultado(
+  id,
+  valor
+){
+
+  const elemento =
+    document.getElementById(id);
+
+
+  elemento.classList.remove(
+    "positivo",
+    "negativo"
+  );
+
+
+  elemento.classList.add(
+
+    valor >= 0
+
+    ?
+
+    "positivo"
+
+    :
+
+    "negativo"
+
+  );
+
+}
+
+
+/* =========================================================
+   FORMATOS
+========================================================= */
+
+function formatoNumero(numero){
+
+  return Number(
+    numero || 0
+  )
+  .toLocaleString(
+
+    "es-ES",
+
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
+
+  );
+
+}
+
+
+function formatoEuro(numero){
+
+  return formatoNumero(numero)
+  +
+  " €";
+
+}
+
+</script>
+
+</body>
+</html>
