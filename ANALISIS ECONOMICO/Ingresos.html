@@ -1,1 +1,1659 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GERAVALON · Ingresos</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f4f6;
+    color: #1f2937;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 22px 30px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+header p {
+    margin: 6px 0 0;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.contenedor {
+    width: 96%;
+    max-width: 1600px;
+    margin: 25px auto;
+}
+
+.panel {
+    background: white;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.panel h2 {
+    margin-top: 0;
+    font-size: 20px;
+}
+
+.formulario {
+    display: grid;
+    grid-template-columns: 160px 1fr 180px 1fr 180px;
+    gap: 14px;
+    align-items: end;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo label {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #4b5563;
+}
+
+input,
+select,
+button {
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    padding: 0 10px;
+    font-size: 14px;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+.boton-principal {
+    background: #2563eb;
+    color: white;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.boton-principal:hover {
+    background: #1d4ed8;
+}
+
+.boton-secundario {
+    background: #e5e7eb;
+    color: #111827;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.boton-secundario:hover {
+    background: #d1d5db;
+}
+
+.boton-rojo {
+    background: #dc2626;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.boton-verde {
+    background: #059669;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.fila-cuenta {
+    display: flex;
+    gap: 8px;
+}
+
+.fila-cuenta select {
+    flex: 1;
+}
+
+.fila-cuenta button {
+    white-space: nowrap;
+}
+
+.acciones {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.tabla-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1250px;
+}
+
+th,
+td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 10px;
+    font-size: 13px;
+    text-align: right;
+}
+
+th {
+    background: #f9fafb;
+    color: #374151;
+}
+
+th:first-child,
+td:first-child,
+th:nth-child(2),
+td:nth-child(2),
+th:nth-child(3),
+td:nth-child(3),
+th:nth-child(4),
+td:nth-child(4) {
+    text-align: left;
+}
+
+.total {
+    font-weight: bold;
+    background: #f3f4f6;
+}
+
+.mensaje {
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.ok {
+    color: #047857;
+}
+
+.error {
+    color: #b91c1c;
+}
+
+.modal-fondo {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    width: 430px;
+    max-width: 92%;
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.modal h3 {
+    margin-top: 0;
+}
+
+.modal .campo {
+    margin-bottom: 15px;
+}
+
+.modal-botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.tarjeta {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.tarjeta .titulo {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: bold;
+}
+
+.tarjeta .valor {
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+@media (max-width: 1100px) {
+    .formulario {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .formulario,
+    .resumen {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>GERAVALON · INGRESOS</h1>
+    <p>ANÁLISIS ECONÓMICO · EJERCICIO 2026</p>
+</header>
+
+<div class="contenedor">
+
+    <div class="resumen">
+
+        <div class="tarjeta">
+            <div class="titulo">INGRESOS ACUMULADOS</div>
+            <div class="valor" id="totalIngresos">0,00 €</div>
+        </div>
+
+        <div class="tarjeta">
+            <div class="titulo">NÚMERO DE MOVIMIENTOS</div>
+            <div class="valor" id="numeroMovimientos">0</div>
+        </div>
+
+        <div class="tarjeta">
+            <div class="titulo">CUENTAS DE INGRESO</div>
+            <div class="valor" id="numeroCuentas">0</div>
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>INTRODUCIR INGRESO</h2>
+
+        <div class="formulario">
+
+            <div class="campo">
+                <label>FECHA</label>
+                <input type="date" id="fecha">
+            </div>
+
+            <div class="campo">
+                <label>CUENTA CONTABLE</label>
+
+                <div class="fila-cuenta">
+
+                    <select id="cuenta"></select>
+
+                    <button
+                        type="button"
+                        class="boton-secundario"
+                        onclick="abrirNuevaCuenta()">
+                        + NUEVA CUENTA
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="campo">
+                <label>ORIGEN</label>
+
+                <select id="origen">
+                    <option value="GERA">GERA</option>
+                    <option value="SIG">SIG</option>
+                    <option value="DAVID">DAVID</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label>PROYECTO</label>
+                <select id="proyecto"></select>
+            </div>
+
+            <div class="campo">
+                <label>IMPORTE €</label>
+                <input
+                    type="number"
+                    id="cantidad"
+                    step="0.01"
+                    placeholder="0,00">
+            </div>
+
+        </div>
+
+        <div style="margin-top:18px;">
+            <button
+                class="boton-principal"
+                onclick="guardarMovimiento()">
+                GUARDAR INGRESO
+            </button>
+        </div>
+
+        <div id="mensaje" class="mensaje"></div>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>DATOS GUARDADOS</h2>
+
+        <div class="acciones">
+
+            <button
+                class="boton-verde"
+                onclick="descargarJSON()">
+                DESCARGAR COPIA JSON
+            </button>
+
+            <button
+                class="boton-secundario"
+                onclick="document.getElementById('archivoJSON').click()">
+                CARGAR COPIA JSON
+            </button>
+
+            <input
+                type="file"
+                id="archivoJSON"
+                accept=".json"
+                style="display:none"
+                onchange="cargarJSON(event)">
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>INGRESOS POR MES</h2>
+
+        <div class="tabla-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>CUENTA</th>
+                        <th>PROYECTO</th>
+                        <th>ORIGEN</th>
+
+                        <th>ENE</th>
+                        <th>FEB</th>
+                        <th>MAR</th>
+                        <th>ABR</th>
+                        <th>MAY</th>
+                        <th>JUN</th>
+                        <th>JUL</th>
+                        <th>AGO</th>
+                        <th>SEP</th>
+                        <th>OCT</th>
+                        <th>NOV</th>
+                        <th>DIC</th>
+
+                        <th>TOTAL</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaIngresos"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>MOVIMIENTOS</h2>
+
+        <div class="tabla-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>FECHA</th>
+                        <th>CUENTA</th>
+                        <th>ORIGEN</th>
+                        <th>PROYECTO</th>
+                        <th>IMPORTE</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody id="tablaMovimientos"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MODAL NUEVA CUENTA -->
+
+<div class="modal-fondo" id="modalCuenta">
+
+    <div class="modal">
+
+        <h3>NUEVA CUENTA DE INGRESO</h3>
+
+        <div class="campo">
+            <label>CÓDIGO CONTABLE</label>
+            <input
+                type="text"
+                id="nuevoCodigo"
+                placeholder="Ej. 70500006">
+        </div>
+
+        <div class="campo">
+            <label>NOMBRE</label>
+            <input
+                type="text"
+                id="nuevoNombre"
+                placeholder="Nombre de la cuenta">
+        </div>
+
+        <div class="modal-botones">
+
+            <button
+                class="boton-secundario"
+                onclick="cerrarNuevaCuenta()">
+                CANCELAR
+            </button>
+
+            <button
+                class="boton-principal"
+                onclick="guardarNuevaCuenta()">
+                GUARDAR CUENTA
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
+
+const CLAVE_INGRESOS = "geravalon_ingresos_2026";
+const CLAVE_CUENTAS = "geravalon_cuentas_ingresos";
+
+
+/* =========================================================
+   CUENTAS INICIALES DE INGRESOS
+========================================================= */
+
+const cuentasIniciales = [
+
+    ["70500005", "INSTALACIÓN SEPARADOR DE GRASA"],
+    ["70500004", "INSTALACION Y REPARACIONES"],
+    ["70500003", "SERVICIOS"],
+    ["70500002", "LIMPIEZA RESTAURACION"],
+    ["70500001", "LIMPIEZAS SOL DE ALBA"],
+
+    ["70000010", "GRG - CONTENEDORES - BIDONES"],
+    ["70000008", "SEPARADORES DE GRASA"],
+    ["70000007", "ELEMENTOS SISTEMA DE EXTRACCIÓN"],
+    ["70000006", "CAMPANAS"],
+    ["70000005", "FILTRACIÓN ELECTROSTÁTICA"],
+    ["70000004", "CAJAS DE VENTILACIÓN"],
+    ["70000003", "VENTA DE FILTROS ESPECIALES"],
+    ["70000002", "VENTA DE FILTROS DE COCINA"],
+    ["70000001", "VENTA DE ACEITE USADO"],
+    ["70000000", "VENTAS DE MERCADERÍAS"]
+
+];
+
+
+/* =========================================================
+   PROYECTOS
+========================================================= */
+
+const proyectos = [
+
+    "RECICLAJE DE ACEITES Y GRASAS",
+    "LIMPIEZA INDUSTRIAL",
+    "LIMPIEZA HOSTELERIA",
+    "SERVICIOS VARIOS",
+    "INSTALACION Y REPARACION",
+    "GASTOS GENERALES",
+    "TRADER"
+
+];
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let movimientos = [];
+let cuentas = [];
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function() {
+
+    cargarCuentas();
+
+    cargarSelectores();
+
+    cargarMovimientos();
+
+    ponerFechaHoy();
+
+    construirTodo();
+
+});
+
+
+/* =========================================================
+   FECHA
+========================================================= */
+
+function ponerFechaHoy() {
+
+    const hoy = new Date();
+
+    const yyyy = hoy.getFullYear();
+
+    const mm =
+        String(hoy.getMonth() + 1)
+        .padStart(2, "0");
+
+    const dd =
+        String(hoy.getDate())
+        .padStart(2, "0");
+
+    document.getElementById("fecha").value =
+        `${yyyy}-${mm}-${dd}`;
+
+}
+
+
+/* =========================================================
+   CUENTAS
+========================================================= */
+
+function cargarCuentas() {
+
+    const guardadas =
+        localStorage.getItem(CLAVE_CUENTAS);
+
+    if (guardadas) {
+
+        try {
+
+            cuentas = JSON.parse(guardadas);
+
+        } catch {
+
+            cuentas =
+                JSON.parse(
+                    JSON.stringify(cuentasIniciales)
+                );
+
+        }
+
+    } else {
+
+        cuentas =
+            JSON.parse(
+                JSON.stringify(cuentasIniciales)
+            );
+
+        guardarCuentas();
+
+    }
+
+}
+
+
+function guardarCuentas() {
+
+    localStorage.setItem(
+        CLAVE_CUENTAS,
+        JSON.stringify(cuentas)
+    );
+
+}
+
+
+/* =========================================================
+   SELECTORES
+========================================================= */
+
+function cargarSelectores() {
+
+    const selectorCuenta =
+        document.getElementById("cuenta");
+
+    selectorCuenta.innerHTML = "";
+
+
+    cuentas
+        .sort((a,b) =>
+            a[0].localeCompare(b[0])
+        )
+        .forEach(cuenta => {
+
+            const opcion =
+                document.createElement("option");
+
+            opcion.value = cuenta[0];
+
+            opcion.textContent =
+                `${cuenta[0]} · ${cuenta[1]}`;
+
+            selectorCuenta.appendChild(opcion);
+
+        });
+
+
+    const selectorProyecto =
+        document.getElementById("proyecto");
+
+    selectorProyecto.innerHTML = "";
+
+
+    proyectos.forEach(proyecto => {
+
+        const opcion =
+            document.createElement("option");
+
+        opcion.value = proyecto;
+
+        opcion.textContent = proyecto;
+
+        selectorProyecto.appendChild(opcion);
+
+    });
+
+
+    actualizarResumen();
+
+}
+
+
+/* =========================================================
+   NUEVA CUENTA
+========================================================= */
+
+function abrirNuevaCuenta() {
+
+    document.getElementById("nuevoCodigo").value = "";
+    document.getElementById("nuevoNombre").value = "";
+
+    document.getElementById("modalCuenta").style.display =
+        "flex";
+
+    setTimeout(() => {
+        document.getElementById("nuevoCodigo").focus();
+    },100);
+
+}
+
+
+function cerrarNuevaCuenta() {
+
+    document.getElementById("modalCuenta").style.display =
+        "none";
+
+}
+
+
+function guardarNuevaCuenta() {
+
+    const codigo =
+        document.getElementById("nuevoCodigo")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const nombre =
+        document.getElementById("nuevoNombre")
+        .value
+        .trim()
+        .toUpperCase();
+
+
+    if (!codigo || !nombre) {
+
+        alert(
+            "DEBES INDICAR EL CÓDIGO Y EL NOMBRE DE LA CUENTA."
+        );
+
+        return;
+
+    }
+
+
+    const existe =
+        cuentas.some(
+            cuenta => cuenta[0] === codigo
+        );
+
+
+    if (existe) {
+
+        alert(
+            "ESA CUENTA CONTABLE YA EXISTE."
+        );
+
+        return;
+
+    }
+
+
+    cuentas.push([
+        codigo,
+        nombre
+    ]);
+
+
+    guardarCuentas();
+
+    cargarSelectores();
+
+
+    document.getElementById("cuenta").value =
+        codigo;
+
+
+    cerrarNuevaCuenta();
+
+    mostrarMensaje(
+        "CUENTA CREADA CORRECTAMENTE.",
+        true
+    );
+
+}
+
+
+/* =========================================================
+   MOVIMIENTOS
+========================================================= */
+
+function cargarMovimientos() {
+
+    const guardados =
+        localStorage.getItem(CLAVE_INGRESOS);
+
+    if (!guardados) {
+
+        movimientos = [];
+
+        return;
+
+    }
+
+
+    try {
+
+        const datos =
+            JSON.parse(guardados);
+
+        movimientos =
+            Array.isArray(datos)
+            ? datos
+            : [];
+
+    } catch {
+
+        movimientos = [];
+
+    }
+
+}
+
+
+function guardarLocal() {
+
+    localStorage.setItem(
+        CLAVE_INGRESOS,
+        JSON.stringify(movimientos)
+    );
+
+}
+
+
+/* =========================================================
+   GUARDAR INGRESO
+========================================================= */
+
+function guardarMovimiento() {
+
+    const fecha =
+        document.getElementById("fecha").value;
+
+    const cuenta =
+        document.getElementById("cuenta").value;
+
+    const origen =
+        document.getElementById("origen").value;
+
+    const proyecto =
+        document.getElementById("proyecto").value;
+
+    const cantidad =
+        parseFloat(
+            document.getElementById("cantidad").value
+        );
+
+
+    if (!fecha) {
+
+        mostrarMensaje(
+            "DEBES INDICAR LA FECHA.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    if (!cuenta) {
+
+        mostrarMensaje(
+            "DEBES SELECCIONAR UNA CUENTA.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    if (!proyecto) {
+
+        mostrarMensaje(
+            "DEBES SELECCIONAR UN PROYECTO.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    if (
+        isNaN(cantidad) ||
+        cantidad === 0
+    ) {
+
+        mostrarMensaje(
+            "DEBES INTRODUCIR UN IMPORTE DISTINTO DE CERO.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    const fechaObjeto =
+        new Date(fecha + "T12:00:00");
+
+
+    if (
+        fechaObjeto.getFullYear() !== 2026
+    ) {
+
+        mostrarMensaje(
+            "LA FECHA DEBE PERTENECER AL EJERCICIO 2026.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    const movimiento = {
+
+        id:
+            Date.now() +
+            Math.floor(
+                Math.random() * 1000
+            ),
+
+        fecha: fecha,
+
+        cuenta: cuenta,
+
+        origen: origen,
+
+        proyecto: proyecto,
+
+        cantidadTotal: cantidad
+
+    };
+
+
+    movimientos.push(movimiento);
+
+
+    guardarLocal();
+
+    construirTodo();
+
+
+    document.getElementById("cantidad").value = "";
+
+
+    mostrarMensaje(
+        "INGRESO GUARDADO CORRECTAMENTE.",
+        true
+    );
+
+}
+
+
+/* =========================================================
+   ELIMINAR MOVIMIENTO
+========================================================= */
+
+function eliminarMovimiento(id) {
+
+    const movimiento =
+        movimientos.find(
+            m => m.id === id
+        );
+
+
+    if (!movimiento) {
+        return;
+    }
+
+
+    const confirmar =
+        confirm(
+            "¿ELIMINAR ESTE INGRESO?"
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    movimientos =
+        movimientos.filter(
+            m => m.id !== id
+        );
+
+
+    guardarLocal();
+
+    construirTodo();
+
+}
+
+
+/* =========================================================
+   NOMBRE DE CUENTA
+========================================================= */
+
+function obtenerNombreCuenta(codigo) {
+
+    const cuenta =
+        cuentas.find(
+            c => c[0] === codigo
+        );
+
+    if (!cuenta) {
+        return codigo;
+    }
+
+    return `${cuenta[0]} · ${cuenta[1]}`;
+
+}
+
+
+/* =========================================================
+   TABLA DE MOVIMIENTOS
+========================================================= */
+
+function construirTablaMovimientos() {
+
+    const tbody =
+        document.getElementById(
+            "tablaMovimientos"
+        );
+
+    tbody.innerHTML = "";
+
+
+    const ordenados =
+        [...movimientos]
+        .sort((a,b) =>
+            b.fecha.localeCompare(a.fecha)
+        );
+
+
+    ordenados.forEach(movimiento => {
+
+        const fila =
+            document.createElement("tr");
+
+
+        fila.innerHTML = `
+
+            <td>
+                ${formatearFecha(movimiento.fecha)}
+            </td>
+
+            <td>
+                ${obtenerNombreCuenta(movimiento.cuenta)}
+            </td>
+
+            <td>
+                ${movimiento.origen}
+            </td>
+
+            <td>
+                ${movimiento.proyecto}
+            </td>
+
+            <td>
+                ${formatearDinero(movimiento.cantidadTotal)}
+            </td>
+
+            <td>
+                <button
+                    class="boton-rojo"
+                    onclick="eliminarMovimiento(${movimiento.id})">
+                    ELIMINAR
+                </button>
+            </td>
+
+        `;
+
+
+        tbody.appendChild(fila);
+
+    });
+
+}
+
+
+/* =========================================================
+   TABLA MENSUAL
+========================================================= */
+
+function construirTablaMensual() {
+
+    const tbody =
+        document.getElementById(
+            "tablaIngresos"
+        );
+
+    tbody.innerHTML = "";
+
+
+    const agrupados = {};
+
+
+    movimientos.forEach(movimiento => {
+
+        const clave =
+            movimiento.cuenta +
+            "||" +
+            movimiento.proyecto +
+            "||" +
+            movimiento.origen;
+
+
+        if (!agrupados[clave]) {
+
+            agrupados[clave] = {
+
+                cuenta: movimiento.cuenta,
+
+                proyecto:
+                    movimiento.proyecto,
+
+                origen:
+                    movimiento.origen,
+
+                meses:
+                    new Array(12).fill(0)
+
+            };
+
+        }
+
+
+        const fecha =
+            new Date(
+                movimiento.fecha +
+                "T12:00:00"
+            );
+
+
+        const mes =
+            fecha.getMonth();
+
+
+        agrupados[clave]
+            .meses[mes] +=
+            Number(
+                movimiento.cantidadTotal
+            ) || 0;
+
+    });
+
+
+    const totalesMes =
+        new Array(12).fill(0);
+
+
+    Object.values(agrupados)
+        .sort((a,b) => {
+
+            const proyecto =
+                a.proyecto.localeCompare(
+                    b.proyecto
+                );
+
+            if (proyecto !== 0) {
+                return proyecto;
+            }
+
+            return a.cuenta.localeCompare(
+                b.cuenta
+            );
+
+        })
+        .forEach(grupo => {
+
+            const fila =
+                document.createElement("tr");
+
+
+            let totalFila = 0;
+
+            let celdasMeses = "";
+
+
+            grupo.meses.forEach(
+                (cantidad, indice) => {
+
+                    totalFila += cantidad;
+
+                    totalesMes[indice] +=
+                        cantidad;
+
+
+                    celdasMeses += `
+                        <td>
+                            ${formatearDinero(cantidad)}
+                        </td>
+                    `;
+
+                }
+            );
+
+
+            fila.innerHTML = `
+
+                <td>
+                    ${obtenerNombreCuenta(grupo.cuenta)}
+                </td>
+
+                <td>
+                    ${grupo.proyecto}
+                </td>
+
+                <td>
+                    ${grupo.origen}
+                </td>
+
+                ${celdasMeses}
+
+                <td>
+                    <strong>
+                        ${formatearDinero(totalFila)}
+                    </strong>
+                </td>
+
+            `;
+
+
+            tbody.appendChild(fila);
+
+        });
+
+
+    const filaTotal =
+        document.createElement("tr");
+
+    filaTotal.className = "total";
+
+
+    let totalGeneral = 0;
+
+    let celdasTotales = "";
+
+
+    totalesMes.forEach(cantidad => {
+
+        totalGeneral += cantidad;
+
+        celdasTotales += `
+            <td>
+                ${formatearDinero(cantidad)}
+            </td>
+        `;
+
+    });
+
+
+    filaTotal.innerHTML = `
+
+        <td>TOTAL</td>
+
+        <td></td>
+
+        <td></td>
+
+        ${celdasTotales}
+
+        <td>
+            ${formatearDinero(totalGeneral)}
+        </td>
+
+    `;
+
+
+    tbody.appendChild(filaTotal);
+
+}
+
+
+/* =========================================================
+   RESUMEN
+========================================================= */
+
+function actualizarResumen() {
+
+    const total =
+        movimientos.reduce(
+            (suma,movimiento) =>
+                suma +
+                (
+                    Number(
+                        movimiento.cantidadTotal
+                    ) || 0
+                ),
+            0
+        );
+
+
+    document.getElementById(
+        "totalIngresos"
+    ).textContent =
+        formatearDinero(total);
+
+
+    document.getElementById(
+        "numeroMovimientos"
+    ).textContent =
+        movimientos.length;
+
+
+    document.getElementById(
+        "numeroCuentas"
+    ).textContent =
+        cuentas.length;
+
+}
+
+
+/* =========================================================
+   CONSTRUIR TODO
+========================================================= */
+
+function construirTodo() {
+
+    construirTablaMovimientos();
+
+    construirTablaMensual();
+
+    actualizarResumen();
+
+}
+
+
+/* =========================================================
+   JSON
+========================================================= */
+
+function descargarJSON() {
+
+    const copia = {
+
+        aplicacion:
+            "GERAVALON ANALISIS ECONOMICO",
+
+        tipo:
+            "INGRESOS",
+
+        ejercicio:
+            2026,
+
+        fechaCopia:
+            new Date().toISOString(),
+
+        cuentas:
+            cuentas,
+
+        movimientos:
+            movimientos
+
+    };
+
+
+    const blob =
+        new Blob(
+            [
+                JSON.stringify(
+                    copia,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const enlace =
+        document.createElement("a");
+
+
+    enlace.href = url;
+
+    enlace.download =
+        "GERAVALON_INGRESOS_2026.json";
+
+
+    enlace.click();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* =========================================================
+   CARGAR JSON
+========================================================= */
+
+function cargarJSON(event) {
+
+    const archivo =
+        event.target.files[0];
+
+
+    if (!archivo) {
+        return;
+    }
+
+
+    const lector =
+        new FileReader();
+
+
+    lector.onload = function(e) {
+
+        try {
+
+            const datos =
+                JSON.parse(
+                    e.target.result
+                );
+
+
+            let nuevosMovimientos;
+
+
+            if (Array.isArray(datos)) {
+
+                nuevosMovimientos =
+                    datos;
+
+            } else if (
+                datos &&
+                Array.isArray(
+                    datos.movimientos
+                )
+            ) {
+
+                nuevosMovimientos =
+                    datos.movimientos;
+
+            } else {
+
+                throw new Error();
+
+            }
+
+
+            const confirmar =
+                confirm(
+                    "LA COPIA SUSTITUIRÁ LOS INGRESOS ACTUALES. ¿CONTINUAR?"
+                );
+
+
+            if (!confirmar) {
+
+                event.target.value = "";
+
+                return;
+
+            }
+
+
+            movimientos =
+                nuevosMovimientos;
+
+
+            if (
+                datos &&
+                Array.isArray(
+                    datos.cuentas
+                )
+            ) {
+
+                cuentas =
+                    datos.cuentas;
+
+                guardarCuentas();
+
+                cargarSelectores();
+
+            }
+
+
+            guardarLocal();
+
+            construirTodo();
+
+
+            mostrarMensaje(
+                "COPIA CARGADA CORRECTAMENTE.",
+                true
+            );
+
+
+        } catch {
+
+            alert(
+                "EL ARCHIVO JSON NO ES VÁLIDO."
+            );
+
+        }
+
+
+        event.target.value = "";
+
+    };
+
+
+    lector.readAsText(archivo);
+
+}
+
+
+/* =========================================================
+   FORMATO
+========================================================= */
+
+function formatearDinero(valor) {
+
+    return new Intl.NumberFormat(
+        "es-ES",
+        {
+            style: "currency",
+            currency: "EUR"
+        }
+    ).format(
+        Number(valor) || 0
+    );
+
+}
+
+
+function formatearFecha(fecha) {
+
+    if (!fecha) {
+        return "";
+    }
+
+
+    const partes =
+        fecha.split("-");
+
+
+    if (partes.length !== 3) {
+        return fecha;
+    }
+
+
+    return (
+        partes[2] +
+        "/" +
+        partes[1] +
+        "/" +
+        partes[0]
+    );
+
+}
+
+
+/* =========================================================
+   MENSAJES
+========================================================= */
+
+function mostrarMensaje(texto, correcto) {
+
+    const elemento =
+        document.getElementById(
+            "mensaje"
+        );
+
+
+    elemento.textContent = texto;
+
+    elemento.className =
+        correcto
+        ? "mensaje ok"
+        : "mensaje error";
+
+
+    setTimeout(() => {
+
+        elemento.textContent = "";
+
+    },4000);
+
+}
+
+
+/* =========================================================
+   CERRAR MODAL HACIENDO CLIC FUERA
+========================================================= */
+
+document.getElementById(
+    "modalCuenta"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === this
+        ) {
+
+            cerrarNuevaCuenta();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
