@@ -13,10 +13,6 @@
   box-sizing: border-box;
 }
 
-:root {
-  --ancho-cuenta: 260px;
-}
-
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
@@ -98,11 +94,6 @@ body {
   margin-bottom: 10px;
 }
 
-.panel-datos {
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
 .panel-tabla {
   margin-bottom: 10px;
   overflow: hidden;
@@ -156,15 +147,16 @@ body {
   display: grid;
 
   grid-template-columns:
-    125px
-    145px
-    minmax(260px,1.4fr)
-    115px
-    minmax(230px,1fr)
-    150px
+    120px
+    135px
+    minmax(250px,1.4fr)
+    100px
+    minmax(210px,1fr)
+    135px
+    95px
     34px
-    105px
-    105px;
+    100px
+    100px;
 
   gap: 5px;
   align-items: center;
@@ -249,6 +241,29 @@ button {
 }
 
 /* =========================================================
+   PREVISUALIZACION IVA
+========================================================= */
+
+.previsualizacion-iva {
+  margin-top: 8px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  min-height: 20px;
+  color: #4b5563;
+  font-size: 11px;
+}
+
+.previsualizacion-iva strong {
+  color: #111827;
+}
+
+.previsualizacion-iva .base {
+  color: #047857;
+  font-weight: bold;
+}
+
+/* =========================================================
    ESTADO
 ========================================================= */
 
@@ -266,15 +281,6 @@ button {
 .estado.error {
   color: #b91c1c;
   font-weight: bold;
-}
-
-/* =========================================================
-   JSON
-========================================================= */
-
-.acciones-json {
-  display: flex;
-  gap: 6px;
 }
 
 /* =========================================================
@@ -418,16 +424,7 @@ td {
 @media(max-width:1200px) {
 
   .linea-entrada {
-    grid-template-columns:
-      120px
-      130px
-      minmax(240px,1fr)
-      100px
-      minmax(200px,1fr)
-      130px
-      34px
-      100px
-      100px;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
 }
@@ -501,7 +498,7 @@ td {
     <div class="tarjeta">
 
       <div class="titulo-resumen">
-        INGRESOS ACUMULADOS
+        INGRESOS ACUMULADOS SIN IVA
       </div>
 
       <div class="valor" id="totalIngresos">
@@ -593,17 +590,9 @@ td {
       id="origen"
       title="Origen">
 
-      <option value="GERA">
-        GERA
-      </option>
-
-      <option value="SIG">
-        SIG
-      </option>
-
-      <option value="DAVID">
-        DAVID
-      </option>
+      <option value="GERA">GERA</option>
+      <option value="SIG">SIG</option>
+      <option value="DAVID">DAVID</option>
 
     </select>
 
@@ -618,8 +607,22 @@ td {
       type="number"
       id="cantidad"
       step="0.01"
-      placeholder="IMPORTE €"
+      placeholder="TOTAL FACTURA €"
+      oninput="actualizarCalculoIVA()"
     >
+
+
+    <select
+      id="tipoIVA"
+      onchange="actualizarCalculoIVA()"
+      title="Tipo de IVA">
+
+      <option value="21">IVA 21%</option>
+      <option value="10">IVA 10%</option>
+      <option value="4">IVA 4%</option>
+      <option value="0">SIN IVA</option>
+
+    </select>
 
 
     <button
@@ -655,6 +658,32 @@ td {
   </div>
 
 
+  <div class="previsualizacion-iva">
+
+    <span>
+      TOTAL:
+      <strong id="vistaTotal">
+        0,00 €
+      </strong>
+    </span>
+
+    <span>
+      IVA:
+      <strong id="vistaIVA">
+        0,00 €
+      </strong>
+    </span>
+
+    <span>
+      BASE SIN IVA:
+      <span class="base" id="vistaBase">
+        0,00 €
+      </span>
+    </span>
+
+  </div>
+
+
   <div
     class="estado"
     id="mensaje">
@@ -675,7 +704,7 @@ td {
   <div style="padding:10px 10px 0">
 
     <div class="titulo">
-      INGRESOS POR MES
+      INGRESOS POR MES · SIN IVA
     </div>
 
   </div>
@@ -690,9 +719,7 @@ td {
         <tr>
 
           <th>CUENTA CONTABLE</th>
-
           <th>PROYECTO</th>
-
           <th>ORIGEN</th>
 
           <th>ENE</th>
@@ -770,16 +797,14 @@ td {
         <tr>
 
           <th>FECHA</th>
-
           <th>N.º FACTURA</th>
-
           <th>CUENTA</th>
-
           <th>ORIGEN</th>
-
           <th>PROYECTO</th>
 
-          <th>IMPORTE</th>
+          <th>BASE</th>
+          <th>IVA</th>
+          <th>TOTAL FACTURA</th>
 
           <th>ACCIÓN</th>
 
@@ -950,6 +975,8 @@ document.addEventListener(
 
     ponerFechaHoy();
 
+    actualizarCalculoIVA();
+
     construirTodo();
 
   }
@@ -1001,6 +1028,129 @@ function ponerFechaHoy(){
     )
     .value =
     `2026-${mm}-${dd}`;
+
+}
+
+
+/* =========================================================
+   CALCULO IVA
+========================================================= */
+
+function calcularImportesIVA(
+  total,
+  tipoIVA
+){
+
+  const importeTotal =
+    Number(total) || 0;
+
+  const porcentajeIVA =
+    Number(tipoIVA) || 0;
+
+
+  if(
+    porcentajeIVA === 0
+  ){
+
+    return {
+
+      total:
+        importeTotal,
+
+      base:
+        importeTotal,
+
+      iva:
+        0
+
+    };
+
+  }
+
+
+  const base =
+    importeTotal
+    /
+    (
+      1
+      +
+      porcentajeIVA / 100
+    );
+
+
+  const iva =
+    importeTotal
+    -
+    base;
+
+
+  return {
+
+    total:
+      importeTotal,
+
+    base:
+      base,
+
+    iva:
+      iva
+
+  };
+
+}
+
+
+function actualizarCalculoIVA(){
+
+  const total =
+    parseFloat(
+      document.getElementById(
+        "cantidad"
+      ).value
+    )
+    ||
+    0;
+
+
+  const tipoIVA =
+    parseFloat(
+      document.getElementById(
+        "tipoIVA"
+      ).value
+    )
+    ||
+    0;
+
+
+  const calculo =
+    calcularImportesIVA(
+      total,
+      tipoIVA
+    );
+
+
+  document.getElementById(
+    "vistaTotal"
+  ).textContent =
+    formatearDinero(
+      calculo.total
+    );
+
+
+  document.getElementById(
+    "vistaIVA"
+  ).textContent =
+    formatearDinero(
+      calculo.iva
+    );
+
+
+  document.getElementById(
+    "vistaBase"
+  ).textContent =
+    formatearDinero(
+      calculo.base
+    );
 
 }
 
@@ -1260,20 +1410,6 @@ function abrirNuevaCuenta(){
   ).style.display =
     "flex";
 
-
-  setTimeout(
-    () => {
-
-      document
-        .getElementById(
-          "nuevoCodigo"
-        )
-        .focus();
-
-    },
-    100
-  );
-
 }
 
 
@@ -1375,7 +1511,7 @@ function guardarNuevaCuenta(){
 
 
 /* =========================================================
-   CARGAR MOVIMIENTOS
+   MOVIMIENTOS
 ========================================================= */
 
 function cargarMovimientos(){
@@ -1422,10 +1558,6 @@ function cargarMovimientos(){
 
 }
 
-
-/* =========================================================
-   GUARDAR LOCAL
-========================================================= */
 
 function guardarLocal(){
 
@@ -1480,12 +1612,22 @@ function guardarMovimiento(){
     ).value;
 
 
-  const cantidad =
+  const importeConIVA =
     parseFloat(
       document.getElementById(
         "cantidad"
       ).value
     );
+
+
+  const tipoIVA =
+    parseFloat(
+      document.getElementById(
+        "tipoIVA"
+      ).value
+    )
+    ||
+    0;
 
 
   if(!fecha){
@@ -1538,10 +1680,10 @@ function guardarMovimiento(){
 
   if(
     Number.isNaN(
-      cantidad
+      importeConIVA
     )
     ||
-    cantidad === 0
+    importeConIVA === 0
   ){
 
     mostrarMensaje(
@@ -1578,6 +1720,13 @@ function guardarMovimiento(){
   }
 
 
+  const calculo =
+    calcularImportesIVA(
+      importeConIVA,
+      tipoIVA
+    );
+
+
   const movimiento = {
 
     id:
@@ -1604,8 +1753,17 @@ function guardarMovimiento(){
     proyecto:
       proyecto,
 
+    importeConIVA:
+      calculo.total,
+
+    tipoIVA:
+      tipoIVA,
+
+    importeIVA:
+      calculo.iva,
+
     cantidadTotal:
-      cantidad
+      calculo.base
 
   };
 
@@ -1630,8 +1788,15 @@ function guardarMovimiento(){
   ).value = "";
 
 
+  actualizarCalculoIVA();
+
+
   mostrarMensaje(
-    "Ingreso guardado correctamente.",
+    "Ingreso guardado sin IVA: "
+    +
+    formatearDinero(
+      calculo.base
+    ),
     true
   );
 
@@ -1658,12 +1823,6 @@ function eliminarMovimiento(id){
   }
 
 
-  const factura =
-    movimiento.numeroFactura
-    ||
-    "SIN N.º DE FACTURA";
-
-
   const confirmar =
     confirm(
 
@@ -1671,11 +1830,15 @@ function eliminarMovimiento(id){
       +
       "FACTURA: "
       +
-      factura
+      (
+        movimiento.numeroFactura
+        ||
+        "—"
+      )
       +
       "\n"
       +
-      "IMPORTE: "
+      "BASE: "
       +
       formatearDinero(
         movimiento.cantidadTotal
@@ -1873,7 +2036,7 @@ function construirTablaMovimientos(){
     tr.innerHTML = `
 
       <td
-        colspan="7"
+        colspan="9"
         style="
           text-align:center;
           color:#9ca3af;
@@ -1907,6 +2070,68 @@ function construirTablaMovimientos(){
         );
 
 
+      /*
+        MOVIMIENTOS ANTIGUOS:
+        Si no tienen los campos de IVA,
+        conservamos su cantidadTotal tal cual.
+      */
+
+      const esNuevoConIVA =
+        movimiento.importeConIVA !== undefined;
+
+
+      const base =
+        Number(
+          movimiento.cantidadTotal
+        )
+        ||
+        0;
+
+
+      const iva =
+        esNuevoConIVA
+        ?
+        Number(
+          movimiento.importeIVA
+        )
+        ||
+        0
+        :
+        0;
+
+
+      const total =
+        esNuevoConIVA
+        ?
+        Number(
+          movimiento.importeConIVA
+        )
+        ||
+        0
+        :
+        base;
+
+
+      const textoIVA =
+        esNuevoConIVA
+        ?
+        formatearDinero(iva)
+        +
+        " ("
+        +
+        (
+          Number(
+            movimiento.tipoIVA
+          )
+          ||
+          0
+        )
+        +
+        "%)"
+        :
+        "—";
+
+
       tr.innerHTML = `
 
         <td class="texto">
@@ -1935,7 +2160,17 @@ function construirTablaMovimientos(){
 
 
         <td class="numero">
-          ${formatearDinero(movimiento.cantidadTotal)}
+          ${formatearDinero(base)}
+        </td>
+
+
+        <td class="numero">
+          ${textoIVA}
+        </td>
+
+
+        <td class="numero">
+          ${formatearDinero(total)}
         </td>
 
 
@@ -2322,7 +2557,7 @@ function construirTodo(){
 
 
 /* =========================================================
-   GUARDAR JSON
+   JSON
 ========================================================= */
 
 function descargarJSON(){
