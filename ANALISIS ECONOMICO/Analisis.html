@@ -104,16 +104,45 @@ header .grupo {
     font-size: 18px;
 }
 
-/* gráfico provisional */
+/* =========================
+   EVOLUCIÓN MENSUAL
+========================= */
 
 .grafico {
-    height: 260px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px dashed #bbb;
-    color: #888;
+    min-height: 260px;
+    border: 1px solid #e5e7eb;
     background: #fafafa;
+    padding: 15px;
+    overflow-x: auto;
+}
+
+.tabla-mensual {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+}
+
+.tabla-mensual th,
+.tabla-mensual td {
+    padding: 8px 6px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.tabla-mensual th:first-child,
+.tabla-mensual td:first-child {
+    text-align: left;
+}
+
+.tabla-mensual thead th {
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.tabla-mensual tbody td {
+    font-size: 12px;
+    font-weight: bold;
 }
 
 /* =========================
@@ -160,6 +189,10 @@ header .grupo {
     background: #2563eb;
 }
 
+.proyectos .icono {
+    background: #16a34a;
+}
+
 .boton .nombre {
     font-weight: bold;
 }
@@ -169,8 +202,6 @@ header .grupo {
     color: #777;
     margin-top: 4px;
 }
-
-/* botones todavía no disponibles */
 
 .deshabilitado {
     opacity: 0.45;
@@ -206,7 +237,6 @@ header .grupo {
     }
 }
 </style>
-
 </head>
 
 <body>
@@ -235,22 +265,22 @@ header .grupo {
 
         <div class="tarjeta">
             <div class="titulo">INGRESOS ACUMULADOS</div>
-            <div class="valor">0,00 €</div>
+            <div class="valor" id="ingresosAcumulados">0,00 €</div>
         </div>
 
         <div class="tarjeta">
             <div class="titulo">GASTOS ACUMULADOS</div>
-            <div class="valor">0,00 €</div>
+            <div class="valor" id="gastosAcumulados">0,00 €</div>
         </div>
 
         <div class="tarjeta">
             <div class="titulo">RESULTADO</div>
-            <div class="valor positivo">0,00 €</div>
+            <div class="valor" id="resultadoAcumulado">0,00 €</div>
         </div>
 
         <div class="tarjeta">
             <div class="titulo">CAJAS / BANCOS</div>
-            <div class="valor">0,00 €</div>
+            <div class="valor" id="cajasBancos">0,00 €</div>
         </div>
 
     </div>
@@ -267,20 +297,23 @@ header .grupo {
             <h2>Estado general</h2>
 
             <p>
-                Ingresos: <strong>0,00 €</strong>
+                Ingresos:
+                <strong id="estadoIngresos">0,00 €</strong>
             </p>
 
             <p>
-                Gastos: <strong>0,00 €</strong>
+                Gastos:
+                <strong id="estadoGastos">0,00 €</strong>
             </p>
 
             <p>
-                Resultado: 
-                <strong class="positivo">0,00 €</strong>
+                Resultado:
+                <strong id="estadoResultado">0,00 €</strong>
             </p>
 
             <p>
-                Proyectos activos: <strong>0</strong>
+                Proyectos activos:
+                <strong id="proyectosActivos">0</strong>
             </p>
 
         </div>
@@ -291,9 +324,45 @@ header .grupo {
             <h2>Evolución mensual</h2>
 
             <div class="grafico">
-                GRÁFICO INGRESOS · GASTOS · RESULTADO
-                <br>
-                ENE — FEB — MAR — ABR — MAY — JUN — JUL — AGO — SEP — OCT — NOV — DIC
+
+                <table class="tabla-mensual">
+
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>ENE</th>
+                            <th>FEB</th>
+                            <th>MAR</th>
+                            <th>ABR</th>
+                            <th>MAY</th>
+                            <th>JUN</th>
+                            <th>JUL</th>
+                            <th>AGO</th>
+                            <th>SEP</th>
+                            <th>OCT</th>
+                            <th>NOV</th>
+                            <th>DIC</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr id="filaIngresos">
+                            <td>INGRESOS</td>
+                        </tr>
+
+                        <tr id="filaGastos">
+                            <td>GASTOS</td>
+                        </tr>
+
+                        <tr id="filaResultado">
+                            <td>RESULTADO</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
             </div>
 
         </div>
@@ -306,8 +375,6 @@ header .grupo {
     ========================== -->
 
     <div class="menu">
-
-        <!-- ÚNICO BOTÓN ACTIVO -->
 
         <a href="EntradaDatos.html" class="boton activo entrada">
 
@@ -323,11 +390,11 @@ header .grupo {
         </a>
 
 
-        <!-- FUTUROS BOTONES -->
+        <!-- PROYECTOS YA ACTIVO -->
 
-        <div class="boton deshabilitado">
+        <a href="Proyectos.html" class="boton activo proyectos">
 
-            <div class="icono" style="background:#16a34a">P</div>
+            <div class="icono">P</div>
 
             <div>
                 <div class="nombre">PROYECTOS</div>
@@ -336,7 +403,7 @@ header .grupo {
                 </div>
             </div>
 
-        </div>
+        </a>
 
 
         <div class="boton deshabilitado">
@@ -402,6 +469,547 @@ header .grupo {
     </div>
 
 </div>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURACIÓN
+========================================================= */
+
+const CLAVE_DATOS =
+    "geravalon_analisis_economico_2026";
+
+
+const proyectos = [
+
+    "RECICLAJE DE ACEITES Y GRASAS",
+    "LIMPIEZA INDUSTRIAL",
+    "LIMPIEZA HOSTELERIA",
+    "SERVICIOS VARIOS",
+    "INSTALACION Y REPARACION",
+    "GASTOS GENERALES",
+    "TRADER"
+
+];
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    actualizarAnalisis
+);
+
+
+/* =========================================================
+   LEER MOVIMIENTOS
+========================================================= */
+
+function leerMovimientos(){
+
+    const guardado =
+        localStorage.getItem(
+            CLAVE_DATOS
+        );
+
+    if(!guardado){
+
+        return [];
+
+    }
+
+    try{
+
+        const datos =
+            JSON.parse(
+                guardado
+            );
+
+        return Array.isArray(datos)
+            ? datos
+            : [];
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Error leyendo movimientos:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================================================
+   MESES DE UN PERIODO
+========================================================= */
+
+function obtenerMesesPeriodo(
+    desde,
+    hasta
+){
+
+    const inicio =
+        new Date(
+            desde + "T00:00:00"
+        );
+
+    const fin =
+        new Date(
+            hasta + "T00:00:00"
+        );
+
+    const resultado = [];
+
+    let anio =
+        inicio.getFullYear();
+
+    let mes =
+        inicio.getMonth();
+
+
+    while(
+
+        anio < fin.getFullYear()
+
+        ||
+
+        (
+            anio === fin.getFullYear()
+            &&
+            mes <= fin.getMonth()
+        )
+
+    ){
+
+        if(anio === 2026){
+
+            resultado.push(
+                mes
+            );
+
+        }
+
+        mes++;
+
+        if(mes > 11){
+
+            mes = 0;
+            anio++;
+
+        }
+
+    }
+
+    return resultado;
+
+}
+
+
+/* =========================================================
+   ACTUALIZAR CUADRO DE MANDO
+========================================================= */
+
+function actualizarAnalisis(){
+
+    const movimientos =
+        leerMovimientos();
+
+
+    /* ---------------------------------------------
+       GASTOS TOTALES
+    --------------------------------------------- */
+
+    let gastosTotales = 0;
+
+
+    movimientos.forEach(
+        movimiento => {
+
+            gastosTotales +=
+                Number(
+                    movimiento.cantidadTotal
+                )
+                ||
+                0;
+
+        }
+    );
+
+
+    /*
+       DE MOMENTO NO EXISTEN INGRESOS
+       EN EntradaDatos.html.
+
+       Por eso quedan en cero hasta que
+       programemos su entrada.
+    */
+
+    const ingresosTotales = 0;
+
+
+    const resultado =
+        ingresosTotales
+        -
+        gastosTotales;
+
+
+    /* ---------------------------------------------
+       TARJETAS
+    --------------------------------------------- */
+
+    document.getElementById(
+        "ingresosAcumulados"
+    ).textContent =
+        formatoEuro(
+            ingresosTotales
+        );
+
+
+    document.getElementById(
+        "gastosAcumulados"
+    ).textContent =
+        formatoEuro(
+            gastosTotales
+        );
+
+
+    document.getElementById(
+        "resultadoAcumulado"
+    ).textContent =
+        formatoEuro(
+            resultado
+        );
+
+
+    aplicarColorResultado(
+        document.getElementById(
+            "resultadoAcumulado"
+        ),
+        resultado
+    );
+
+
+    /* ---------------------------------------------
+       ESTADO GENERAL
+    --------------------------------------------- */
+
+    document.getElementById(
+        "estadoIngresos"
+    ).textContent =
+        formatoEuro(
+            ingresosTotales
+        );
+
+
+    document.getElementById(
+        "estadoGastos"
+    ).textContent =
+        formatoEuro(
+            gastosTotales
+        );
+
+
+    const estadoResultado =
+        document.getElementById(
+            "estadoResultado"
+        );
+
+
+    estadoResultado.textContent =
+        formatoEuro(
+            resultado
+        );
+
+
+    aplicarColorResultado(
+        estadoResultado,
+        resultado
+    );
+
+
+    /* ---------------------------------------------
+       PROYECTOS ACTIVOS
+    --------------------------------------------- */
+
+    const proyectosConDatos =
+        new Set();
+
+
+    movimientos.forEach(
+        movimiento => {
+
+            const cantidad =
+                Number(
+                    movimiento.cantidadTotal
+                )
+                ||
+                0;
+
+
+            if(
+                movimiento.proyecto
+                &&
+                Math.abs(cantidad) > 0.000001
+            ){
+
+                proyectosConDatos.add(
+                    movimiento.proyecto
+                );
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "proyectosActivos"
+    ).textContent =
+        proyectosConDatos.size;
+
+
+    /* ---------------------------------------------
+       EVOLUCIÓN MENSUAL
+    --------------------------------------------- */
+
+    const gastosMes =
+        new Array(12)
+        .fill(0);
+
+
+    movimientos.forEach(
+        movimiento => {
+
+
+            const meses =
+                obtenerMesesPeriodo(
+                    movimiento.desde,
+                    movimiento.hasta
+                );
+
+
+            if(meses.length === 0){
+
+                return;
+
+            }
+
+
+            const cantidad =
+                Number(
+                    movimiento.cantidadTotal
+                )
+                ||
+                0;
+
+
+            const mensual =
+                cantidad
+                /
+                meses.length;
+
+
+            meses.forEach(
+                mes => {
+
+                    gastosMes[mes] +=
+                        mensual;
+
+                }
+            );
+
+        }
+    );
+
+
+    const ingresosMes =
+        new Array(12)
+        .fill(0);
+
+
+    const resultadoMes =
+        ingresosMes.map(
+            (ingreso, indice) =>
+                ingreso
+                -
+                gastosMes[indice]
+        );
+
+
+    rellenarFila(
+        "filaIngresos",
+        ingresosMes
+    );
+
+
+    rellenarFila(
+        "filaGastos",
+        gastosMes
+    );
+
+
+    rellenarFila(
+        "filaResultado",
+        resultadoMes,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   RELLENAR FILA MENSUAL
+========================================================= */
+
+function rellenarFila(
+    idFila,
+    valores,
+    colorear = false
+){
+
+    const fila =
+        document.getElementById(
+            idFila
+        );
+
+
+    while(
+        fila.children.length > 1
+    ){
+
+        fila.removeChild(
+            fila.lastChild
+        );
+
+    }
+
+
+    valores.forEach(
+        valor => {
+
+            const td =
+                document.createElement(
+                    "td"
+                );
+
+
+            td.textContent =
+                formatoNumero(
+                    valor
+                );
+
+
+            if(colorear){
+
+                if(valor > 0){
+
+                    td.classList.add(
+                        "positivo"
+                    );
+
+                }
+
+                else if(valor < 0){
+
+                    td.classList.add(
+                        "negativo"
+                    );
+
+                }
+
+            }
+
+
+            fila.appendChild(
+                td
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   COLOR RESULTADO
+========================================================= */
+
+function aplicarColorResultado(
+    elemento,
+    valor
+){
+
+    elemento.classList.remove(
+        "positivo",
+        "negativo"
+    );
+
+
+    if(valor >= 0){
+
+        elemento.classList.add(
+            "positivo"
+        );
+
+    }
+
+    else{
+
+        elemento.classList.add(
+            "negativo"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FORMATO
+========================================================= */
+
+function formatoNumero(
+    numero
+){
+
+    return Number(
+        numero
+    ).toLocaleString(
+
+        "es-ES",
+
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+
+    );
+
+}
+
+
+function formatoEuro(
+    numero
+){
+
+    return formatoNumero(
+        numero
+    )
+    +
+    " €";
+
+}
+
+</script>
 
 </body>
 </html>
