@@ -1,18 +1,15 @@
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Entrada de datos - Análisis Económico</title>
+<title>GERAVALON · Gastos</title>
 
 <style>
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 :root {
   --ancho-cuenta: 260px;
@@ -32,18 +29,39 @@ body {
 
 /* =========================================================
    CABECERA
-   ========================================================= */
+========================================================= */
 
 .cabecera {
+  height: 76px;
+  background: #1f2937;
+  color: white;
+  padding: 14px 22px;
+
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: space-between;
 }
 
-.cabecera h1 {
+.cabecera-titulo h1 {
   margin: 0;
   font-size: 21px;
+}
+
+.cabecera-titulo p {
+  margin: 3px 0 0;
+  color: #cbd5e1;
+  font-size: 11px;
+}
+
+.cabecera-derecha {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.ejercicio {
+  font-weight: bold;
+  font-size: 12px;
 }
 
 .volver {
@@ -57,7 +75,7 @@ body {
 
 /* =========================================================
    PANELES
-   ========================================================= */
+========================================================= */
 
 .panel {
   background: white;
@@ -70,6 +88,21 @@ body {
   margin-bottom: 10px;
 }
 
+.panel-filtros {
+  padding: 9px 10px;
+  margin-bottom: 8px;
+}
+
+.panel-tabla {
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.panel-movimientos {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
 .titulo {
   font-weight: bold;
   font-size: 13px;
@@ -77,22 +110,25 @@ body {
 }
 
 /* =========================================================
-   LINEA DE ENTRADA
-   ========================================================= */
+   ENTRADA
+========================================================= */
 
 .linea-entrada {
   display: grid;
+
   grid-template-columns:
-    125px
-    125px
-    260px
-    120px
-    1fr
-    260px
+    115px
+    115px
+    115px
+    minmax(220px,1fr)
+    90px
+    minmax(200px,1fr)
+    130px
+    85px
     34px
     34px
-    105px
-    105px;
+    95px
+    95px;
 
   gap: 5px;
   align-items: center;
@@ -118,10 +154,10 @@ button {
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
+  height: 30px;
 }
 
 .icono {
-  height: 30px;
   width: 34px;
   font-size: 17px;
   padding: 0;
@@ -132,38 +168,61 @@ button {
   color: white;
 }
 
+.guardar:hover {
+  background: #15803d;
+}
+
 .borrar {
   background: #dc2626;
   color: white;
 }
 
 .json {
-  height: 30px;
   padding: 0 8px;
   background: #2563eb;
   color: white;
   font-size: 10px;
 }
 
-/* =========================================================
-   FILTROS
-   ========================================================= */
-
-.panel-filtros {
-  padding: 9px 10px;
-  margin-bottom: 8px;
+.json-gris {
+  padding: 0 8px;
+  background: #e5e7eb;
+  color: #111827;
+  font-size: 10px;
 }
+
+/* =========================================================
+   CALCULO IVA
+========================================================= */
+
+.previsualizacion-iva {
+  margin-top: 8px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  min-height: 20px;
+  color: #4b5563;
+  font-size: 11px;
+}
+
+.previsualizacion-iva strong {
+  color: #111827;
+}
+
+.previsualizacion-iva .base {
+  color: #047857;
+  font-weight: bold;
+}
+
+/* =========================================================
+   FILTROS TABLA MENSUAL
+========================================================= */
 
 .filtros {
   display: grid;
   grid-template-columns: 300px 280px 1fr auto;
   gap: 8px;
   align-items: center;
-}
-
-.filtros select,
-.filtros input {
-  height: 30px;
 }
 
 .ocultar-vacias {
@@ -181,18 +240,17 @@ button {
 }
 
 /* =========================================================
-   TABLA
-   ========================================================= */
-
-.panel-tabla {
-  overflow: hidden;
-}
+   TABLAS
+========================================================= */
 
 .tabla-contenedor {
-  height: calc(100vh - 210px);
-  min-height: 420px;
   overflow: auto;
   position: relative;
+}
+
+.tabla-mensual {
+  max-height: 520px;
+  min-height: 300px;
 }
 
 table {
@@ -224,10 +282,6 @@ tbody tr:hover {
   background: #f8fafc;
 }
 
-/* =========================================================
-   COLUMNA CUENTA REDIMENSIONABLE
-   ========================================================= */
-
 .cuenta {
   width: var(--ancho-cuenta);
   min-width: var(--ancho-cuenta);
@@ -251,6 +305,14 @@ tbody tr:hover {
   text-align: right;
 }
 
+.texto {
+  text-align: left;
+}
+
+.numero {
+  text-align: right;
+}
+
 .valor-con-datos {
   font-weight: bold;
   background: #ecfdf5;
@@ -262,7 +324,7 @@ tbody tr:hover {
 
 /* =========================================================
    COLUMNAS FIJAS
-   ========================================================= */
+========================================================= */
 
 th.col-cuenta,
 td.col-cuenta {
@@ -295,12 +357,8 @@ tbody tr:hover td.col-proyecto {
 }
 
 /* =========================================================
-   TIRADOR PARA CAMBIAR ANCHO
-   ========================================================= */
-
-th.col-cuenta {
-  position: sticky;
-}
+   REDIMENSIONADOR
+========================================================= */
 
 .redimensionador {
   position: absolute;
@@ -317,8 +375,37 @@ th.col-cuenta {
 }
 
 /* =========================================================
+   MOVIMIENTOS
+========================================================= */
+
+.filtros-movimientos {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.limpiar-filtros {
+  background: #e5e7eb;
+  color: #111827;
+  padding: 0 12px;
+}
+
+.eliminar {
+  background: #dc2626;
+  color: white;
+  height: 26px;
+  padding: 0 9px;
+  font-size: 10px;
+}
+
+.eliminar:hover {
+  background: #b91c1c;
+}
+
+/* =========================================================
    ESTADO
-   ========================================================= */
+========================================================= */
 
 .estado {
   margin-top: 6px;
@@ -326,25 +413,32 @@ th.col-cuenta {
   font-size: 10px;
 }
 
+.estado.ok {
+  color: #047857;
+  font-weight: bold;
+}
+
 /* =========================================================
-   PANTALLAS MAS PEQUEÑAS
-   ========================================================= */
+   RESPONSIVE
+========================================================= */
 
 @media(max-width:1200px) {
 
   .linea-entrada {
-    grid-template-columns:
-      120px
-      115px
-      115px
-      220px
-      85px
-      190px
-      95px
-      32px
-      32px
-      100px
-      100px;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+}
+
+@media(max-width:800px) {
+
+  .linea-entrada {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .filtros,
+  .filtros-movimientos {
+    grid-template-columns: 1fr;
   }
 
 }
@@ -354,17 +448,29 @@ th.col-cuenta {
 
 <body>
 
-<div class="pagina">
+<!-- =====================================================
+     CABECERA
+====================================================== -->
 
-  <!-- =====================================================
-       CABECERA
-       ===================================================== -->
+<div class="cabecera">
 
-  <div class="cabecera">
+  <div class="cabecera-titulo">
 
     <h1>
-      ENTRADA DE DATOS · ANÁLISIS ECONÓMICO
+      GERAVALON · GASTOS
     </h1>
+
+    <p>
+      ANÁLISIS ECONÓMICO · EJERCICIO 2026
+    </p>
+
+  </div>
+
+  <div class="cabecera-derecha">
+
+    <div class="ejercicio">
+      Ejercicio 2026
+    </div>
 
     <a href="Analisis.html" class="volver">
       ← VOLVER
@@ -372,264 +478,379 @@ th.col-cuenta {
 
   </div>
 
+</div>
 
-  <!-- =====================================================
-       ENTRADA DE GASTOS
-       ===================================================== -->
 
-  <div class="panel panel-entrada">
+<div class="pagina">
+
+<!-- =====================================================
+     ENTRADA
+====================================================== -->
+
+<div class="panel panel-entrada">
+
+  <div class="titulo">
+    INTRODUCIR GASTO
+  </div>
+
+  <div class="linea-entrada">
+
+    <select id="modoFecha" onchange="cambiarModoFecha()">
+
+      <option value="periodo">
+        FECHA A FECHA
+      </option>
+
+      <option value="mes">
+        MES CONCRETO
+      </option>
+
+    </select>
+
+
+    <input
+      type="date"
+      id="fechaDesde"
+      min="2026-01-01"
+      max="2026-12-31"
+      title="Inicio del periodo"
+    >
+
+
+    <input
+      type="date"
+      id="fechaHasta"
+      min="2026-01-01"
+      max="2026-12-31"
+      title="Final del periodo"
+    >
+
+
+    <select
+      id="mesConcreto"
+      style="display:none"
+    >
+
+      <option value="">MES</option>
+      <option value="0">ENERO</option>
+      <option value="1">FEBRERO</option>
+      <option value="2">MARZO</option>
+      <option value="3">ABRIL</option>
+      <option value="4">MAYO</option>
+      <option value="5">JUNIO</option>
+      <option value="6">JULIO</option>
+      <option value="7">AGOSTO</option>
+      <option value="8">SEPTIEMBRE</option>
+      <option value="9">OCTUBRE</option>
+      <option value="10">NOVIEMBRE</option>
+      <option value="11">DICIEMBRE</option>
+
+    </select>
+
+
+    <select id="cuentaEntrada">
+    </select>
+
+
+    <select id="origen">
+
+      <option value="">
+        ORIGEN
+      </option>
+
+      <option value="GERA">
+        GERA
+      </option>
+
+      <option value="SIG">
+        SIG
+      </option>
+
+      <option value="DAVID">
+        DAVID
+      </option>
+
+    </select>
+
+
+    <select id="proyectoEntrada">
+    </select>
+
+
+    <input
+      type="number"
+      id="cantidad"
+      step="0.01"
+      placeholder="TOTAL FACTURA €"
+      oninput="actualizarCalculoIVA()"
+    >
+
+
+    <select
+      id="tipoIVA"
+      onchange="actualizarCalculoIVA()"
+      title="Tipo de IVA"
+    >
+
+      <option value="21">IVA 21%</option>
+      <option value="10">IVA 10%</option>
+      <option value="4">IVA 4%</option>
+      <option value="0">SIN IVA</option>
+
+    </select>
+
+
+    <button
+      class="icono guardar"
+      onclick="guardarMovimiento()"
+      title="Guardar gasto">
+      💾
+    </button>
+
+
+    <button
+      class="icono borrar"
+      onclick="limpiarEntrada()"
+      title="Limpiar línea">
+      🗑️
+    </button>
+
+
+    <button
+      class="json"
+      onclick="guardarJSON()">
+      GUARDAR JSON
+    </button>
+
+
+    <button
+      class="json-gris"
+      onclick="seleccionarJSON()">
+      CARGAR JSON
+    </button>
+
+
+    <input
+      type="file"
+      id="archivoJSON"
+      accept=".json"
+      style="display:none"
+      onchange="cargarJSON(this)"
+    >
+
+  </div>
+
+
+  <div class="previsualizacion-iva">
+
+    <span>
+      TOTAL:
+      <strong id="vistaTotal">0,00 €</strong>
+    </span>
+
+    <span>
+      IVA:
+      <strong id="vistaIVA">0,00 €</strong>
+    </span>
+
+    <span>
+      BASE SIN IVA:
+      <span class="base" id="vistaBase">0,00 €</span>
+    </span>
+
+  </div>
+
+
+  <div class="estado" id="estado">
+    Los datos se guardan automáticamente en este navegador.
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     FILTROS TABLA MENSUAL
+====================================================== -->
+
+<div class="panel panel-filtros">
+
+  <div class="filtros">
+
+    <select
+      id="filtroCuenta"
+      onchange="construirTabla()">
+    </select>
+
+
+    <select
+      id="filtroProyecto"
+      onchange="construirTabla()">
+    </select>
+
+
+    <input
+      id="buscar"
+      type="text"
+      placeholder="🔎 Buscar cuenta o proyecto..."
+      oninput="construirTabla()"
+    >
+
+
+    <label class="ocultar-vacias">
+
+      <input
+        type="checkbox"
+        id="ocultarVacias"
+        onchange="construirTabla()"
+        checked
+      >
+
+      OCULTAR FILAS SIN GASTO
+
+    </label>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     TABLA MENSUAL
+====================================================== -->
+
+<div class="panel panel-tabla">
+
+  <div style="padding:10px 10px 0">
 
     <div class="titulo">
-      INTRODUCIR GASTO
-    </div>
-
-    <div class="linea-entrada">
-
-      <select id="modoFecha" onchange="cambiarModoFecha()">
-
-        <option value="periodo">
-          FECHA A FECHA
-        </option>
-
-        <option value="mes">
-          MES CONCRETO
-        </option>
-
-      </select>
-
-
-      <input
-        type="date"
-        id="fechaDesde"
-        min="2026-01-01"
-        max="2026-12-31"
-        title="Inicio del periodo"
-      >
-
-
-      <input
-        type="date"
-        id="fechaHasta"
-        min="2026-01-01"
-        max="2026-12-31"
-        title="Final del periodo"
-      >
-
-
-      <select
-        id="mesConcreto"
-        style="display:none"
-      >
-
-        <option value="">MES</option>
-
-        <option value="0">ENERO</option>
-        <option value="1">FEBRERO</option>
-        <option value="2">MARZO</option>
-        <option value="3">ABRIL</option>
-        <option value="4">MAYO</option>
-        <option value="5">JUNIO</option>
-        <option value="6">JULIO</option>
-        <option value="7">AGOSTO</option>
-        <option value="8">SEPTIEMBRE</option>
-        <option value="9">OCTUBRE</option>
-        <option value="10">NOVIEMBRE</option>
-        <option value="11">DICIEMBRE</option>
-
-      </select>
-
-
-      <select id="cuentaEntrada">
-      </select>
-
-
-      <select id="origen">
-
-        <option value="">
-          ORIGEN
-        </option>
-
-        <option value="GERA">
-          GERA
-        </option>
-
-        <option value="SIG">
-          SIG
-        </option>
-
-        <option value="DAVID">
-          DAVID
-        </option>
-
-      </select>
-
-
-      <select id="proyectoEntrada">
-      </select>
-
-
-      <input
-        type="number"
-        id="cantidad"
-        step="0.01"
-        placeholder="CANTIDAD €"
-      >
-
-
-      <button
-        class="icono guardar"
-        onclick="guardarMovimiento()"
-        title="Guardar gasto">
-        💾
-      </button>
-
-
-      <button
-        class="icono borrar"
-        onclick="limpiarEntrada()"
-        title="Limpiar línea">
-        🗑️
-      </button>
-
-
-      <button
-        class="json"
-        onclick="guardarJSON()">
-        GUARDAR JSON
-      </button>
-
-
-      <button
-        class="json"
-        onclick="seleccionarJSON()">
-        CARGAR JSON
-      </button>
-
-
-      <input
-        type="file"
-        id="archivoJSON"
-        accept=".json"
-        style="display:none"
-        onchange="cargarJSON(this)"
-      >
-
-    </div>
-
-
-    <div class="estado" id="estado">
-      Los datos se guardan automáticamente en este navegador.
+      GASTOS POR MES · SIN IVA
     </div>
 
   </div>
 
+  <div class="tabla-contenedor tabla-mensual">
 
-  <!-- =====================================================
-       FILTROS
-       ===================================================== -->
+    <table>
 
-  <div class="panel panel-filtros">
+      <thead>
 
-    <div class="filtros">
+        <tr>
 
+          <th
+            class="col-cuenta cuenta"
+            id="cabeceraCuenta">
 
-      <select
-        id="filtroCuenta"
-        onchange="construirTabla()">
-      </select>
+            CUENTA CONTABLE
 
+            <span
+              class="redimensionador"
+              id="redimensionadorCuenta">
+            </span>
 
-      <select
-        id="filtroProyecto"
-        onchange="construirTabla()">
-      </select>
-
-
-      <input
-        id="buscar"
-        type="text"
-        placeholder="🔎 Buscar cuenta o proyecto..."
-        oninput="construirTabla()"
-      >
+          </th>
 
 
-      <label class="ocultar-vacias">
+          <th class="col-proyecto proyecto">
+            PROYECTO
+          </th>
 
-        <input
-          type="checkbox"
-          id="ocultarVacias"
-          onchange="construirTabla()"
-          checked
-        >
 
-        OCULTAR FILAS SIN GASTO
+          <th class="mes">ENE</th>
+          <th class="mes">FEB</th>
+          <th class="mes">MAR</th>
+          <th class="mes">ABR</th>
+          <th class="mes">MAY</th>
+          <th class="mes">JUN</th>
+          <th class="mes">JUL</th>
+          <th class="mes">AGO</th>
+          <th class="mes">SEP</th>
+          <th class="mes">OCT</th>
+          <th class="mes">NOV</th>
+          <th class="mes">DIC</th>
 
-      </label>
+        </tr>
 
-    </div>
+      </thead>
+
+      <tbody id="tablaGastos">
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     MOVIMIENTOS
+====================================================== -->
+
+<div class="panel panel-movimientos">
+
+  <div class="titulo">
+    MOVIMIENTOS
+  </div>
+
+
+  <div class="filtros-movimientos">
+
+    <select
+      id="filtroCuentaMovimiento"
+      onchange="construirTablaMovimientos()">
+    </select>
+
+
+    <select
+      id="filtroProyectoMovimiento"
+      onchange="construirTablaMovimientos()">
+    </select>
+
+
+    <button
+      class="limpiar-filtros"
+      onclick="limpiarFiltrosMovimientos()">
+
+      LIMPIAR FILTROS
+
+    </button>
 
   </div>
 
 
-  <!-- =====================================================
-       TABLA ENERO - DICIEMBRE
-       ===================================================== -->
+  <div class="tabla-contenedor">
 
-  <div class="panel panel-tabla">
+    <table>
 
-    <div class="tabla-contenedor">
+      <thead>
 
-      <table>
+        <tr>
 
-        <thead>
+          <th>DESDE</th>
+          <th>HASTA</th>
+          <th>CUENTA</th>
+          <th>ORIGEN</th>
+          <th>PROYECTO</th>
+          <th>BASE</th>
+          <th>IVA</th>
+          <th>TOTAL FACTURA</th>
+          <th>MESES</th>
+          <th>BASE / MES</th>
+          <th>ACCIÓN</th>
 
-          <tr>
+        </tr>
 
-            <th
-              class="col-cuenta cuenta"
-              id="cabeceraCuenta">
-
-              CUENTA CONTABLE
-
-              <span
-                class="redimensionador"
-                id="redimensionadorCuenta">
-              </span>
-
-            </th>
+      </thead>
 
 
-            <th class="col-proyecto proyecto">
-              PROYECTO
-            </th>
+      <tbody id="tablaMovimientos">
+      </tbody>
 
-
-            <th class="mes">ENE</th>
-            <th class="mes">FEB</th>
-            <th class="mes">MAR</th>
-            <th class="mes">ABR</th>
-            <th class="mes">MAY</th>
-            <th class="mes">JUN</th>
-            <th class="mes">JUL</th>
-            <th class="mes">AGO</th>
-            <th class="mes">SEP</th>
-            <th class="mes">OCT</th>
-            <th class="mes">NOV</th>
-            <th class="mes">DIC</th>
-
-          </tr>
-
-        </thead>
-
-
-        <tbody id="tablaGastos">
-        </tbody>
-
-      </table>
-
-    </div>
+    </table>
 
   </div>
+
+</div>
 
 </div>
 
@@ -637,8 +858,16 @@ th.col-cuenta {
 <script>
 
 /* =========================================================
-   CUENTAS CONTABLES
-   ========================================================= */
+   CONFIGURACIÓN
+========================================================= */
+
+const CLAVE_GASTOS =
+  "geravalon_analisis_economico_2026";
+
+
+/* =========================================================
+   CUENTAS
+========================================================= */
 
 const cuentas = [
 
@@ -708,7 +937,7 @@ const cuentas = [
 
 /* =========================================================
    PROYECTOS
-   ========================================================= */
+========================================================= */
 
 const proyectos = [
 
@@ -723,16 +952,12 @@ const proyectos = [
 ];
 
 
-/* =========================================================
-   MOVIMIENTOS
-   ========================================================= */
-
 let movimientos = [];
 
 
 /* =========================================================
    INICIO
-   ========================================================= */
+========================================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -740,11 +965,20 @@ document.addEventListener(
 
     cargarSelectores();
 
+    /*
+      EMPEZAMOS LIMPIO.
+
+      Como has dicho que los datos anteriores pueden borrarse,
+      no hacemos ninguna conversión automática de los antiguos.
+    */
+
     cargarLocal();
 
     cambiarModoFecha();
 
-    construirTabla();
+    actualizarCalculoIVA();
+
+    construirTodo();
 
     activarRedimensionador();
 
@@ -754,7 +988,7 @@ document.addEventListener(
 
 /* =========================================================
    SELECTORES
-   ========================================================= */
+========================================================= */
 
 function cargarSelectores(){
 
@@ -764,13 +998,13 @@ function cargarSelectores(){
   cuentaEntrada.innerHTML =
     '<option value="">CUENTA CONTABLE</option>';
 
+
   cuentas.forEach(c => {
 
     const opcion =
       document.createElement("option");
 
-    opcion.value =
-      c[0];
+    opcion.value = c[0];
 
     opcion.textContent =
       c[1] + " · " + c[0];
@@ -786,16 +1020,15 @@ function cargarSelectores(){
   proyectoEntrada.innerHTML =
     '<option value="">PROYECTO</option>';
 
+
   proyectos.forEach(p => {
 
     const opcion =
       document.createElement("option");
 
-    opcion.value =
-      p;
+    opcion.value = p;
 
-    opcion.textContent =
-      p;
+    opcion.textContent = p;
 
     proyectoEntrada.appendChild(opcion);
 
@@ -808,18 +1041,38 @@ function cargarSelectores(){
   filtroCuenta.innerHTML =
     '<option value="">TODAS LAS CUENTAS</option>';
 
+
+  const filtroCuentaMovimiento =
+    document.getElementById("filtroCuentaMovimiento");
+
+  filtroCuentaMovimiento.innerHTML =
+    '<option value="">TODAS LAS CUENTAS</option>';
+
+
   cuentas.forEach(c => {
 
-    const opcion =
-      document.createElement("option");
-
-    opcion.value =
-      c[0];
-
-    opcion.textContent =
+    const texto =
       c[1] + " · " + c[0];
 
-    filtroCuenta.appendChild(opcion);
+
+    const opcion1 =
+      document.createElement("option");
+
+    opcion1.value = c[0];
+
+    opcion1.textContent = texto;
+
+    filtroCuenta.appendChild(opcion1);
+
+
+    const opcion2 =
+      document.createElement("option");
+
+    opcion2.value = c[0];
+
+    opcion2.textContent = texto;
+
+    filtroCuentaMovimiento.appendChild(opcion2);
 
   });
 
@@ -830,18 +1083,34 @@ function cargarSelectores(){
   filtroProyecto.innerHTML =
     '<option value="">TODOS LOS PROYECTOS</option>';
 
+
+  const filtroProyectoMovimiento =
+    document.getElementById("filtroProyectoMovimiento");
+
+  filtroProyectoMovimiento.innerHTML =
+    '<option value="">TODOS LOS PROYECTOS</option>';
+
+
   proyectos.forEach(p => {
 
-    const opcion =
+    const opcion1 =
       document.createElement("option");
 
-    opcion.value =
-      p;
+    opcion1.value = p;
 
-    opcion.textContent =
-      p;
+    opcion1.textContent = p;
 
-    filtroProyecto.appendChild(opcion);
+    filtroProyecto.appendChild(opcion1);
+
+
+    const opcion2 =
+      document.createElement("option");
+
+    opcion2.value = p;
+
+    opcion2.textContent = p;
+
+    filtroProyectoMovimiento.appendChild(opcion2);
 
   });
 
@@ -849,8 +1118,8 @@ function cargarSelectores(){
 
 
 /* =========================================================
-   CAMBIAR ENTRE FECHAS Y MES CONCRETO
-   ========================================================= */
+   MODO FECHA
+========================================================= */
 
 function cambiarModoFecha(){
 
@@ -866,27 +1135,24 @@ function cambiarModoFecha(){
   const mesConcreto =
     document.getElementById("mesConcreto");
 
-  const linea =
-    document.querySelector(".linea-entrada");
-
 
   if(modo === "mes"){
 
     fechaDesde.style.display = "none";
+
     fechaHasta.style.display = "none";
+
     mesConcreto.style.display = "block";
 
-    linea.style.gridTemplateColumns =
-      "125px 125px 260px 120px minmax(220px,1fr) 260px 34px 34px 105px 105px";
+  }
 
-  }else{
+  else{
 
     fechaDesde.style.display = "block";
-    fechaHasta.style.display = "block";
-    mesConcreto.style.display = "none";
 
-    linea.style.gridTemplateColumns =
-      "125px 122px 122px 260px 120px minmax(220px,1fr) 260px 34px 34px 105px 105px";
+    fechaHasta.style.display = "block";
+
+    mesConcreto.style.display = "none";
 
   }
 
@@ -894,8 +1160,111 @@ function cambiarModoFecha(){
 
 
 /* =========================================================
+   IVA
+========================================================= */
+
+function calcularImportesIVA(
+  total,
+  tipoIVA
+){
+
+  const importeTotal =
+    Number(total) || 0;
+
+  const porcentaje =
+    Number(tipoIVA) || 0;
+
+
+  if(porcentaje === 0){
+
+    return {
+
+      total: importeTotal,
+
+      base: importeTotal,
+
+      iva: 0
+
+    };
+
+  }
+
+
+  const base =
+    importeTotal
+    /
+    (
+      1
+      +
+      porcentaje / 100
+    );
+
+
+  const iva =
+    importeTotal - base;
+
+
+  return {
+
+    total: importeTotal,
+
+    base: base,
+
+    iva: iva
+
+  };
+
+}
+
+
+function actualizarCalculoIVA(){
+
+  const total =
+    parseFloat(
+      document.getElementById("cantidad").value
+    )
+    ||
+    0;
+
+
+  const tipoIVA =
+    parseFloat(
+      document.getElementById("tipoIVA").value
+    )
+    ||
+    0;
+
+
+  const calculo =
+    calcularImportesIVA(
+      total,
+      tipoIVA
+    );
+
+
+  document.getElementById(
+    "vistaTotal"
+  ).textContent =
+    formatoEuro(calculo.total);
+
+
+  document.getElementById(
+    "vistaIVA"
+  ).textContent =
+    formatoEuro(calculo.iva);
+
+
+  document.getElementById(
+    "vistaBase"
+  ).textContent =
+    formatoEuro(calculo.base);
+
+}
+
+
+/* =========================================================
    GUARDAR MOVIMIENTO
-   ========================================================= */
+========================================================= */
 
 function guardarMovimiento(){
 
@@ -908,10 +1277,6 @@ function guardarMovimiento(){
   let hasta = "";
 
 
-  /* -------------------------------------------------------
-     SI ES MES CONCRETO
-     ------------------------------------------------------- */
-
   if(modoFecha === "mes"){
 
     const valorMes =
@@ -920,9 +1285,7 @@ function guardarMovimiento(){
 
     if(valorMes === ""){
 
-      alert(
-        "Selecciona un mes."
-      );
+      alert("Selecciona un mes.");
 
       return;
 
@@ -974,11 +1337,6 @@ function guardarMovimiento(){
 
   }
 
-
-  /* -------------------------------------------------------
-     SI ES FECHA A FECHA
-     ------------------------------------------------------- */
-
   else{
 
     desde =
@@ -1013,7 +1371,7 @@ function guardarMovimiento(){
     ).value;
 
 
-  const cantidad =
+  const importeConIVA =
     parseFloat(
       document.getElementById(
         "cantidad"
@@ -1021,9 +1379,17 @@ function guardarMovimiento(){
     );
 
 
-  /* -------------------------------------------------------
-     VALIDACIONES
-     ------------------------------------------------------- */
+  const tipoIVA =
+    parseFloat(
+      document.getElementById(
+        "tipoIVA"
+      ).value
+    )
+    ||
+    0;
+
+
+  /* VALIDACIONES */
 
   if(!desde || !hasta){
 
@@ -1032,6 +1398,7 @@ function guardarMovimiento(){
     );
 
     return;
+
   }
 
 
@@ -1046,6 +1413,7 @@ function guardarMovimiento(){
     );
 
     return;
+
   }
 
 
@@ -1056,6 +1424,7 @@ function guardarMovimiento(){
     );
 
     return;
+
   }
 
 
@@ -1066,6 +1435,7 @@ function guardarMovimiento(){
     );
 
     return;
+
   }
 
 
@@ -1076,6 +1446,7 @@ function guardarMovimiento(){
     );
 
     return;
+
   }
 
 
@@ -1086,28 +1457,24 @@ function guardarMovimiento(){
     );
 
     return;
+
   }
 
 
-  /* ADMITE POSITIVOS Y NEGATIVOS */
-
   if(
-    Number.isNaN(cantidad)
+    Number.isNaN(importeConIVA)
     ||
-    cantidad === 0
+    importeConIVA === 0
   ){
 
     alert(
-      "Introduce una cantidad válida distinta de 0."
+      "Introduce un importe distinto de 0."
     );
 
     return;
+
   }
 
-
-  /* -------------------------------------------------------
-     MESES DEL PERIODO
-     ------------------------------------------------------- */
 
   const meses =
     obtenerMesesPeriodo(
@@ -1123,16 +1490,32 @@ function guardarMovimiento(){
     );
 
     return;
+
   }
 
 
+  /* CALCULAMOS BASE + IVA */
+
+  const calculo =
+    calcularImportesIVA(
+      importeConIVA,
+      tipoIVA
+    );
+
+
+  /*
+    MUY IMPORTANTE:
+
+    cantidadTotal = BASE SIN IVA
+
+    Esto mantiene compatible Analisis.html.
+  */
+
   const cantidadMensual =
-    cantidad / meses.length;
+    calculo.base
+    /
+    meses.length;
 
-
-  /* -------------------------------------------------------
-     MOVIMIENTO
-     ------------------------------------------------------- */
 
   const movimiento = {
 
@@ -1143,23 +1526,27 @@ function guardarMovimiento(){
         Math.random() * 1000
       ),
 
-    desde:
-      desde,
+    desde: desde,
 
-    hasta:
-      hasta,
+    hasta: hasta,
 
-    cuenta:
-      cuenta,
+    cuenta: cuenta,
 
-    origen:
-      origen,
+    origen: origen,
 
-    proyecto:
-      proyecto,
+    proyecto: proyecto,
+
+    importeConIVA:
+      calculo.total,
+
+    tipoIVA:
+      tipoIVA,
+
+    importeIVA:
+      calculo.iva,
 
     cantidadTotal:
-      cantidad,
+      calculo.base,
 
     numeroMeses:
       meses.length,
@@ -1177,24 +1564,22 @@ function guardarMovimiento(){
 
   guardarLocal();
 
-  construirTabla();
+  construirTodo();
 
 
   mostrarEstado(
 
-    "Guardado: "
+    "Guardado · BASE SIN IVA: "
     +
-    formatoEuro(cantidad)
+    formatoEuro(calculo.base)
     +
-    " · "
+    " · IVA: "
     +
-    meses.length
+    formatoEuro(calculo.iva)
     +
-    " mes(es) · "
+    " · TOTAL: "
     +
-    formatoEuro(cantidadMensual)
-    +
-    " por mes."
+    formatoEuro(calculo.total)
 
   );
 
@@ -1202,6 +1587,9 @@ function guardarMovimiento(){
   document.getElementById(
     "cantidad"
   ).value = "";
+
+
+  actualizarCalculoIVA();
 
 
   document.getElementById(
@@ -1212,8 +1600,8 @@ function guardarMovimiento(){
 
 
 /* =========================================================
-   OBTENER MESES DEL PERIODO
-   ========================================================= */
+   MESES DEL PERIODO
+========================================================= */
 
 function obtenerMesesPeriodo(
   desde,
@@ -1259,9 +1647,7 @@ function obtenerMesesPeriodo(
 
     if(anio === 2026){
 
-      resultado.push(
-        mes
-      );
+      resultado.push(mes);
 
     }
 
@@ -1286,8 +1672,8 @@ function obtenerMesesPeriodo(
 
 
 /* =========================================================
-   CONSTRUIR TABLA
-   ========================================================= */
+   TABLA MENSUAL
+========================================================= */
 
 function construirTabla(){
 
@@ -1342,6 +1728,7 @@ function construirTabla(){
           ){
 
             return;
+
           }
 
 
@@ -1352,6 +1739,7 @@ function construirTabla(){
           ){
 
             return;
+
           }
 
 
@@ -1377,6 +1765,7 @@ function construirTabla(){
           ){
 
             return;
+
           }
 
 
@@ -1403,6 +1792,7 @@ function construirTabla(){
           ){
 
             return;
+
           }
 
 
@@ -1438,7 +1828,9 @@ function construirTabla(){
 
 
               const clase =
-                Math.abs(valor) < 0.000001
+                Math.abs(valor)
+                <
+                0.000001
 
                 ?
 
@@ -1455,7 +1847,9 @@ function construirTabla(){
                   class="mes ${clase}">
 
                   ${
-                    Math.abs(valor) < 0.000001
+                    Math.abs(valor)
+                    <
+                    0.000001
 
                     ?
 
@@ -1492,8 +1886,8 @@ function construirTabla(){
 
 
 /* =========================================================
-   CALCULAR UNA FILA COMPLETA
-   ========================================================= */
+   CALCULAR FILA
+========================================================= */
 
 function calcularFila(
   codigoCuenta,
@@ -1516,6 +1910,7 @@ function calcularFila(
       ){
 
         return;
+
       }
 
 
@@ -1529,11 +1924,14 @@ function calcularFila(
       if(meses.length === 0){
 
         return;
+
       }
 
 
       const mensual =
-        movimiento.cantidadTotal
+        Number(
+          movimiento.cantidadTotal
+        )
         /
         meses.length;
 
@@ -1557,8 +1955,431 @@ function calcularFila(
 
 
 /* =========================================================
-   LIMPIAR LINEA DE ENTRADA
-   ========================================================= */
+   MOVIMIENTOS
+========================================================= */
+
+function construirTablaMovimientos(){
+
+  const tbody =
+    document.getElementById(
+      "tablaMovimientos"
+    );
+
+
+  tbody.innerHTML = "";
+
+
+  const filtroCuenta =
+    document.getElementById(
+      "filtroCuentaMovimiento"
+    ).value;
+
+
+  const filtroProyecto =
+    document.getElementById(
+      "filtroProyectoMovimiento"
+    ).value;
+
+
+  const filtrados =
+    movimientos
+    .filter(
+      movimiento => {
+
+
+        if(
+          filtroCuenta
+          &&
+          movimiento.cuenta !== filtroCuenta
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          filtroProyecto
+          &&
+          movimiento.proyecto !== filtroProyecto
+        ){
+
+          return false;
+
+        }
+
+
+        return true;
+
+      }
+    )
+    .sort(
+      (a,b) => {
+
+        const fecha =
+          (b.desde || "")
+          .localeCompare(
+            a.desde || ""
+          );
+
+
+        if(fecha !== 0){
+
+          return fecha;
+
+        }
+
+
+        return (
+          Number(b.id) || 0
+        )
+        -
+        (
+          Number(a.id) || 0
+        );
+
+      }
+    );
+
+
+  if(filtrados.length === 0){
+
+    const tr =
+      document.createElement(
+        "tr"
+      );
+
+
+    tr.innerHTML = `
+
+      <td
+        colspan="11"
+        style="
+          text-align:center;
+          color:#9ca3af;
+          padding:15px;
+        ">
+
+        NO HAY MOVIMIENTOS
+
+      </td>
+
+    `;
+
+
+    tbody.appendChild(tr);
+
+    return;
+
+  }
+
+
+  filtrados.forEach(
+    movimiento => {
+
+
+      const cuenta =
+        obtenerNombreCuenta(
+          movimiento.cuenta
+        );
+
+
+      const base =
+        Number(
+          movimiento.cantidadTotal
+        )
+        ||
+        0;
+
+
+      const iva =
+        Number(
+          movimiento.importeIVA
+        )
+        ||
+        0;
+
+
+      const total =
+        Number(
+          movimiento.importeConIVA
+        )
+        ||
+        base;
+
+
+      const tipoIVA =
+        Number(
+          movimiento.tipoIVA
+        )
+        ||
+        0;
+
+
+      const meses =
+        Number(
+          movimiento.numeroMeses
+        )
+        ||
+        obtenerMesesPeriodo(
+          movimiento.desde,
+          movimiento.hasta
+        ).length;
+
+
+      const mensual =
+        Number(
+          movimiento.cantidadMensual
+        )
+        ||
+        (
+          meses
+          ?
+          base / meses
+          :
+          0
+        );
+
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      tr.innerHTML = `
+
+        <td class="texto">
+          ${formatearFecha(movimiento.desde)}
+        </td>
+
+
+        <td class="texto">
+          ${formatearFecha(movimiento.hasta)}
+        </td>
+
+
+        <td class="texto">
+          ${cuenta}
+        </td>
+
+
+        <td class="texto">
+          ${movimiento.origen || "—"}
+        </td>
+
+
+        <td class="texto">
+          ${movimiento.proyecto}
+        </td>
+
+
+        <td class="numero">
+          ${formatoEuro(base)}
+        </td>
+
+
+        <td class="numero">
+          ${formatoEuro(iva)} (${tipoIVA}%)
+        </td>
+
+
+        <td class="numero">
+          ${formatoEuro(total)}
+        </td>
+
+
+        <td class="numero">
+          ${meses}
+        </td>
+
+
+        <td class="numero">
+          ${formatoEuro(mensual)}
+        </td>
+
+
+        <td style="text-align:center">
+
+          <button
+            class="eliminar"
+            onclick="eliminarMovimiento(${movimiento.id})">
+
+            ELIMINAR
+
+          </button>
+
+        </td>
+
+      `;
+
+
+      tbody.appendChild(tr);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ELIMINAR MOVIMIENTO
+========================================================= */
+
+function eliminarMovimiento(id){
+
+  const movimiento =
+    movimientos.find(
+      m =>
+        m.id === id
+    );
+
+
+  if(!movimiento){
+
+    return;
+
+  }
+
+
+  const aceptar =
+    confirm(
+
+      "¿ELIMINAR ESTE GASTO?\n\n"
+      +
+      obtenerNombreCuenta(
+        movimiento.cuenta
+      )
+      +
+      "\n"
+      +
+      "PERIODO: "
+      +
+      formatearFecha(
+        movimiento.desde
+      )
+      +
+      " - "
+      +
+      formatearFecha(
+        movimiento.hasta
+      )
+      +
+      "\n"
+      +
+      "BASE: "
+      +
+      formatoEuro(
+        movimiento.cantidadTotal
+      )
+      +
+      "\n"
+      +
+      "TOTAL FACTURA: "
+      +
+      formatoEuro(
+        movimiento.importeConIVA
+      )
+
+    );
+
+
+  if(!aceptar){
+
+    return;
+
+  }
+
+
+  movimientos =
+    movimientos.filter(
+      m =>
+        m.id !== id
+    );
+
+
+  guardarLocal();
+
+  construirTodo();
+
+
+  mostrarEstado(
+    "Gasto eliminado correctamente."
+  );
+
+}
+
+
+/* =========================================================
+   FILTROS MOVIMIENTOS
+========================================================= */
+
+function limpiarFiltrosMovimientos(){
+
+  document.getElementById(
+    "filtroCuentaMovimiento"
+  ).value = "";
+
+
+  document.getElementById(
+    "filtroProyectoMovimiento"
+  ).value = "";
+
+
+  construirTablaMovimientos();
+
+}
+
+
+/* =========================================================
+   NOMBRE CUENTA
+========================================================= */
+
+function obtenerNombreCuenta(
+  codigo
+){
+
+  const cuenta =
+    cuentas.find(
+      c =>
+        c[0] === codigo
+    );
+
+
+  if(!cuenta){
+
+    return codigo;
+
+  }
+
+
+  return (
+    cuenta[1]
+    +
+    " · "
+    +
+    cuenta[0]
+  );
+
+}
+
+
+/* =========================================================
+   CONSTRUIR TODO
+========================================================= */
+
+function construirTodo(){
+
+  construirTabla();
+
+  construirTablaMovimientos();
+
+}
+
+
+/* =========================================================
+   LIMPIAR ENTRADA
+========================================================= */
 
 function limpiarEntrada(){
 
@@ -1597,6 +2418,14 @@ function limpiarEntrada(){
   ).value = "";
 
 
+  document.getElementById(
+    "tipoIVA"
+  ).value = "21";
+
+
+  actualizarCalculoIVA();
+
+
   mostrarEstado(
     "Línea de entrada limpia."
   );
@@ -1605,14 +2434,14 @@ function limpiarEntrada(){
 
 
 /* =========================================================
-   AUTOGUARDADO LOCAL
-   ========================================================= */
+   LOCALSTORAGE
+========================================================= */
 
 function guardarLocal(){
 
   localStorage.setItem(
 
-    "geravalon_analisis_economico_2026",
+    CLAVE_GASTOS,
 
     JSON.stringify(
       movimientos
@@ -1627,7 +2456,7 @@ function cargarLocal(){
 
   const guardado =
     localStorage.getItem(
-      "geravalon_analisis_economico_2026"
+      CLAVE_GASTOS
     );
 
 
@@ -1636,15 +2465,24 @@ function cargarLocal(){
     movimientos = [];
 
     return;
+
   }
 
 
   try{
 
-    movimientos =
+    const datos =
       JSON.parse(
         guardado
       );
+
+
+    movimientos =
+      Array.isArray(datos)
+      ?
+      datos
+      :
+      [];
 
   }
 
@@ -1658,8 +2496,8 @@ function cargarLocal(){
 
 
 /* =========================================================
-   GUARDAR JSON
-   ========================================================= */
+   JSON
+========================================================= */
 
 function guardarJSON(){
 
@@ -1667,6 +2505,9 @@ function guardarJSON(){
 
     aplicacion:
       "GERAVALON ANALISIS ECONOMICO",
+
+    tipo:
+      "GASTOS",
 
     ejercicio:
       2026,
@@ -1718,7 +2559,7 @@ function guardarJSON(){
 
 
   enlace.download =
-    "GERAVALON_ANALISIS_ECONOMICO_2026.json";
+    "GERAVALON_GASTOS_2026.json";
 
 
   document.body.appendChild(
@@ -1728,13 +2569,9 @@ function guardarJSON(){
 
   enlace.click();
 
-
   enlace.remove();
 
-
-  URL.revokeObjectURL(
-    url
-  );
+  URL.revokeObjectURL(url);
 
 
   mostrarEstado(
@@ -1743,10 +2580,6 @@ function guardarJSON(){
 
 }
 
-
-/* =========================================================
-   SELECCIONAR JSON
-   ========================================================= */
 
 function seleccionarJSON(){
 
@@ -1759,13 +2592,7 @@ function seleccionarJSON(){
 }
 
 
-/* =========================================================
-   CARGAR JSON
-   ========================================================= */
-
-function cargarJSON(
-  input
-){
+function cargarJSON(input){
 
   const archivo =
     input.files[0];
@@ -1774,6 +2601,7 @@ function cargarJSON(
   if(!archivo){
 
     return;
+
   }
 
 
@@ -1798,9 +2626,7 @@ function cargarJSON(
 
 
         if(
-          Array.isArray(
-            contenido
-          )
+          Array.isArray(contenido)
         ){
 
           nuevosMovimientos =
@@ -1809,6 +2635,8 @@ function cargarJSON(
         }
 
         else if(
+          contenido
+          &&
           Array.isArray(
             contenido.movimientos
           )
@@ -1831,7 +2659,7 @@ function cargarJSON(
         const aceptar =
           confirm(
 
-            "Se van a sustituir los datos actuales "
+            "Se van a sustituir los gastos actuales "
             +
             "por los del archivo JSON.\n\n"
             +
@@ -1845,6 +2673,7 @@ function cargarJSON(
           input.value = "";
 
           return;
+
         }
 
 
@@ -1854,7 +2683,7 @@ function cargarJSON(
 
         guardarLocal();
 
-        construirTabla();
+        construirTodo();
 
 
         mostrarEstado(
@@ -1864,7 +2693,6 @@ function cargarJSON(
           " movimientos cargados desde JSON."
 
         );
-
 
       }
 
@@ -1882,16 +2710,14 @@ function cargarJSON(
     };
 
 
-  lector.readAsText(
-    archivo
-  );
+  lector.readAsText(archivo);
 
 }
 
 
 /* =========================================================
-   REDIMENSIONAR PRIMERA COLUMNA
-   ========================================================= */
+   REDIMENSIONAR
+========================================================= */
 
 function activarRedimensionador(){
 
@@ -1904,19 +2730,15 @@ function activarRedimensionador(){
   if(!tirador){
 
     return;
+
   }
 
 
-  let redimensionando =
-    false;
+  let redimensionando = false;
 
+  let inicioX = 0;
 
-  let inicioX =
-    0;
-
-
-  let anchoInicial =
-    260;
+  let anchoInicial = 260;
 
 
   tirador.addEventListener(
@@ -1924,12 +2746,9 @@ function activarRedimensionador(){
     function(evento){
 
 
-      redimensionando =
-        true;
+      redimensionando = true;
 
-
-      inicioX =
-        evento.clientX;
+      inicioX = evento.clientX;
 
 
       const valorActual =
@@ -1942,9 +2761,7 @@ function activarRedimensionador(){
 
 
       anchoInicial =
-        parseInt(
-          valorActual
-        )
+        parseInt(valorActual)
         ||
         260;
 
@@ -1969,6 +2786,7 @@ function activarRedimensionador(){
       if(!redimensionando){
 
         return;
+
       }
 
 
@@ -1984,16 +2802,14 @@ function activarRedimensionador(){
 
       if(nuevoAncho < 140){
 
-        nuevoAncho =
-          140;
+        nuevoAncho = 140;
 
       }
 
 
       if(nuevoAncho > 600){
 
-        nuevoAncho =
-          600;
+        nuevoAncho = 600;
 
       }
 
@@ -2020,12 +2836,11 @@ function activarRedimensionador(){
       if(!redimensionando){
 
         return;
+
       }
 
 
-      redimensionando =
-        false;
-
+      redimensionando = false;
 
       document.body.style.userSelect =
         "";
@@ -2037,23 +2852,21 @@ function activarRedimensionador(){
 
 
 /* =========================================================
-   FORMATO NUMERO
-   ========================================================= */
+   FORMATOS
+========================================================= */
 
-function formatoNumero(
-  numero
-){
+function formatoNumero(numero){
 
-  return numero.toLocaleString(
+  return Number(
+    numero || 0
+  )
+  .toLocaleString(
 
     "es-ES",
 
     {
-      minimumFractionDigits:
-        2,
-
-      maximumFractionDigits:
-        2
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
     }
 
   );
@@ -2061,37 +2874,68 @@ function formatoNumero(
 }
 
 
-/* =========================================================
-   FORMATO EURO
-   ========================================================= */
+function formatoEuro(numero){
 
-function formatoEuro(
-  numero
-){
-
-  return formatoNumero(
-    numero
-  )
+  return formatoNumero(numero)
   +
   " €";
 
 }
 
 
+function formatearFecha(fecha){
+
+  if(!fecha){
+
+    return "—";
+
+  }
+
+
+  const partes =
+    fecha.split("-");
+
+
+  if(partes.length !== 3){
+
+    return fecha;
+
+  }
+
+
+  return (
+    partes[2]
+    +
+    "/"
+    +
+    partes[1]
+    +
+    "/"
+    +
+    partes[0]
+  );
+
+}
+
+
 /* =========================================================
    ESTADO
-   ========================================================= */
+========================================================= */
 
-function mostrarEstado(
-  texto
-){
+function mostrarEstado(texto){
 
-  document
-    .getElementById(
+  const estado =
+    document.getElementById(
       "estado"
-    )
-    .textContent =
-      texto;
+    );
+
+
+  estado.textContent =
+    texto;
+
+
+  estado.className =
+    "estado ok";
 
 }
 
