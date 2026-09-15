@@ -57,7 +57,7 @@ header p {
 
 .formulario {
     display: grid;
-    grid-template-columns: 160px 1fr 180px 1fr 180px;
+    grid-template-columns: 150px 170px 1fr 160px 1fr 170px;
     gap: 14px;
     align-items: end;
 }
@@ -119,6 +119,10 @@ select:focus {
     color: white;
     border: none;
     cursor: pointer;
+}
+
+.boton-rojo:hover {
+    background: #b91c1c;
 }
 
 .boton-verde {
@@ -259,15 +263,42 @@ td:nth-child(4) {
     margin-top: 8px;
 }
 
+/* =========================================================
+   FILTROS DE MOVIMIENTOS
+========================================================= */
+
+.filtros-movimientos {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 18px;
+}
+
+.filtros-movimientos .campo {
+    min-width: 0;
+}
+
+.sin-movimientos {
+    text-align: center !important;
+    color: #6b7280;
+    padding: 25px;
+}
+
 @media (max-width: 1100px) {
     .formulario {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filtros-movimientos {
         grid-template-columns: 1fr 1fr;
     }
 }
 
 @media (max-width: 700px) {
     .formulario,
-    .resumen {
+    .resumen,
+    .filtros-movimientos {
         grid-template-columns: 1fr;
     }
 }
@@ -302,6 +333,10 @@ td:nth-child(4) {
 
     </div>
 
+    <!-- =====================================================
+         INTRODUCIR INGRESO
+    ====================================================== -->
+
     <div class="panel">
 
         <h2>INTRODUCIR INGRESO</h2>
@@ -310,7 +345,19 @@ td:nth-child(4) {
 
             <div class="campo">
                 <label>FECHA</label>
-                <input type="date" id="fecha">
+                <input
+                    type="date"
+                    id="fecha"
+                    min="2026-01-01"
+                    max="2026-12-31">
+            </div>
+
+            <div class="campo">
+                <label>N.º FACTURA</label>
+                <input
+                    type="text"
+                    id="numeroFactura"
+                    placeholder="N.º FACTURA">
             </div>
 
             <div class="campo">
@@ -368,6 +415,10 @@ td:nth-child(4) {
 
     </div>
 
+    <!-- =====================================================
+         DATOS GUARDADOS
+    ====================================================== -->
+
     <div class="panel">
 
         <h2>DATOS GUARDADOS</h2>
@@ -396,6 +447,10 @@ td:nth-child(4) {
         </div>
 
     </div>
+
+    <!-- =====================================================
+         INGRESOS POR MES
+    ====================================================== -->
 
     <div class="panel">
 
@@ -436,9 +491,40 @@ td:nth-child(4) {
 
     </div>
 
+    <!-- =====================================================
+         MOVIMIENTOS
+    ====================================================== -->
+
     <div class="panel">
 
         <h2>MOVIMIENTOS</h2>
+
+        <div class="filtros-movimientos">
+
+            <div class="campo">
+                <label>FILTRAR POR CUENTA</label>
+                <select
+                    id="filtroCuentaMovimiento"
+                    onchange="construirTablaMovimientos()">
+                </select>
+            </div>
+
+            <div class="campo">
+                <label>FILTRAR POR PROYECTO</label>
+                <select
+                    id="filtroProyectoMovimiento"
+                    onchange="construirTablaMovimientos()">
+                </select>
+            </div>
+
+            <button
+                type="button"
+                class="boton-secundario"
+                onclick="limpiarFiltrosMovimientos()">
+                LIMPIAR FILTROS
+            </button>
+
+        </div>
 
         <div class="tabla-wrapper">
 
@@ -447,6 +533,7 @@ td:nth-child(4) {
                 <thead>
                     <tr>
                         <th>FECHA</th>
+                        <th>N.º FACTURA</th>
                         <th>CUENTA</th>
                         <th>ORIGEN</th>
                         <th>PROYECTO</th>
@@ -466,7 +553,9 @@ td:nth-child(4) {
 </div>
 
 
-<!-- MODAL NUEVA CUENTA -->
+<!-- =====================================================
+     MODAL NUEVA CUENTA
+====================================================== -->
 
 <div class="modal-fondo" id="modalCuenta">
 
@@ -609,8 +698,12 @@ function ponerFechaHoy() {
         String(hoy.getDate())
         .padStart(2, "0");
 
-    document.getElementById("fecha").value =
-        `${yyyy}-${mm}-${dd}`;
+    if (yyyy === 2026) {
+
+        document.getElementById("fecha").value =
+            `${yyyy}-${mm}-${dd}`;
+
+    }
 
 }
 
@@ -669,6 +762,10 @@ function guardarCuentas() {
 
 function cargarSelectores() {
 
+    /* -----------------------------------------------------
+       CUENTA DE ENTRADA
+    ----------------------------------------------------- */
+
     const selectorCuenta =
         document.getElementById("cuenta");
 
@@ -694,6 +791,10 @@ function cargarSelectores() {
         });
 
 
+    /* -----------------------------------------------------
+       PROYECTO DE ENTRADA
+    ----------------------------------------------------- */
+
     const selectorProyecto =
         document.getElementById("proyecto");
 
@@ -710,6 +811,61 @@ function cargarSelectores() {
         opcion.textContent = proyecto;
 
         selectorProyecto.appendChild(opcion);
+
+    });
+
+
+    /* -----------------------------------------------------
+       FILTRO DE CUENTAS EN MOVIMIENTOS
+    ----------------------------------------------------- */
+
+    const filtroCuenta =
+        document.getElementById(
+            "filtroCuentaMovimiento"
+        );
+
+    filtroCuenta.innerHTML =
+        '<option value="">TODAS LAS CUENTAS</option>';
+
+
+    cuentas.forEach(cuenta => {
+
+        const opcion =
+            document.createElement("option");
+
+        opcion.value = cuenta[0];
+
+        opcion.textContent =
+            `${cuenta[0]} · ${cuenta[1]}`;
+
+        filtroCuenta.appendChild(opcion);
+
+    });
+
+
+    /* -----------------------------------------------------
+       FILTRO DE PROYECTOS EN MOVIMIENTOS
+    ----------------------------------------------------- */
+
+    const filtroProyecto =
+        document.getElementById(
+            "filtroProyectoMovimiento"
+        );
+
+    filtroProyecto.innerHTML =
+        '<option value="">TODOS LOS PROYECTOS</option>';
+
+
+    proyectos.forEach(proyecto => {
+
+        const opcion =
+            document.createElement("option");
+
+        opcion.value = proyecto;
+
+        opcion.textContent = proyecto;
+
+        filtroProyecto.appendChild(opcion);
 
     });
 
@@ -870,6 +1026,11 @@ function guardarMovimiento() {
     const fecha =
         document.getElementById("fecha").value;
 
+    const numeroFactura =
+        document.getElementById("numeroFactura")
+        .value
+        .trim();
+
     const cuenta =
         document.getElementById("cuenta").value;
 
@@ -889,6 +1050,18 @@ function guardarMovimiento() {
 
         mostrarMensaje(
             "DEBES INDICAR LA FECHA.",
+            false
+        );
+
+        return;
+
+    }
+
+
+    if (!numeroFactura) {
+
+        mostrarMensaje(
+            "DEBES INDICAR EL NÚMERO DE FACTURA.",
             false
         );
 
@@ -964,6 +1137,8 @@ function guardarMovimiento() {
 
         fecha: fecha,
 
+        numeroFactura: numeroFactura,
+
         cuenta: cuenta,
 
         origen: origen,
@@ -983,7 +1158,13 @@ function guardarMovimiento() {
     construirTodo();
 
 
-    document.getElementById("cantidad").value = "";
+    document.getElementById(
+        "numeroFactura"
+    ).value = "";
+
+    document.getElementById(
+        "cantidad"
+    ).value = "";
 
 
     mostrarMensaje(
@@ -1011,9 +1192,22 @@ function eliminarMovimiento(id) {
     }
 
 
+    const factura =
+        movimiento.numeroFactura
+        ? movimiento.numeroFactura
+        : "SIN N.º DE FACTURA";
+
+
     const confirmar =
         confirm(
-            "¿ELIMINAR ESTE INGRESO?"
+            "¿ELIMINAR ESTE INGRESO?\n\n" +
+            "FACTURA: " + factura + "\n" +
+            "IMPORTE: " +
+            formatearDinero(
+                movimiento.cantidadTotal
+            ) +
+            "\n\n" +
+            "EL INGRESO DEJARÁ DE CONTAR EN TODAS LAS SUMATORIAS."
         );
 
 
@@ -1031,6 +1225,12 @@ function eliminarMovimiento(id) {
     guardarLocal();
 
     construirTodo();
+
+
+    mostrarMensaje(
+        "INGRESO ELIMINADO CORRECTAMENTE.",
+        true
+    );
 
 }
 
@@ -1056,6 +1256,25 @@ function obtenerNombreCuenta(codigo) {
 
 
 /* =========================================================
+   FILTROS DE MOVIMIENTOS
+========================================================= */
+
+function limpiarFiltrosMovimientos() {
+
+    document.getElementById(
+        "filtroCuentaMovimiento"
+    ).value = "";
+
+    document.getElementById(
+        "filtroProyectoMovimiento"
+    ).value = "";
+
+    construirTablaMovimientos();
+
+}
+
+
+/* =========================================================
    TABLA DE MOVIMIENTOS
 ========================================================= */
 
@@ -1069,11 +1288,85 @@ function construirTablaMovimientos() {
     tbody.innerHTML = "";
 
 
-    const ordenados =
-        [...movimientos]
-        .sort((a,b) =>
-            b.fecha.localeCompare(a.fecha)
+    const filtroCuenta =
+        document.getElementById(
+            "filtroCuentaMovimiento"
+        ).value;
+
+
+    const filtroProyecto =
+        document.getElementById(
+            "filtroProyectoMovimiento"
+        ).value;
+
+
+    const filtrados =
+        movimientos.filter(
+            movimiento => {
+
+                if (
+                    filtroCuenta &&
+                    movimiento.cuenta !== filtroCuenta
+                ) {
+                    return false;
+                }
+
+
+                if (
+                    filtroProyecto &&
+                    movimiento.proyecto !== filtroProyecto
+                ) {
+                    return false;
+                }
+
+
+                return true;
+
+            }
         );
+
+
+    const ordenados =
+        [...filtrados]
+        .sort((a,b) => {
+
+            const comparacionFecha =
+                (b.fecha || "")
+                .localeCompare(
+                    a.fecha || ""
+                );
+
+            if (comparacionFecha !== 0) {
+                return comparacionFecha;
+            }
+
+            return (
+                Number(b.id) || 0
+            ) - (
+                Number(a.id) || 0
+            );
+
+        });
+
+
+    if (ordenados.length === 0) {
+
+        const fila =
+            document.createElement("tr");
+
+        fila.innerHTML = `
+            <td
+                colspan="7"
+                class="sin-movimientos">
+                NO HAY MOVIMIENTOS PARA LOS FILTROS SELECCIONADOS
+            </td>
+        `;
+
+        tbody.appendChild(fila);
+
+        return;
+
+    }
 
 
     ordenados.forEach(movimiento => {
@@ -1082,10 +1375,22 @@ function construirTablaMovimientos() {
             document.createElement("tr");
 
 
+        const numeroFactura =
+            movimiento.numeroFactura
+            ? movimiento.numeroFactura
+            : "—";
+
+
         fila.innerHTML = `
 
             <td>
                 ${formatearFecha(movimiento.fecha)}
+            </td>
+
+            <td>
+                <strong>
+                    ${numeroFactura}
+                </strong>
             </td>
 
             <td>
