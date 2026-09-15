@@ -183,9 +183,14 @@ header .grupo {
     font-weight: bold;
     font-size: 20px;
     color: white;
+    flex-shrink: 0;
 }
 
-.entrada .icono {
+.gastos .icono {
+    background: #dc2626;
+}
+
+.ingresos .icono {
     background: #2563eb;
 }
 
@@ -376,21 +381,39 @@ header .grupo {
 
     <div class="menu">
 
-        <a href="EntradaDatos.html" class="boton activo entrada">
+        <!-- GASTOS -->
 
-            <div class="icono">+</div>
+        <a href="Gastos.html" class="boton activo gastos">
+
+            <div class="icono">−</div>
 
             <div>
-                <div class="nombre">ENTRADA DE DATOS</div>
+                <div class="nombre">GASTOS</div>
                 <div class="descripcion">
-                    Introducir ingresos y gastos
+                    Introducir y consultar gastos
                 </div>
             </div>
 
         </a>
 
 
-        <!-- PROYECTOS YA ACTIVO -->
+        <!-- INGRESOS -->
+
+        <a href="Ingresos.html" class="boton activo ingresos">
+
+            <div class="icono">+</div>
+
+            <div>
+                <div class="nombre">INGRESOS</div>
+                <div class="descripcion">
+                    Introducir y consultar ingresos
+                </div>
+            </div>
+
+        </a>
+
+
+        <!-- PROYECTOS -->
 
         <a href="Proyectos.html" class="boton activo proyectos">
 
@@ -406,6 +429,8 @@ header .grupo {
         </a>
 
 
+        <!-- CAJAS Y BANCOS -->
+
         <div class="boton deshabilitado">
 
             <div class="icono" style="background:#9333ea">C</div>
@@ -419,6 +444,8 @@ header .grupo {
 
         </div>
 
+
+        <!-- MOVIMIENTOS -->
 
         <div class="boton deshabilitado">
 
@@ -434,6 +461,8 @@ header .grupo {
         </div>
 
 
+        <!-- CUENTAS -->
+
         <div class="boton deshabilitado">
 
             <div class="icono" style="background:#0891b2">C</div>
@@ -447,6 +476,8 @@ header .grupo {
 
         </div>
 
+
+        <!-- ENTIDADES -->
 
         <div class="boton deshabilitado">
 
@@ -477,21 +508,21 @@ header .grupo {
    CONFIGURACIÓN
 ========================================================= */
 
-const CLAVE_DATOS =
+/*
+   Gastos.html conserva la clave que utilizaba
+   EntradaDatos.html para no perder los datos existentes.
+*/
+
+const CLAVE_GASTOS =
     "geravalon_analisis_economico_2026";
 
 
-const proyectos = [
+/*
+   Ingresos.html utiliza su propia clave.
+*/
 
-    "RECICLAJE DE ACEITES Y GRASAS",
-    "LIMPIEZA INDUSTRIAL",
-    "LIMPIEZA HOSTELERIA",
-    "SERVICIOS VARIOS",
-    "INSTALACION Y REPARACION",
-    "GASTOS GENERALES",
-    "TRADER"
-
-];
+const CLAVE_INGRESOS =
+    "geravalon_ingresos_2026";
 
 
 /* =========================================================
@@ -505,15 +536,14 @@ document.addEventListener(
 
 
 /* =========================================================
-   LEER MOVIMIENTOS
+   LEER DATOS DE LOCALSTORAGE
 ========================================================= */
 
-function leerMovimientos(){
+function leerDatos(clave){
 
     const guardado =
-        localStorage.getItem(
-            CLAVE_DATOS
-        );
+        localStorage.getItem(clave);
+
 
     if(!guardado){
 
@@ -521,23 +551,45 @@ function leerMovimientos(){
 
     }
 
+
     try{
 
         const datos =
-            JSON.parse(
-                guardado
-            );
+            JSON.parse(guardado);
 
-        return Array.isArray(datos)
-            ? datos
-            : [];
+
+        /*
+           Admitimos tanto una matriz directamente
+           como una copia JSON que contenga movimientos.
+        */
+
+        if(Array.isArray(datos)){
+
+            return datos;
+
+        }
+
+
+        if(
+            datos
+            &&
+            Array.isArray(datos.movimientos)
+        ){
+
+            return datos.movimientos;
+
+        }
+
+
+        return [];
 
     }
 
     catch(error){
 
         console.error(
-            "Error leyendo movimientos:",
+            "Error leyendo datos:",
+            clave,
             error
         );
 
@@ -549,13 +601,20 @@ function leerMovimientos(){
 
 
 /* =========================================================
-   MESES DE UN PERIODO
+   MESES DE UN PERIODO DE GASTOS
 ========================================================= */
 
 function obtenerMesesPeriodo(
     desde,
     hasta
 ){
+
+    if(!desde || !hasta){
+
+        return [];
+
+    }
+
 
     const inicio =
         new Date(
@@ -567,7 +626,20 @@ function obtenerMesesPeriodo(
             hasta + "T00:00:00"
         );
 
+
+    if(
+        isNaN(inicio.getTime())
+        ||
+        isNaN(fin.getTime())
+    ){
+
+        return [];
+
+    }
+
+
     const resultado = [];
+
 
     let anio =
         inicio.getFullYear();
@@ -592,13 +664,13 @@ function obtenerMesesPeriodo(
 
         if(anio === 2026){
 
-            resultado.push(
-                mes
-            );
+            resultado.push(mes);
 
         }
 
+
         mes++;
+
 
         if(mes > 11){
 
@@ -608,6 +680,7 @@ function obtenerMesesPeriodo(
         }
 
     }
+
 
     return resultado;
 
@@ -620,40 +693,56 @@ function obtenerMesesPeriodo(
 
 function actualizarAnalisis(){
 
-    const movimientos =
-        leerMovimientos();
+    const gastos =
+        leerDatos(
+            CLAVE_GASTOS
+        );
 
 
-    /* ---------------------------------------------
-       GASTOS TOTALES
-    --------------------------------------------- */
-
-    let gastosTotales = 0;
-
-
-    movimientos.forEach(
-        movimiento => {
-
-            gastosTotales +=
-                Number(
-                    movimiento.cantidadTotal
-                )
-                ||
-                0;
-
-        }
-    );
+    const ingresos =
+        leerDatos(
+            CLAVE_INGRESOS
+        );
 
 
-    /*
-       DE MOMENTO NO EXISTEN INGRESOS
-       EN EntradaDatos.html.
+    /* =====================================================
+       TOTALES
+    ===================================================== */
 
-       Por eso quedan en cero hasta que
-       programemos su entrada.
-    */
+    const gastosTotales =
+        gastos.reduce(
+            (total, movimiento) => {
 
-    const ingresosTotales = 0;
+                return total +
+                    (
+                        Number(
+                            movimiento.cantidadTotal
+                        )
+                        ||
+                        0
+                    );
+
+            },
+            0
+        );
+
+
+    const ingresosTotales =
+        ingresos.reduce(
+            (total, movimiento) => {
+
+                return total +
+                    (
+                        Number(
+                            movimiento.cantidadTotal
+                        )
+                        ||
+                        0
+                    );
+
+            },
+            0
+        );
 
 
     const resultado =
@@ -662,9 +751,9 @@ function actualizarAnalisis(){
         gastosTotales;
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        TARJETAS
-    --------------------------------------------- */
+    ===================================================== */
 
     document.getElementById(
         "ingresosAcumulados"
@@ -682,25 +771,27 @@ function actualizarAnalisis(){
         );
 
 
-    document.getElementById(
-        "resultadoAcumulado"
-    ).textContent =
+    const resultadoAcumulado =
+        document.getElementById(
+            "resultadoAcumulado"
+        );
+
+
+    resultadoAcumulado.textContent =
         formatoEuro(
             resultado
         );
 
 
     aplicarColorResultado(
-        document.getElementById(
-            "resultadoAcumulado"
-        ),
+        resultadoAcumulado,
         resultado
     );
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        ESTADO GENERAL
-    --------------------------------------------- */
+    ===================================================== */
 
     document.getElementById(
         "estadoIngresos"
@@ -736,15 +827,43 @@ function actualizarAnalisis(){
     );
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        PROYECTOS ACTIVOS
-    --------------------------------------------- */
+       Se cuentan proyectos que tengan gasto O ingreso.
+    ===================================================== */
 
     const proyectosConDatos =
         new Set();
 
 
-    movimientos.forEach(
+    gastos.forEach(
+        movimiento => {
+
+            const cantidad =
+                Number(
+                    movimiento.cantidadTotal
+                )
+                ||
+                0;
+
+
+            if(
+                movimiento.proyecto
+                &&
+                Math.abs(cantidad) > 0.000001
+            ){
+
+                proyectosConDatos.add(
+                    movimiento.proyecto
+                );
+
+            }
+
+        }
+    );
+
+
+    ingresos.forEach(
         movimiento => {
 
             const cantidad =
@@ -777,16 +896,19 @@ function actualizarAnalisis(){
         proyectosConDatos.size;
 
 
-    /* ---------------------------------------------
-       EVOLUCIÓN MENSUAL
-    --------------------------------------------- */
+    /* =====================================================
+       GASTOS POR MES
+
+       Los gastos pueden abarcar un periodo.
+       Se reparte el importe entre los meses del periodo.
+    ===================================================== */
 
     const gastosMes =
         new Array(12)
         .fill(0);
 
 
-    movimientos.forEach(
+    gastos.forEach(
         movimiento => {
 
 
@@ -831,19 +953,92 @@ function actualizarAnalisis(){
     );
 
 
+    /* =====================================================
+       INGRESOS POR MES
+
+       Los ingresos tienen UNA FECHA.
+       Todo el importe pertenece al mes de esa fecha.
+    ===================================================== */
+
     const ingresosMes =
         new Array(12)
         .fill(0);
 
 
-    const resultadoMes =
-        ingresosMes.map(
-            (ingreso, indice) =>
-                ingreso
-                -
-                gastosMes[indice]
-        );
+    ingresos.forEach(
+        movimiento => {
 
+
+            if(!movimiento.fecha){
+
+                return;
+
+            }
+
+
+            const fecha =
+                new Date(
+                    movimiento.fecha +
+                    "T12:00:00"
+                );
+
+
+            if(
+                isNaN(fecha.getTime())
+                ||
+                fecha.getFullYear() !== 2026
+            ){
+
+                return;
+
+            }
+
+
+            const mes =
+                fecha.getMonth();
+
+
+            const cantidad =
+                Number(
+                    movimiento.cantidadTotal
+                )
+                ||
+                0;
+
+
+            ingresosMes[mes] +=
+                cantidad;
+
+        }
+    );
+
+
+    /* =====================================================
+       RESULTADO POR MES
+    ===================================================== */
+
+    const resultadoMes =
+        new Array(12)
+        .fill(0);
+
+
+    for(
+        let mes = 0;
+        mes < 12;
+        mes++
+    ){
+
+        resultadoMes[mes] =
+            ingresosMes[mes]
+            -
+            gastosMes[mes];
+
+    }
+
+
+    /* =====================================================
+       TABLA
+    ===================================================== */
 
     rellenarFila(
         "filaIngresos",
