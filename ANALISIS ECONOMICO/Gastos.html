@@ -1,1 +1,2101 @@
 
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Entrada de datos - Análisis Económico</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --ancho-cuenta: 260px;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f4f6;
+  color: #1f2937;
+  font-size: 12px;
+}
+
+.pagina {
+  padding: 14px;
+}
+
+/* =========================================================
+   CABECERA
+   ========================================================= */
+
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cabecera h1 {
+  margin: 0;
+  font-size: 21px;
+}
+
+.volver {
+  text-decoration: none;
+  background: #374151;
+  color: white;
+  padding: 7px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* =========================================================
+   PANELES
+   ========================================================= */
+
+.panel {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+
+.panel-entrada {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.titulo {
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+/* =========================================================
+   LINEA DE ENTRADA
+   ========================================================= */
+
+.linea-entrada {
+  display: grid;
+  grid-template-columns:
+    125px
+    125px
+    260px
+    120px
+    1fr
+    260px
+    34px
+    34px
+    105px
+    105px;
+
+  gap: 5px;
+  align-items: center;
+}
+
+select,
+input {
+  height: 30px;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  padding: 3px 6px;
+  font-size: 11px;
+}
+
+input[type="number"] {
+  text-align: right;
+}
+
+button {
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.icono {
+  height: 30px;
+  width: 34px;
+  font-size: 17px;
+  padding: 0;
+}
+
+.guardar {
+  background: #16a34a;
+  color: white;
+}
+
+.borrar {
+  background: #dc2626;
+  color: white;
+}
+
+.json {
+  height: 30px;
+  padding: 0 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 10px;
+}
+
+/* =========================================================
+   FILTROS
+   ========================================================= */
+
+.panel-filtros {
+  padding: 9px 10px;
+  margin-bottom: 8px;
+}
+
+.filtros {
+  display: grid;
+  grid-template-columns: 300px 280px 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.filtros select,
+.filtros input {
+  height: 30px;
+}
+
+.ocultar-vacias {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  padding: 0 8px;
+  font-weight: bold;
+}
+
+.ocultar-vacias input {
+  width: auto;
+  height: auto;
+}
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.panel-tabla {
+  overflow: hidden;
+}
+
+.tabla-contenedor {
+  height: calc(100vh - 210px);
+  min-height: 420px;
+  overflow: auto;
+  position: relative;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: 1500px;
+  width: 100%;
+}
+
+th,
+td {
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 5px 6px;
+  white-space: nowrap;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #1f2937;
+  color: white;
+  text-align: center;
+  font-size: 10px;
+  height: 30px;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* =========================================================
+   COLUMNA CUENTA REDIMENSIONABLE
+   ========================================================= */
+
+.cuenta {
+  width: var(--ancho-cuenta);
+  min-width: var(--ancho-cuenta);
+  max-width: var(--ancho-cuenta);
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proyecto {
+  min-width: 230px;
+}
+
+.mes {
+  width: 78px;
+  min-width: 78px;
+  text-align: right;
+}
+
+.valor {
+  text-align: right;
+}
+
+.valor-con-datos {
+  font-weight: bold;
+  background: #ecfdf5;
+}
+
+.cero {
+  color: #b8bdc5;
+}
+
+/* =========================================================
+   COLUMNAS FIJAS
+   ========================================================= */
+
+th.col-cuenta,
+td.col-cuenta {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+}
+
+th.col-proyecto,
+td.col-proyecto {
+  position: sticky;
+  left: var(--ancho-cuenta);
+  z-index: 10;
+}
+
+thead th.col-cuenta,
+thead th.col-proyecto {
+  z-index: 30;
+  background: #1f2937;
+}
+
+tbody td.col-cuenta,
+tbody td.col-proyecto {
+  background: white;
+}
+
+tbody tr:hover td.col-cuenta,
+tbody tr:hover td.col-proyecto {
+  background: #f8fafc;
+}
+
+/* =========================================================
+   TIRADOR PARA CAMBIAR ANCHO
+   ========================================================= */
+
+th.col-cuenta {
+  position: sticky;
+}
+
+.redimensionador {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 50;
+}
+
+.redimensionador:hover {
+  background: rgba(255,255,255,.25);
+}
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+
+.estado {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 10px;
+}
+
+/* =========================================================
+   PANTALLAS MAS PEQUEÑAS
+   ========================================================= */
+
+@media(max-width:1200px) {
+
+  .linea-entrada {
+    grid-template-columns:
+      120px
+      115px
+      115px
+      220px
+      85px
+      190px
+      95px
+      32px
+      32px
+      100px
+      100px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="pagina">
+
+  <!-- =====================================================
+       CABECERA
+       ===================================================== -->
+
+  <div class="cabecera">
+
+    <h1>
+      ENTRADA DE DATOS · ANÁLISIS ECONÓMICO
+    </h1>
+
+    <a href="Analisis.html" class="volver">
+      ← VOLVER
+    </a>
+
+  </div>
+
+
+  <!-- =====================================================
+       ENTRADA DE GASTOS
+       ===================================================== -->
+
+  <div class="panel panel-entrada">
+
+    <div class="titulo">
+      INTRODUCIR GASTO
+    </div>
+
+    <div class="linea-entrada">
+
+      <select id="modoFecha" onchange="cambiarModoFecha()">
+
+        <option value="periodo">
+          FECHA A FECHA
+        </option>
+
+        <option value="mes">
+          MES CONCRETO
+        </option>
+
+      </select>
+
+
+      <input
+        type="date"
+        id="fechaDesde"
+        min="2026-01-01"
+        max="2026-12-31"
+        title="Inicio del periodo"
+      >
+
+
+      <input
+        type="date"
+        id="fechaHasta"
+        min="2026-01-01"
+        max="2026-12-31"
+        title="Final del periodo"
+      >
+
+
+      <select
+        id="mesConcreto"
+        style="display:none"
+      >
+
+        <option value="">MES</option>
+
+        <option value="0">ENERO</option>
+        <option value="1">FEBRERO</option>
+        <option value="2">MARZO</option>
+        <option value="3">ABRIL</option>
+        <option value="4">MAYO</option>
+        <option value="5">JUNIO</option>
+        <option value="6">JULIO</option>
+        <option value="7">AGOSTO</option>
+        <option value="8">SEPTIEMBRE</option>
+        <option value="9">OCTUBRE</option>
+        <option value="10">NOVIEMBRE</option>
+        <option value="11">DICIEMBRE</option>
+
+      </select>
+
+
+      <select id="cuentaEntrada">
+      </select>
+
+
+      <select id="origen">
+
+        <option value="">
+          ORIGEN
+        </option>
+
+        <option value="GERA">
+          GERA
+        </option>
+
+        <option value="SIG">
+          SIG
+        </option>
+
+        <option value="DAVID">
+          DAVID
+        </option>
+
+      </select>
+
+
+      <select id="proyectoEntrada">
+      </select>
+
+
+      <input
+        type="number"
+        id="cantidad"
+        step="0.01"
+        placeholder="CANTIDAD €"
+      >
+
+
+      <button
+        class="icono guardar"
+        onclick="guardarMovimiento()"
+        title="Guardar gasto">
+        💾
+      </button>
+
+
+      <button
+        class="icono borrar"
+        onclick="limpiarEntrada()"
+        title="Limpiar línea">
+        🗑️
+      </button>
+
+
+      <button
+        class="json"
+        onclick="guardarJSON()">
+        GUARDAR JSON
+      </button>
+
+
+      <button
+        class="json"
+        onclick="seleccionarJSON()">
+        CARGAR JSON
+      </button>
+
+
+      <input
+        type="file"
+        id="archivoJSON"
+        accept=".json"
+        style="display:none"
+        onchange="cargarJSON(this)"
+      >
+
+    </div>
+
+
+    <div class="estado" id="estado">
+      Los datos se guardan automáticamente en este navegador.
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       FILTROS
+       ===================================================== -->
+
+  <div class="panel panel-filtros">
+
+    <div class="filtros">
+
+
+      <select
+        id="filtroCuenta"
+        onchange="construirTabla()">
+      </select>
+
+
+      <select
+        id="filtroProyecto"
+        onchange="construirTabla()">
+      </select>
+
+
+      <input
+        id="buscar"
+        type="text"
+        placeholder="🔎 Buscar cuenta o proyecto..."
+        oninput="construirTabla()"
+      >
+
+
+      <label class="ocultar-vacias">
+
+        <input
+          type="checkbox"
+          id="ocultarVacias"
+          onchange="construirTabla()"
+          checked
+        >
+
+        OCULTAR FILAS SIN GASTO
+
+      </label>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       TABLA ENERO - DICIEMBRE
+       ===================================================== -->
+
+  <div class="panel panel-tabla">
+
+    <div class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th
+              class="col-cuenta cuenta"
+              id="cabeceraCuenta">
+
+              CUENTA CONTABLE
+
+              <span
+                class="redimensionador"
+                id="redimensionadorCuenta">
+              </span>
+
+            </th>
+
+
+            <th class="col-proyecto proyecto">
+              PROYECTO
+            </th>
+
+
+            <th class="mes">ENE</th>
+            <th class="mes">FEB</th>
+            <th class="mes">MAR</th>
+            <th class="mes">ABR</th>
+            <th class="mes">MAY</th>
+            <th class="mes">JUN</th>
+            <th class="mes">JUL</th>
+            <th class="mes">AGO</th>
+            <th class="mes">SEP</th>
+            <th class="mes">OCT</th>
+            <th class="mes">NOV</th>
+            <th class="mes">DIC</th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="tablaGastos">
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CUENTAS CONTABLES
+   ========================================================= */
+
+const cuentas = [
+
+  ["62800007","ACCIONA ENERGIA"],
+  ["62300002","ADOBE"],
+  ["62800004","AGUA"],
+  ["62900001","ALARMA"],
+  ["62100003","ALQUILER MAQUINARIAS"],
+  ["62100001","ALQUILER NAVE"],
+  ["62100002","ALQUILER VEHICULO"],
+  ["62900017","APLAZAMIENTO HACIENDA"],
+  ["62300006","ASESORIA"],
+  ["62800002","BASURA"],
+  ["62600001","COMISIONES BANCARIAS"],
+  ["60000001","COMPRA DE ACEITE USADO"],
+  ["60200003","COMPRA DE FILTROS DE CAMPANA RECOGIDA"],
+  ["60200006","COMPRA PEQUEÑAS HERRAMIENTAS"],
+  ["62900011","CONSUMIBLE HIGIENE"],
+  ["62800003","ELECTRICIDAD"],
+  ["62300003","ENRIQUE LUGONES - SERVICIOS PROFESIONALES INDEPENDIENTES"],
+  ["60200005","FUNGIBLE"],
+  ["62800006","GASOIL"],
+  ["62700001","GASTOS DE REPRESENTACION"],
+  ["62900023","GASTOS DESPLAZAMIENTO / PARQUING"],
+  ["64900000","GASTOS SOCIALES"],
+  ["62900013","GESTION DE RESIDUOS LIQUIDOS"],
+  ["62900014","GESTION DE RESIDUOS SOLIDOS"],
+  ["62300001","GESTORÍA"],
+  ["60200009","GRG"],
+  ["63100001","HACIENDA - SANCIONES"],
+  ["62900022","INCENTIVO PRODUCTOS - GASTOS DE RECOGIDA"],
+  ["66240001","INTERESES HACIENDA"],
+  ["62300004","ISCC - CERTIFICACION"],
+  ["62900016","ITV"],
+  ["62900008","MATERIAL DE OFICINA"],
+  ["60200001","MATERIALES DE INSTALACION"],
+  ["60200002","MATERIALES NAVE"],
+  ["62900005","MPE"],
+  ["67800002","MULTAS DE TRAFICO"],
+  ["60200008","OTROS GASTOS RECOGIDA"],
+  ["62900021","PAPELERÍA"],
+  ["62900009","PRODUCTOS DE LIMPIEZA"],
+  ["62900002","RECICLAJE SOLIDOS"],
+  ["62200001","REPARACION CONSERVACION NAVE"],
+  ["62200002","REPARACION VEHICULOS"],
+  ["62900018","SACAS DE OBRA BASURA"],
+  ["64000006","SALARIO DANIEL PRIETO MARTÍNEZ"],
+  ["64000003","SALARIO DAVID JAUAREZ LEON"],
+  ["64000004","SALARIO FRANCISCO GARCIA ROMERA"],
+  ["64000007","SALARIO JAIRO ZARZA MANTAS"],
+  ["64000005","SALARIO RENE HUERTAS POVEDANO"],
+  ["64000009","SALARIO SANDRA CASTRILLON GALEANO"],
+  ["64000008","SALARIO SEILA MARTIN BARROSO"],
+  ["64000010","SALARIO SOCIO ANTONIO ADROVER MARTINEZ"],
+  ["64000011","SALARIO SOCIO MARIA JOSEFA MARTOS CORONADO"],
+  ["64200002","SEGUROS SOCIALES"],
+  ["62500002","SEGUROS VEHÍCULOS"],
+  ["62800005","SERVICIOS DIGITALES / SOFWARE"],
+  ["62900006","SERVICIOS INFORMATICOS"],
+  ["62800001","TELEFONIA"],
+  ["60700000","TRABAJO DE OTRAS EMPRESAS"],
+  ["62900010","UTILES DE LIMPIEZA"],
+  ["62900007","VESTUARIO Y EPIS"]
+
+];
+
+
+/* =========================================================
+   PROYECTOS
+   ========================================================= */
+
+const proyectos = [
+
+  "RECICLAJE DE ACEITES Y GRASAS",
+  "LIMPIEZA INDUSTRIAL",
+  "LIMPIEZA HOSTELERIA",
+  "SERVICIOS VARIOS",
+  "INSTALACION Y REPARACION",
+  "GASTOS GENERALES",
+  "TRADER"
+
+];
+
+
+/* =========================================================
+   MOVIMIENTOS
+   ========================================================= */
+
+let movimientos = [];
+
+
+/* =========================================================
+   INICIO
+   ========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    cargarSelectores();
+
+    cargarLocal();
+
+    cambiarModoFecha();
+
+    construirTabla();
+
+    activarRedimensionador();
+
+  }
+);
+
+
+/* =========================================================
+   SELECTORES
+   ========================================================= */
+
+function cargarSelectores(){
+
+  const cuentaEntrada =
+    document.getElementById("cuentaEntrada");
+
+  cuentaEntrada.innerHTML =
+    '<option value="">CUENTA CONTABLE</option>';
+
+  cuentas.forEach(c => {
+
+    const opcion =
+      document.createElement("option");
+
+    opcion.value =
+      c[0];
+
+    opcion.textContent =
+      c[1] + " · " + c[0];
+
+    cuentaEntrada.appendChild(opcion);
+
+  });
+
+
+  const proyectoEntrada =
+    document.getElementById("proyectoEntrada");
+
+  proyectoEntrada.innerHTML =
+    '<option value="">PROYECTO</option>';
+
+  proyectos.forEach(p => {
+
+    const opcion =
+      document.createElement("option");
+
+    opcion.value =
+      p;
+
+    opcion.textContent =
+      p;
+
+    proyectoEntrada.appendChild(opcion);
+
+  });
+
+
+  const filtroCuenta =
+    document.getElementById("filtroCuenta");
+
+  filtroCuenta.innerHTML =
+    '<option value="">TODAS LAS CUENTAS</option>';
+
+  cuentas.forEach(c => {
+
+    const opcion =
+      document.createElement("option");
+
+    opcion.value =
+      c[0];
+
+    opcion.textContent =
+      c[1] + " · " + c[0];
+
+    filtroCuenta.appendChild(opcion);
+
+  });
+
+
+  const filtroProyecto =
+    document.getElementById("filtroProyecto");
+
+  filtroProyecto.innerHTML =
+    '<option value="">TODOS LOS PROYECTOS</option>';
+
+  proyectos.forEach(p => {
+
+    const opcion =
+      document.createElement("option");
+
+    opcion.value =
+      p;
+
+    opcion.textContent =
+      p;
+
+    filtroProyecto.appendChild(opcion);
+
+  });
+
+}
+
+
+/* =========================================================
+   CAMBIAR ENTRE FECHAS Y MES CONCRETO
+   ========================================================= */
+
+function cambiarModoFecha(){
+
+  const modo =
+    document.getElementById("modoFecha").value;
+
+  const fechaDesde =
+    document.getElementById("fechaDesde");
+
+  const fechaHasta =
+    document.getElementById("fechaHasta");
+
+  const mesConcreto =
+    document.getElementById("mesConcreto");
+
+  const linea =
+    document.querySelector(".linea-entrada");
+
+
+  if(modo === "mes"){
+
+    fechaDesde.style.display = "none";
+    fechaHasta.style.display = "none";
+    mesConcreto.style.display = "block";
+
+    linea.style.gridTemplateColumns =
+      "125px 125px 260px 120px minmax(220px,1fr) 260px 34px 34px 105px 105px";
+
+  }else{
+
+    fechaDesde.style.display = "block";
+    fechaHasta.style.display = "block";
+    mesConcreto.style.display = "none";
+
+    linea.style.gridTemplateColumns =
+      "125px 122px 122px 260px 120px minmax(220px,1fr) 260px 34px 34px 105px 105px";
+
+  }
+
+}
+
+
+/* =========================================================
+   GUARDAR MOVIMIENTO
+   ========================================================= */
+
+function guardarMovimiento(){
+
+  const modoFecha =
+    document.getElementById("modoFecha").value;
+
+
+  let desde = "";
+
+  let hasta = "";
+
+
+  /* -------------------------------------------------------
+     SI ES MES CONCRETO
+     ------------------------------------------------------- */
+
+  if(modoFecha === "mes"){
+
+    const valorMes =
+      document.getElementById("mesConcreto").value;
+
+
+    if(valorMes === ""){
+
+      alert(
+        "Selecciona un mes."
+      );
+
+      return;
+
+    }
+
+
+    const mes =
+      parseInt(valorMes);
+
+
+    const numeroMes =
+      String(
+        mes + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    const ultimoDia =
+      new Date(
+        2026,
+        mes + 1,
+        0
+      ).getDate();
+
+
+    desde =
+      "2026-"
+      +
+      numeroMes
+      +
+      "-01";
+
+
+    hasta =
+      "2026-"
+      +
+      numeroMes
+      +
+      "-"
+      +
+      String(
+        ultimoDia
+      ).padStart(
+        2,
+        "0"
+      );
+
+  }
+
+
+  /* -------------------------------------------------------
+     SI ES FECHA A FECHA
+     ------------------------------------------------------- */
+
+  else{
+
+    desde =
+      document.getElementById(
+        "fechaDesde"
+      ).value;
+
+
+    hasta =
+      document.getElementById(
+        "fechaHasta"
+      ).value;
+
+  }
+
+
+  const cuenta =
+    document.getElementById(
+      "cuentaEntrada"
+    ).value;
+
+
+  const origen =
+    document.getElementById(
+      "origen"
+    ).value;
+
+
+  const proyecto =
+    document.getElementById(
+      "proyectoEntrada"
+    ).value;
+
+
+  const cantidad =
+    parseFloat(
+      document.getElementById(
+        "cantidad"
+      ).value
+    );
+
+
+  /* -------------------------------------------------------
+     VALIDACIONES
+     ------------------------------------------------------- */
+
+  if(!desde || !hasta){
+
+    alert(
+      "Introduce DESDE y HASTA."
+    );
+
+    return;
+  }
+
+
+  if(
+    desde < "2026-01-01"
+    ||
+    hasta > "2026-12-31"
+  ){
+
+    alert(
+      "Esta tabla corresponde solamente al año 2026."
+    );
+
+    return;
+  }
+
+
+  if(hasta < desde){
+
+    alert(
+      "La fecha HASTA no puede ser anterior a DESDE."
+    );
+
+    return;
+  }
+
+
+  if(!cuenta){
+
+    alert(
+      "Selecciona una cuenta."
+    );
+
+    return;
+  }
+
+
+  if(!origen){
+
+    alert(
+      "Selecciona el origen."
+    );
+
+    return;
+  }
+
+
+  if(!proyecto){
+
+    alert(
+      "Selecciona el proyecto."
+    );
+
+    return;
+  }
+
+
+  /* ADMITE POSITIVOS Y NEGATIVOS */
+
+  if(
+    Number.isNaN(cantidad)
+    ||
+    cantidad === 0
+  ){
+
+    alert(
+      "Introduce una cantidad válida distinta de 0."
+    );
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     MESES DEL PERIODO
+     ------------------------------------------------------- */
+
+  const meses =
+    obtenerMesesPeriodo(
+      desde,
+      hasta
+    );
+
+
+  if(meses.length === 0){
+
+    alert(
+      "El periodo no contiene meses válidos de 2026."
+    );
+
+    return;
+  }
+
+
+  const cantidadMensual =
+    cantidad / meses.length;
+
+
+  /* -------------------------------------------------------
+     MOVIMIENTO
+     ------------------------------------------------------- */
+
+  const movimiento = {
+
+    id:
+      Date.now()
+      +
+      Math.floor(
+        Math.random() * 1000
+      ),
+
+    desde:
+      desde,
+
+    hasta:
+      hasta,
+
+    cuenta:
+      cuenta,
+
+    origen:
+      origen,
+
+    proyecto:
+      proyecto,
+
+    cantidadTotal:
+      cantidad,
+
+    numeroMeses:
+      meses.length,
+
+    cantidadMensual:
+      cantidadMensual
+
+  };
+
+
+  movimientos.push(
+    movimiento
+  );
+
+
+  guardarLocal();
+
+  construirTabla();
+
+
+  mostrarEstado(
+
+    "Guardado: "
+    +
+    formatoEuro(cantidad)
+    +
+    " · "
+    +
+    meses.length
+    +
+    " mes(es) · "
+    +
+    formatoEuro(cantidadMensual)
+    +
+    " por mes."
+
+  );
+
+
+  document.getElementById(
+    "cantidad"
+  ).value = "";
+
+
+  document.getElementById(
+    "cantidad"
+  ).focus();
+
+}
+
+
+/* =========================================================
+   OBTENER MESES DEL PERIODO
+   ========================================================= */
+
+function obtenerMesesPeriodo(
+  desde,
+  hasta
+){
+
+  const inicio =
+    new Date(
+      desde + "T00:00:00"
+    );
+
+
+  const fin =
+    new Date(
+      hasta + "T00:00:00"
+    );
+
+
+  const resultado = [];
+
+
+  let anio =
+    inicio.getFullYear();
+
+
+  let mes =
+    inicio.getMonth();
+
+
+  while(
+
+    anio < fin.getFullYear()
+
+    ||
+
+    (
+      anio === fin.getFullYear()
+      &&
+      mes <= fin.getMonth()
+    )
+
+  ){
+
+    if(anio === 2026){
+
+      resultado.push(
+        mes
+      );
+
+    }
+
+
+    mes++;
+
+
+    if(mes > 11){
+
+      mes = 0;
+
+      anio++;
+
+    }
+
+  }
+
+
+  return resultado;
+
+}
+
+
+/* =========================================================
+   CONSTRUIR TABLA
+   ========================================================= */
+
+function construirTabla(){
+
+  const tbody =
+    document.getElementById(
+      "tablaGastos"
+    );
+
+
+  tbody.innerHTML = "";
+
+
+  const filtroCuenta =
+    document.getElementById(
+      "filtroCuenta"
+    ).value;
+
+
+  const filtroProyecto =
+    document.getElementById(
+      "filtroProyecto"
+    ).value;
+
+
+  const texto =
+    document.getElementById(
+      "buscar"
+    )
+    .value
+    .trim()
+    .toUpperCase();
+
+
+  const ocultarVacias =
+    document.getElementById(
+      "ocultarVacias"
+    ).checked;
+
+
+  cuentas.forEach(
+    cuenta => {
+
+
+      proyectos.forEach(
+        proyecto => {
+
+
+          if(
+            filtroCuenta
+            &&
+            cuenta[0] !== filtroCuenta
+          ){
+
+            return;
+          }
+
+
+          if(
+            filtroProyecto
+            &&
+            proyecto !== filtroProyecto
+          ){
+
+            return;
+          }
+
+
+          const textoFila =
+            (
+              cuenta[0]
+              +
+              " "
+              +
+              cuenta[1]
+              +
+              " "
+              +
+              proyecto
+            )
+            .toUpperCase();
+
+
+          if(
+            texto
+            &&
+            !textoFila.includes(texto)
+          ){
+
+            return;
+          }
+
+
+          const valores =
+            calcularFila(
+              cuenta[0],
+              proyecto
+            );
+
+
+          const tieneGasto =
+            valores.some(
+              valor =>
+                Math.abs(valor)
+                >
+                0.000001
+            );
+
+
+          if(
+            ocultarVacias
+            &&
+            !tieneGasto
+          ){
+
+            return;
+          }
+
+
+          const tr =
+            document.createElement(
+              "tr"
+            );
+
+
+          let html = `
+
+            <td
+              class="col-cuenta cuenta"
+              title="${cuenta[1]} · ${cuenta[0]}">
+
+              ${cuenta[1]} · ${cuenta[0]}
+
+            </td>
+
+
+            <td
+              class="col-proyecto proyecto">
+
+              ${proyecto}
+
+            </td>
+
+          `;
+
+
+          valores.forEach(
+            valor => {
+
+
+              const clase =
+                Math.abs(valor) < 0.000001
+
+                ?
+
+                "valor cero"
+
+                :
+
+                "valor valor-con-datos";
+
+
+              html += `
+
+                <td
+                  class="mes ${clase}">
+
+                  ${
+                    Math.abs(valor) < 0.000001
+
+                    ?
+
+                    "—"
+
+                    :
+
+                    formatoNumero(valor)
+                  }
+
+                </td>
+
+              `;
+
+            }
+          );
+
+
+          tr.innerHTML =
+            html;
+
+
+          tbody.appendChild(
+            tr
+          );
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   CALCULAR UNA FILA COMPLETA
+   ========================================================= */
+
+function calcularFila(
+  codigoCuenta,
+  proyecto
+){
+
+  const valores =
+    new Array(12)
+    .fill(0);
+
+
+  movimientos.forEach(
+    movimiento => {
+
+
+      if(
+        movimiento.cuenta !== codigoCuenta
+        ||
+        movimiento.proyecto !== proyecto
+      ){
+
+        return;
+      }
+
+
+      const meses =
+        obtenerMesesPeriodo(
+          movimiento.desde,
+          movimiento.hasta
+        );
+
+
+      if(meses.length === 0){
+
+        return;
+      }
+
+
+      const mensual =
+        movimiento.cantidadTotal
+        /
+        meses.length;
+
+
+      meses.forEach(
+        mes => {
+
+          valores[mes] +=
+            mensual;
+
+        }
+      );
+
+    }
+  );
+
+
+  return valores;
+
+}
+
+
+/* =========================================================
+   LIMPIAR LINEA DE ENTRADA
+   ========================================================= */
+
+function limpiarEntrada(){
+
+  document.getElementById(
+    "fechaDesde"
+  ).value = "";
+
+
+  document.getElementById(
+    "fechaHasta"
+  ).value = "";
+
+
+  document.getElementById(
+    "mesConcreto"
+  ).value = "";
+
+
+  document.getElementById(
+    "cuentaEntrada"
+  ).value = "";
+
+
+  document.getElementById(
+    "origen"
+  ).value = "";
+
+
+  document.getElementById(
+    "proyectoEntrada"
+  ).value = "";
+
+
+  document.getElementById(
+    "cantidad"
+  ).value = "";
+
+
+  mostrarEstado(
+    "Línea de entrada limpia."
+  );
+
+}
+
+
+/* =========================================================
+   AUTOGUARDADO LOCAL
+   ========================================================= */
+
+function guardarLocal(){
+
+  localStorage.setItem(
+
+    "geravalon_analisis_economico_2026",
+
+    JSON.stringify(
+      movimientos
+    )
+
+  );
+
+}
+
+
+function cargarLocal(){
+
+  const guardado =
+    localStorage.getItem(
+      "geravalon_analisis_economico_2026"
+    );
+
+
+  if(!guardado){
+
+    movimientos = [];
+
+    return;
+  }
+
+
+  try{
+
+    movimientos =
+      JSON.parse(
+        guardado
+      );
+
+  }
+
+  catch(error){
+
+    movimientos = [];
+
+  }
+
+}
+
+
+/* =========================================================
+   GUARDAR JSON
+   ========================================================= */
+
+function guardarJSON(){
+
+  const copia = {
+
+    aplicacion:
+      "GERAVALON ANALISIS ECONOMICO",
+
+    ejercicio:
+      2026,
+
+    fechaCopia:
+      new Date().toISOString(),
+
+    movimientos:
+      movimientos
+
+  };
+
+
+  const texto =
+    JSON.stringify(
+      copia,
+      null,
+      2
+    );
+
+
+  const blob =
+    new Blob(
+
+      [texto],
+
+      {
+        type:
+          "application/json;charset=utf-8"
+      }
+
+    );
+
+
+  const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  const enlace =
+    document.createElement(
+      "a"
+    );
+
+
+  enlace.href =
+    url;
+
+
+  enlace.download =
+    "GERAVALON_ANALISIS_ECONOMICO_2026.json";
+
+
+  document.body.appendChild(
+    enlace
+  );
+
+
+  enlace.click();
+
+
+  enlace.remove();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  mostrarEstado(
+    "Copia JSON guardada."
+  );
+
+}
+
+
+/* =========================================================
+   SELECCIONAR JSON
+   ========================================================= */
+
+function seleccionarJSON(){
+
+  document
+    .getElementById(
+      "archivoJSON"
+    )
+    .click();
+
+}
+
+
+/* =========================================================
+   CARGAR JSON
+   ========================================================= */
+
+function cargarJSON(
+  input
+){
+
+  const archivo =
+    input.files[0];
+
+
+  if(!archivo){
+
+    return;
+  }
+
+
+  const lector =
+    new FileReader();
+
+
+  lector.onload =
+    function(evento){
+
+
+      try{
+
+
+        const contenido =
+          JSON.parse(
+            evento.target.result
+          );
+
+
+        let nuevosMovimientos;
+
+
+        if(
+          Array.isArray(
+            contenido
+          )
+        ){
+
+          nuevosMovimientos =
+            contenido;
+
+        }
+
+        else if(
+          Array.isArray(
+            contenido.movimientos
+          )
+        ){
+
+          nuevosMovimientos =
+            contenido.movimientos;
+
+        }
+
+        else{
+
+          throw new Error(
+            "Formato incorrecto"
+          );
+
+        }
+
+
+        const aceptar =
+          confirm(
+
+            "Se van a sustituir los datos actuales "
+            +
+            "por los del archivo JSON.\n\n"
+            +
+            "¿Continuar?"
+
+          );
+
+
+        if(!aceptar){
+
+          input.value = "";
+
+          return;
+        }
+
+
+        movimientos =
+          nuevosMovimientos;
+
+
+        guardarLocal();
+
+        construirTabla();
+
+
+        mostrarEstado(
+
+          movimientos.length
+          +
+          " movimientos cargados desde JSON."
+
+        );
+
+
+      }
+
+      catch(error){
+
+        alert(
+          "No se ha podido cargar el archivo JSON."
+        );
+
+      }
+
+
+      input.value = "";
+
+    };
+
+
+  lector.readAsText(
+    archivo
+  );
+
+}
+
+
+/* =========================================================
+   REDIMENSIONAR PRIMERA COLUMNA
+   ========================================================= */
+
+function activarRedimensionador(){
+
+  const tirador =
+    document.getElementById(
+      "redimensionadorCuenta"
+    );
+
+
+  if(!tirador){
+
+    return;
+  }
+
+
+  let redimensionando =
+    false;
+
+
+  let inicioX =
+    0;
+
+
+  let anchoInicial =
+    260;
+
+
+  tirador.addEventListener(
+    "mousedown",
+    function(evento){
+
+
+      redimensionando =
+        true;
+
+
+      inicioX =
+        evento.clientX;
+
+
+      const valorActual =
+        getComputedStyle(
+          document.documentElement
+        )
+        .getPropertyValue(
+          "--ancho-cuenta"
+        );
+
+
+      anchoInicial =
+        parseInt(
+          valorActual
+        )
+        ||
+        260;
+
+
+      document.body.style.userSelect =
+        "none";
+
+
+      evento.preventDefault();
+
+      evento.stopPropagation();
+
+    }
+  );
+
+
+  document.addEventListener(
+    "mousemove",
+    function(evento){
+
+
+      if(!redimensionando){
+
+        return;
+      }
+
+
+      let nuevoAncho =
+        anchoInicial
+        +
+        (
+          evento.clientX
+          -
+          inicioX
+        );
+
+
+      if(nuevoAncho < 140){
+
+        nuevoAncho =
+          140;
+
+      }
+
+
+      if(nuevoAncho > 600){
+
+        nuevoAncho =
+          600;
+
+      }
+
+
+      document.documentElement
+        .style
+        .setProperty(
+
+          "--ancho-cuenta",
+
+          nuevoAncho + "px"
+
+        );
+
+    }
+  );
+
+
+  document.addEventListener(
+    "mouseup",
+    function(){
+
+
+      if(!redimensionando){
+
+        return;
+      }
+
+
+      redimensionando =
+        false;
+
+
+      document.body.style.userSelect =
+        "";
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   FORMATO NUMERO
+   ========================================================= */
+
+function formatoNumero(
+  numero
+){
+
+  return numero.toLocaleString(
+
+    "es-ES",
+
+    {
+      minimumFractionDigits:
+        2,
+
+      maximumFractionDigits:
+        2
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   FORMATO EURO
+   ========================================================= */
+
+function formatoEuro(
+  numero
+){
+
+  return formatoNumero(
+    numero
+  )
+  +
+  " €";
+
+}
+
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+
+function mostrarEstado(
+  texto
+){
+
+  document
+    .getElementById(
+      "estado"
+    )
+    .textContent =
+      texto;
+
+}
+
+</script>
+
+</body>
+</html>
