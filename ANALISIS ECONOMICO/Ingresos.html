@@ -8,562 +8,795 @@
 <title>GERAVALON · Ingresos</title>
 
 <style>
+
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:root {
+  --ancho-cuenta: 260px;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f3f4f6;
-    color: #1f2937;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f4f6;
+  color: #1f2937;
+  font-size: 12px;
 }
 
-header {
-    background: #111827;
-    color: white;
-    padding: 22px 30px;
+/* =========================================================
+   CABECERA
+========================================================= */
+
+.cabecera {
+  height: 76px;
+  background: #1f2937;
+  color: white;
+  padding: 14px 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 25px;
+.cabecera-titulo h1 {
+  margin: 0;
+  font-size: 21px;
 }
 
-header p {
-    margin: 6px 0 0;
-    color: #cbd5e1;
-    font-size: 14px;
+.cabecera-titulo p {
+  margin: 3px 0 0;
+  color: #cbd5e1;
+  font-size: 11px;
 }
 
-.contenedor {
-    width: 96%;
-    max-width: 1600px;
-    margin: 25px auto;
+.cabecera-derecha {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
+
+.ejercicio {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.volver {
+  text-decoration: none;
+  background: #374151;
+  color: white;
+  padding: 7px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* =========================================================
+   PAGINA
+========================================================= */
+
+.pagina {
+  padding: 14px;
+}
+
+/* =========================================================
+   PANELES
+========================================================= */
 
 .panel {
-    background: white;
-    border-radius: 10px;
-    padding: 22px;
-    margin-bottom: 22px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07);
 }
 
-.panel h2 {
-    margin-top: 0;
-    font-size: 20px;
+.panel-resumen {
+  margin-bottom: 10px;
 }
 
-.formulario {
-    display: grid;
-    grid-template-columns: 150px 170px 1fr 160px 1fr 170px;
-    gap: 14px;
-    align-items: end;
+.panel-entrada {
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
-.campo {
-    display: flex;
-    flex-direction: column;
+.panel-datos {
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
-.campo label {
-    font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 6px;
-    color: #4b5563;
+.panel-tabla {
+  margin-bottom: 10px;
+  overflow: hidden;
 }
 
-input,
+.panel-movimientos {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.titulo {
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+/* =========================================================
+   RESUMEN
+========================================================= */
+
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.tarjeta {
+  background: white;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+
+.tarjeta .titulo-resumen {
+  color: #6b7280;
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.tarjeta .valor {
+  font-size: 21px;
+  font-weight: bold;
+}
+
+/* =========================================================
+   LINEA DE ENTRADA
+========================================================= */
+
+.linea-entrada {
+  display: grid;
+
+  grid-template-columns:
+    125px
+    145px
+    minmax(260px,1.4fr)
+    115px
+    minmax(230px,1fr)
+    150px
+    34px
+    105px
+    105px;
+
+  gap: 5px;
+  align-items: center;
+}
+
 select,
+input {
+  height: 30px;
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background: white;
+  padding: 3px 6px;
+  font-size: 11px;
+}
+
+input[type="number"] {
+  text-align: right;
+}
+
 button {
-    height: 40px;
-    border-radius: 6px;
-    border: 1px solid #d1d5db;
-    padding: 0 10px;
-    font-size: 14px;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  height: 30px;
 }
 
-input:focus,
-select:focus {
-    outline: none;
-    border-color: #2563eb;
+.guardar {
+  background: #16a34a;
+  color: white;
 }
 
-.boton-principal {
-    background: #2563eb;
-    color: white;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
+.guardar:hover {
+  background: #15803d;
 }
 
-.boton-principal:hover {
-    background: #1d4ed8;
+.nueva-cuenta {
+  background: #e5e7eb;
+  color: #111827;
+  height: 30px;
+  padding: 0 8px;
+  white-space: nowrap;
 }
 
-.boton-secundario {
-    background: #e5e7eb;
-    color: #111827;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
+.nueva-cuenta:hover {
+  background: #d1d5db;
 }
 
-.boton-secundario:hover {
-    background: #d1d5db;
+.json {
+  height: 30px;
+  padding: 0 8px;
+  background: #2563eb;
+  color: white;
+  font-size: 10px;
 }
 
-.boton-rojo {
-    background: #dc2626;
-    color: white;
-    border: none;
-    cursor: pointer;
+.json-gris {
+  height: 30px;
+  padding: 0 8px;
+  background: #e5e7eb;
+  color: #111827;
+  font-size: 10px;
 }
 
-.boton-rojo:hover {
-    background: #b91c1c;
+.eliminar {
+  background: #dc2626;
+  color: white;
+  height: 26px;
+  padding: 0 9px;
+  font-size: 10px;
 }
 
-.boton-verde {
-    background: #059669;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
+.eliminar:hover {
+  background: #b91c1c;
 }
 
 .fila-cuenta {
-    display: flex;
-    gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px;
 }
 
-.fila-cuenta select {
-    flex: 1;
+/* =========================================================
+   ESTADO
+========================================================= */
+
+.estado {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 10px;
 }
 
-.fila-cuenta button {
-    white-space: nowrap;
+.estado.ok {
+  color: #047857;
+  font-weight: bold;
 }
 
-.acciones {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+.estado.error {
+  color: #b91c1c;
+  font-weight: bold;
 }
 
-.tabla-wrapper {
-    overflow-x: auto;
+/* =========================================================
+   JSON
+========================================================= */
+
+.acciones-json {
+  display: flex;
+  gap: 6px;
+}
+
+/* =========================================================
+   TABLAS
+========================================================= */
+
+.tabla-contenedor {
+  overflow: auto;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1250px;
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 1250px;
 }
 
 th,
 td {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 10px;
-    font-size: 13px;
-    text-align: right;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 5px 6px;
+  white-space: nowrap;
 }
 
-th {
-    background: #f9fafb;
-    color: #374151;
+thead th {
+  background: #1f2937;
+  color: white;
+  text-align: center;
+  font-size: 10px;
+  height: 30px;
 }
 
-th:first-child,
-td:first-child,
-th:nth-child(2),
-td:nth-child(2),
-th:nth-child(3),
-td:nth-child(3),
-th:nth-child(4),
-td:nth-child(4) {
-    text-align: left;
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+td {
+  font-size: 11px;
+}
+
+.texto {
+  text-align: left;
+}
+
+.numero {
+  text-align: right;
+}
+
+.valor-con-datos {
+  font-weight: bold;
+  background: #ecfdf5;
+}
+
+.cero {
+  color: #b8bdc5;
 }
 
 .total {
-    font-weight: bold;
-    background: #f3f4f6;
-}
-
-.mensaje {
-    margin-top: 15px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.ok {
-    color: #047857;
-}
-
-.error {
-    color: #b91c1c;
-}
-
-.modal-fondo {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.55);
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal {
-    width: 430px;
-    max-width: 92%;
-    background: white;
-    border-radius: 10px;
-    padding: 24px;
-}
-
-.modal h3 {
-    margin-top: 0;
-}
-
-.modal .campo {
-    margin-bottom: 15px;
-}
-
-.modal-botones {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.resumen {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-bottom: 22px;
-}
-
-.tarjeta {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.08);
-}
-
-.tarjeta .titulo {
-    font-size: 12px;
-    color: #6b7280;
-    font-weight: bold;
-}
-
-.tarjeta .valor {
-    font-size: 26px;
-    font-weight: bold;
-    margin-top: 8px;
+  font-weight: bold;
+  background: #f3f4f6;
 }
 
 /* =========================================================
-   FILTROS DE MOVIMIENTOS
+   FILTROS MOVIMIENTOS
 ========================================================= */
 
-.filtros-movimientos {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 12px;
-    align-items: end;
-    margin-bottom: 18px;
+.filtros {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
-.filtros-movimientos .campo {
-    min-width: 0;
+.limpiar-filtros {
+  background: #e5e7eb;
+  color: #111827;
+  padding: 0 12px;
 }
 
-.sin-movimientos {
-    text-align: center !important;
-    color: #6b7280;
-    padding: 25px;
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal-fondo {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-@media (max-width: 1100px) {
-    .formulario {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .filtros-movimientos {
-        grid-template-columns: 1fr 1fr;
-    }
+.modal {
+  width: 430px;
+  max-width: 92%;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
 }
 
-@media (max-width: 700px) {
-    .formulario,
-    .resumen,
-    .filtros-movimientos {
-        grid-template-columns: 1fr;
-    }
+.modal h3 {
+  margin-top: 0;
+  font-size: 16px;
 }
+
+.modal-campo {
+  margin-bottom: 12px;
+}
+
+.modal-campo label {
+  display: block;
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.boton-cancelar {
+  background: #e5e7eb;
+  color: #111827;
+  padding: 0 12px;
+}
+
+.boton-guardar-cuenta {
+  background: #16a34a;
+  color: white;
+  padding: 0 12px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1200px) {
+
+  .linea-entrada {
+    grid-template-columns:
+      120px
+      130px
+      minmax(240px,1fr)
+      100px
+      minmax(200px,1fr)
+      130px
+      34px
+      100px
+      100px;
+  }
+
+}
+
+@media(max-width:900px) {
+
+  .resumen {
+    grid-template-columns: 1fr;
+  }
+
+  .linea-entrada {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .filtros {
+    grid-template-columns: 1fr;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>GERAVALON · INGRESOS</h1>
-    <p>ANÁLISIS ECONÓMICO · EJERCICIO 2026</p>
-</header>
-    <div style="width:96%; max-width:1600px; margin:15px auto 0;">
-    <a href="Analisis.html"
-       style="
-           display:inline-block;
-           background:#374151;
-           color:white;
-           text-decoration:none;
-           padding:10px 18px;
-           border-radius:6px;
-           font-weight:bold;
-           font-size:14px;
-       ">
-        ← VOLVER
+<!-- =====================================================
+     CABECERA
+====================================================== -->
+
+<div class="cabecera">
+
+  <div class="cabecera-titulo">
+
+    <h1>
+      GERAVALON · INGRESOS
+    </h1>
+
+    <p>
+      ANÁLISIS ECONÓMICO · EJERCICIO 2026
+    </p>
+
+  </div>
+
+
+  <div class="cabecera-derecha">
+
+    <div class="ejercicio">
+      Ejercicio 2026
+    </div>
+
+    <a href="Analisis.html" class="volver">
+      ← VOLVER
     </a>
+
+  </div>
+
 </div>
 
-<div class="contenedor">
 
-    <div class="resumen">
+<div class="pagina">
 
-        <div class="tarjeta">
-            <div class="titulo">INGRESOS ACUMULADOS</div>
-            <div class="valor" id="totalIngresos">0,00 €</div>
-        </div>
 
-        <div class="tarjeta">
-            <div class="titulo">NÚMERO DE MOVIMIENTOS</div>
-            <div class="valor" id="numeroMovimientos">0</div>
-        </div>
+<!-- =====================================================
+     RESUMEN
+====================================================== -->
 
-        <div class="tarjeta">
-            <div class="titulo">CUENTAS DE INGRESO</div>
-            <div class="valor" id="numeroCuentas">0</div>
-        </div>
+<div class="panel-resumen">
 
-    </div>
+  <div class="resumen">
 
-    <!-- =====================================================
-         INTRODUCIR INGRESO
-    ====================================================== -->
+    <div class="tarjeta">
 
-    <div class="panel">
+      <div class="titulo-resumen">
+        INGRESOS ACUMULADOS
+      </div>
 
-        <h2>INTRODUCIR INGRESO</h2>
-
-        <div class="formulario">
-
-            <div class="campo">
-                <label>FECHA</label>
-                <input
-                    type="date"
-                    id="fecha"
-                    min="2026-01-01"
-                    max="2026-12-31">
-            </div>
-
-            <div class="campo">
-                <label>N.º FACTURA</label>
-                <input
-                    type="text"
-                    id="numeroFactura"
-                    placeholder="N.º FACTURA">
-            </div>
-
-            <div class="campo">
-                <label>CUENTA CONTABLE</label>
-
-                <div class="fila-cuenta">
-
-                    <select id="cuenta"></select>
-
-                    <button
-                        type="button"
-                        class="boton-secundario"
-                        onclick="abrirNuevaCuenta()">
-                        + NUEVA CUENTA
-                    </button>
-
-                </div>
-            </div>
-
-            <div class="campo">
-                <label>ORIGEN</label>
-
-                <select id="origen">
-                    <option value="GERA">GERA</option>
-                    <option value="SIG">SIG</option>
-                    <option value="DAVID">DAVID</option>
-                </select>
-            </div>
-
-            <div class="campo">
-                <label>PROYECTO</label>
-                <select id="proyecto"></select>
-            </div>
-
-            <div class="campo">
-                <label>IMPORTE €</label>
-                <input
-                    type="number"
-                    id="cantidad"
-                    step="0.01"
-                    placeholder="0,00">
-            </div>
-
-        </div>
-
-        <div style="margin-top:18px;">
-            <button
-                class="boton-principal"
-                onclick="guardarMovimiento()">
-                GUARDAR INGRESO
-            </button>
-        </div>
-
-        <div id="mensaje" class="mensaje"></div>
+      <div class="valor" id="totalIngresos">
+        0,00 €
+      </div>
 
     </div>
 
-    <!-- =====================================================
-         DATOS GUARDADOS
-    ====================================================== -->
 
-    <div class="panel">
+    <div class="tarjeta">
 
-        <h2>DATOS GUARDADOS</h2>
+      <div class="titulo-resumen">
+        NÚMERO DE MOVIMIENTOS
+      </div>
 
-        <div class="acciones">
-
-            <button
-                class="boton-verde"
-                onclick="descargarJSON()">
-                DESCARGAR COPIA JSON
-            </button>
-
-            <button
-                class="boton-secundario"
-                onclick="document.getElementById('archivoJSON').click()">
-                CARGAR COPIA JSON
-            </button>
-
-            <input
-                type="file"
-                id="archivoJSON"
-                accept=".json"
-                style="display:none"
-                onchange="cargarJSON(event)">
-
-        </div>
+      <div class="valor" id="numeroMovimientos">
+        0
+      </div>
 
     </div>
 
-    <!-- =====================================================
-         INGRESOS POR MES
-    ====================================================== -->
 
-    <div class="panel">
+    <div class="tarjeta">
 
-        <h2>INGRESOS POR MES</h2>
+      <div class="titulo-resumen">
+        CUENTAS DE INGRESO
+      </div>
 
-        <div class="tabla-wrapper">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>CUENTA</th>
-                        <th>PROYECTO</th>
-                        <th>ORIGEN</th>
-
-                        <th>ENE</th>
-                        <th>FEB</th>
-                        <th>MAR</th>
-                        <th>ABR</th>
-                        <th>MAY</th>
-                        <th>JUN</th>
-                        <th>JUL</th>
-                        <th>AGO</th>
-                        <th>SEP</th>
-                        <th>OCT</th>
-                        <th>NOV</th>
-                        <th>DIC</th>
-
-                        <th>TOTAL</th>
-                    </tr>
-                </thead>
-
-                <tbody id="tablaIngresos"></tbody>
-
-            </table>
-
-        </div>
+      <div class="valor" id="numeroCuentas">
+        0
+      </div>
 
     </div>
 
-    <!-- =====================================================
-         MOVIMIENTOS
-    ====================================================== -->
+  </div>
 
-    <div class="panel">
+</div>
 
-        <h2>MOVIMIENTOS</h2>
 
-        <div class="filtros-movimientos">
+<!-- =====================================================
+     INTRODUCIR INGRESO
+====================================================== -->
 
-            <div class="campo">
-                <label>FILTRAR POR CUENTA</label>
-                <select
-                    id="filtroCuentaMovimiento"
-                    onchange="construirTablaMovimientos()">
-                </select>
-            </div>
+<div class="panel panel-entrada">
 
-            <div class="campo">
-                <label>FILTRAR POR PROYECTO</label>
-                <select
-                    id="filtroProyectoMovimiento"
-                    onchange="construirTablaMovimientos()">
-                </select>
-            </div>
+  <div class="titulo">
+    INTRODUCIR INGRESO
+  </div>
 
-            <button
-                type="button"
-                class="boton-secundario"
-                onclick="limpiarFiltrosMovimientos()">
-                LIMPIAR FILTROS
-            </button>
 
-        </div>
+  <div class="linea-entrada">
 
-        <div class="tabla-wrapper">
 
-            <table>
+    <input
+      type="date"
+      id="fecha"
+      min="2026-01-01"
+      max="2026-12-31"
+      title="Fecha de factura"
+    >
 
-                <thead>
-                    <tr>
-                        <th>FECHA</th>
-                        <th>N.º FACTURA</th>
-                        <th>CUENTA</th>
-                        <th>ORIGEN</th>
-                        <th>PROYECTO</th>
-                        <th>IMPORTE</th>
-                        <th></th>
-                    </tr>
-                </thead>
 
-                <tbody id="tablaMovimientos"></tbody>
+    <input
+      type="text"
+      id="numeroFactura"
+      placeholder="N.º FACTURA"
+      title="Número de factura"
+    >
 
-            </table>
 
-        </div>
+    <div class="fila-cuenta">
+
+      <select
+        id="cuenta"
+        title="Cuenta contable">
+      </select>
+
+      <button
+        type="button"
+        class="nueva-cuenta"
+        onclick="abrirNuevaCuenta()">
+        + NUEVA
+      </button>
 
     </div>
+
+
+    <select
+      id="origen"
+      title="Origen">
+
+      <option value="GERA">
+        GERA
+      </option>
+
+      <option value="SIG">
+        SIG
+      </option>
+
+      <option value="DAVID">
+        DAVID
+      </option>
+
+    </select>
+
+
+    <select
+      id="proyecto"
+      title="Proyecto">
+    </select>
+
+
+    <input
+      type="number"
+      id="cantidad"
+      step="0.01"
+      placeholder="IMPORTE €"
+    >
+
+
+    <button
+      class="guardar"
+      onclick="guardarMovimiento()"
+      title="Guardar ingreso">
+      💾
+    </button>
+
+
+    <button
+      class="json"
+      onclick="descargarJSON()">
+      GUARDAR JSON
+    </button>
+
+
+    <button
+      class="json-gris"
+      onclick="document.getElementById('archivoJSON').click()">
+      CARGAR JSON
+    </button>
+
+
+    <input
+      type="file"
+      id="archivoJSON"
+      accept=".json"
+      style="display:none"
+      onchange="cargarJSON(event)"
+    >
+
+  </div>
+
+
+  <div
+    class="estado"
+    id="mensaje">
+
+    Los datos se guardan automáticamente en este navegador.
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     INGRESOS POR MES
+====================================================== -->
+
+<div class="panel panel-tabla">
+
+  <div style="padding:10px 10px 0">
+
+    <div class="titulo">
+      INGRESOS POR MES
+    </div>
+
+  </div>
+
+
+  <div class="tabla-contenedor">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>CUENTA CONTABLE</th>
+
+          <th>PROYECTO</th>
+
+          <th>ORIGEN</th>
+
+          <th>ENE</th>
+          <th>FEB</th>
+          <th>MAR</th>
+          <th>ABR</th>
+          <th>MAY</th>
+          <th>JUN</th>
+          <th>JUL</th>
+          <th>AGO</th>
+          <th>SEP</th>
+          <th>OCT</th>
+          <th>NOV</th>
+          <th>DIC</th>
+
+          <th>TOTAL</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody id="tablaIngresos">
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     MOVIMIENTOS
+====================================================== -->
+
+<div class="panel panel-movimientos">
+
+  <div class="titulo">
+    MOVIMIENTOS
+  </div>
+
+
+  <div class="filtros">
+
+    <select
+      id="filtroCuentaMovimiento"
+      onchange="construirTablaMovimientos()">
+    </select>
+
+
+    <select
+      id="filtroProyectoMovimiento"
+      onchange="construirTablaMovimientos()">
+    </select>
+
+
+    <button
+      class="limpiar-filtros"
+      onclick="limpiarFiltrosMovimientos()">
+
+      LIMPIAR FILTROS
+
+    </button>
+
+  </div>
+
+
+  <div class="tabla-contenedor">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>FECHA</th>
+
+          <th>N.º FACTURA</th>
+
+          <th>CUENTA</th>
+
+          <th>ORIGEN</th>
+
+          <th>PROYECTO</th>
+
+          <th>IMPORTE</th>
+
+          <th>ACCIÓN</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody id="tablaMovimientos">
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
 
 </div>
 
@@ -572,45 +805,67 @@ td:nth-child(4) {
      MODAL NUEVA CUENTA
 ====================================================== -->
 
-<div class="modal-fondo" id="modalCuenta">
+<div
+  class="modal-fondo"
+  id="modalCuenta">
 
-    <div class="modal">
+  <div class="modal">
 
-        <h3>NUEVA CUENTA DE INGRESO</h3>
+    <h3>
+      NUEVA CUENTA DE INGRESO
+    </h3>
 
-        <div class="campo">
-            <label>CÓDIGO CONTABLE</label>
-            <input
-                type="text"
-                id="nuevoCodigo"
-                placeholder="Ej. 70500006">
-        </div>
 
-        <div class="campo">
-            <label>NOMBRE</label>
-            <input
-                type="text"
-                id="nuevoNombre"
-                placeholder="Nombre de la cuenta">
-        </div>
+    <div class="modal-campo">
 
-        <div class="modal-botones">
+      <label>
+        CÓDIGO CONTABLE
+      </label>
 
-            <button
-                class="boton-secundario"
-                onclick="cerrarNuevaCuenta()">
-                CANCELAR
-            </button>
-
-            <button
-                class="boton-principal"
-                onclick="guardarNuevaCuenta()">
-                GUARDAR CUENTA
-            </button>
-
-        </div>
+      <input
+        type="text"
+        id="nuevoCodigo"
+        placeholder="Ej. 70500006">
 
     </div>
+
+
+    <div class="modal-campo">
+
+      <label>
+        NOMBRE
+      </label>
+
+      <input
+        type="text"
+        id="nuevoNombre"
+        placeholder="Nombre de la cuenta">
+
+    </div>
+
+
+    <div class="modal-botones">
+
+      <button
+        class="boton-cancelar"
+        onclick="cerrarNuevaCuenta()">
+
+        CANCELAR
+
+      </button>
+
+
+      <button
+        class="boton-guardar-cuenta"
+        onclick="guardarNuevaCuenta()">
+
+        GUARDAR CUENTA
+
+      </button>
+
+    </div>
+
+  </div>
 
 </div>
 
@@ -621,32 +876,35 @@ td:nth-child(4) {
    CONFIGURACIÓN
 ========================================================= */
 
-const CLAVE_INGRESOS = "geravalon_ingresos_2026";
-const CLAVE_CUENTAS = "geravalon_cuentas_ingresos";
+const CLAVE_INGRESOS =
+  "geravalon_ingresos_2026";
+
+const CLAVE_CUENTAS =
+  "geravalon_cuentas_ingresos";
 
 
 /* =========================================================
-   CUENTAS INICIALES DE INGRESOS
+   CUENTAS INICIALES
 ========================================================= */
 
 const cuentasIniciales = [
 
-    ["70500005", "INSTALACIÓN SEPARADOR DE GRASA"],
-    ["70500004", "INSTALACION Y REPARACIONES"],
-    ["70500003", "SERVICIOS"],
-    ["70500002", "LIMPIEZA RESTAURACION"],
-    ["70500001", "LIMPIEZAS SOL DE ALBA"],
+  ["70500005","INSTALACIÓN SEPARADOR DE GRASA"],
+  ["70500004","INSTALACION Y REPARACIONES"],
+  ["70500003","SERVICIOS"],
+  ["70500002","LIMPIEZA RESTAURACION"],
+  ["70500001","LIMPIEZAS SOL DE ALBA"],
 
-    ["70000010", "GRG - CONTENEDORES - BIDONES"],
-    ["70000008", "SEPARADORES DE GRASA"],
-    ["70000007", "ELEMENTOS SISTEMA DE EXTRACCIÓN"],
-    ["70000006", "CAMPANAS"],
-    ["70000005", "FILTRACIÓN ELECTROSTÁTICA"],
-    ["70000004", "CAJAS DE VENTILACIÓN"],
-    ["70000003", "VENTA DE FILTROS ESPECIALES"],
-    ["70000002", "VENTA DE FILTROS DE COCINA"],
-    ["70000001", "VENTA DE ACEITE USADO"],
-    ["70000000", "VENTAS DE MERCADERÍAS"]
+  ["70000010","GRG - CONTENEDORES - BIDONES"],
+  ["70000008","SEPARADORES DE GRASA"],
+  ["70000007","ELEMENTOS SISTEMA DE EXTRACCIÓN"],
+  ["70000006","CAMPANAS"],
+  ["70000005","FILTRACIÓN ELECTROSTÁTICA"],
+  ["70000004","CAJAS DE VENTILACIÓN"],
+  ["70000003","VENTA DE FILTROS ESPECIALES"],
+  ["70000002","VENTA DE FILTROS DE COCINA"],
+  ["70000001","VENTA DE ACEITE USADO"],
+  ["70000000","VENTAS DE MERCADERÍAS"]
 
 ];
 
@@ -657,13 +915,13 @@ const cuentasIniciales = [
 
 const proyectos = [
 
-    "RECICLAJE DE ACEITES Y GRASAS",
-    "LIMPIEZA INDUSTRIAL",
-    "LIMPIEZA HOSTELERIA",
-    "SERVICIOS VARIOS",
-    "INSTALACION Y REPARACION",
-    "GASTOS GENERALES",
-    "TRADER"
+  "RECICLAJE DE ACEITES Y GRASAS",
+  "LIMPIEZA INDUSTRIAL",
+  "LIMPIEZA HOSTELERIA",
+  "SERVICIOS VARIOS",
+  "INSTALACION Y REPARACION",
+  "GASTOS GENERALES",
+  "TRADER"
 
 ];
 
@@ -680,7 +938,9 @@ let cuentas = [];
    INICIO
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
 
     cargarCuentas();
 
@@ -692,33 +952,55 @@ document.addEventListener("DOMContentLoaded", function() {
 
     construirTodo();
 
-});
+  }
+);
 
 
 /* =========================================================
    FECHA
 ========================================================= */
 
-function ponerFechaHoy() {
+function ponerFechaHoy(){
 
-    const hoy = new Date();
+  const hoy =
+    new Date();
 
-    const yyyy = hoy.getFullYear();
 
-    const mm =
-        String(hoy.getMonth() + 1)
-        .padStart(2, "0");
+  if(
+    hoy.getFullYear()
+    !==
+    2026
+  ){
 
-    const dd =
-        String(hoy.getDate())
-        .padStart(2, "0");
+    return;
 
-    if (yyyy === 2026) {
+  }
 
-        document.getElementById("fecha").value =
-            `${yyyy}-${mm}-${dd}`;
 
-    }
+  const mm =
+    String(
+      hoy.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const dd =
+    String(
+      hoy.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  document
+    .getElementById(
+      "fecha"
+    )
+    .value =
+    `2026-${mm}-${dd}`;
 
 }
 
@@ -727,46 +1009,66 @@ function ponerFechaHoy() {
    CUENTAS
 ========================================================= */
 
-function cargarCuentas() {
+function cargarCuentas(){
 
-    const guardadas =
-        localStorage.getItem(CLAVE_CUENTAS);
+  const guardadas =
+    localStorage.getItem(
+      CLAVE_CUENTAS
+    );
 
-    if (guardadas) {
 
-        try {
+  if(guardadas){
 
-            cuentas = JSON.parse(guardadas);
+    try{
 
-        } catch {
-
-            cuentas =
-                JSON.parse(
-                    JSON.stringify(cuentasIniciales)
-                );
-
-        }
-
-    } else {
-
-        cuentas =
-            JSON.parse(
-                JSON.stringify(cuentasIniciales)
-            );
-
-        guardarCuentas();
+      cuentas =
+        JSON.parse(
+          guardadas
+        );
 
     }
+
+    catch{
+
+      cuentas =
+        JSON.parse(
+          JSON.stringify(
+            cuentasIniciales
+          )
+        );
+
+    }
+
+  }
+
+  else{
+
+    cuentas =
+      JSON.parse(
+        JSON.stringify(
+          cuentasIniciales
+        )
+      );
+
+
+    guardarCuentas();
+
+  }
 
 }
 
 
-function guardarCuentas() {
+function guardarCuentas(){
 
-    localStorage.setItem(
-        CLAVE_CUENTAS,
-        JSON.stringify(cuentas)
-    );
+  localStorage.setItem(
+
+    CLAVE_CUENTAS,
+
+    JSON.stringify(
+      cuentas
+    )
+
+  );
 
 }
 
@@ -775,117 +1077,164 @@ function guardarCuentas() {
    SELECTORES
 ========================================================= */
 
-function cargarSelectores() {
+function cargarSelectores(){
 
-    /* -----------------------------------------------------
-       CUENTA DE ENTRADA
-    ----------------------------------------------------- */
-
-    const selectorCuenta =
-        document.getElementById("cuenta");
-
-    selectorCuenta.innerHTML = "";
+  const selectorCuenta =
+    document.getElementById(
+      "cuenta"
+    );
 
 
-    cuentas
-        .sort((a,b) =>
-            a[0].localeCompare(b[0])
+  selectorCuenta.innerHTML =
+    "";
+
+
+  cuentas
+    .sort(
+      (a,b) =>
+        a[0].localeCompare(
+          b[0]
         )
-        .forEach(cuenta => {
-
-            const opcion =
-                document.createElement("option");
-
-            opcion.value = cuenta[0];
-
-            opcion.textContent =
-                `${cuenta[0]} · ${cuenta[1]}`;
-
-            selectorCuenta.appendChild(opcion);
-
-        });
-
-
-    /* -----------------------------------------------------
-       PROYECTO DE ENTRADA
-    ----------------------------------------------------- */
-
-    const selectorProyecto =
-        document.getElementById("proyecto");
-
-    selectorProyecto.innerHTML = "";
-
-
-    proyectos.forEach(proyecto => {
+    )
+    .forEach(
+      cuenta => {
 
         const opcion =
-            document.createElement("option");
-
-        opcion.value = proyecto;
-
-        opcion.textContent = proyecto;
-
-        selectorProyecto.appendChild(opcion);
-
-    });
+          document.createElement(
+            "option"
+          );
 
 
-    /* -----------------------------------------------------
-       FILTRO DE CUENTAS EN MOVIMIENTOS
-    ----------------------------------------------------- */
+        opcion.value =
+          cuenta[0];
 
-    const filtroCuenta =
-        document.getElementById(
-            "filtroCuentaMovimiento"
-        );
-
-    filtroCuenta.innerHTML =
-        '<option value="">TODAS LAS CUENTAS</option>';
-
-
-    cuentas.forEach(cuenta => {
-
-        const opcion =
-            document.createElement("option");
-
-        opcion.value = cuenta[0];
 
         opcion.textContent =
-            `${cuenta[0]} · ${cuenta[1]}`;
+          cuenta[1]
+          +
+          " · "
+          +
+          cuenta[0];
 
-        filtroCuenta.appendChild(opcion);
 
-    });
-
-
-    /* -----------------------------------------------------
-       FILTRO DE PROYECTOS EN MOVIMIENTOS
-    ----------------------------------------------------- */
-
-    const filtroProyecto =
-        document.getElementById(
-            "filtroProyectoMovimiento"
+        selectorCuenta.appendChild(
+          opcion
         );
 
-    filtroProyecto.innerHTML =
-        '<option value="">TODOS LOS PROYECTOS</option>';
+      }
+    );
 
 
-    proyectos.forEach(proyecto => {
-
-        const opcion =
-            document.createElement("option");
-
-        opcion.value = proyecto;
-
-        opcion.textContent = proyecto;
-
-        filtroProyecto.appendChild(opcion);
-
-    });
+  const selectorProyecto =
+    document.getElementById(
+      "proyecto"
+    );
 
 
-    actualizarResumen();
+  selectorProyecto.innerHTML =
+    "";
+
+
+  proyectos.forEach(
+    proyecto => {
+
+      const opcion =
+        document.createElement(
+          "option"
+        );
+
+
+      opcion.value =
+        proyecto;
+
+
+      opcion.textContent =
+        proyecto;
+
+
+      selectorProyecto.appendChild(
+        opcion
+      );
+
+    }
+  );
+
+
+  const filtroCuenta =
+    document.getElementById(
+      "filtroCuentaMovimiento"
+    );
+
+
+  filtroCuenta.innerHTML =
+    '<option value="">TODAS LAS CUENTAS</option>';
+
+
+  cuentas.forEach(
+    cuenta => {
+
+      const opcion =
+        document.createElement(
+          "option"
+        );
+
+
+      opcion.value =
+        cuenta[0];
+
+
+      opcion.textContent =
+        cuenta[1]
+        +
+        " · "
+        +
+        cuenta[0];
+
+
+      filtroCuenta.appendChild(
+        opcion
+      );
+
+    }
+  );
+
+
+  const filtroProyecto =
+    document.getElementById(
+      "filtroProyectoMovimiento"
+    );
+
+
+  filtroProyecto.innerHTML =
+    '<option value="">TODOS LOS PROYECTOS</option>';
+
+
+  proyectos.forEach(
+    proyecto => {
+
+      const opcion =
+        document.createElement(
+          "option"
+        );
+
+
+      opcion.value =
+        proyecto;
+
+
+      opcion.textContent =
+        proyecto;
+
+
+      filtroProyecto.appendChild(
+        opcion
+      );
+
+    }
+  );
+
+
+  actualizarResumen();
 
 }
 
@@ -894,140 +1243,201 @@ function cargarSelectores() {
    NUEVA CUENTA
 ========================================================= */
 
-function abrirNuevaCuenta() {
+function abrirNuevaCuenta(){
 
-    document.getElementById("nuevoCodigo").value = "";
-    document.getElementById("nuevoNombre").value = "";
+  document.getElementById(
+    "nuevoCodigo"
+  ).value = "";
 
-    document.getElementById("modalCuenta").style.display =
-        "flex";
 
-    setTimeout(() => {
-        document.getElementById("nuevoCodigo").focus();
-    },100);
+  document.getElementById(
+    "nuevoNombre"
+  ).value = "";
+
+
+  document.getElementById(
+    "modalCuenta"
+  ).style.display =
+    "flex";
+
+
+  setTimeout(
+    () => {
+
+      document
+        .getElementById(
+          "nuevoCodigo"
+        )
+        .focus();
+
+    },
+    100
+  );
 
 }
 
 
-function cerrarNuevaCuenta() {
+function cerrarNuevaCuenta(){
 
-    document.getElementById("modalCuenta").style.display =
-        "none";
+  document.getElementById(
+    "modalCuenta"
+  ).style.display =
+    "none";
 
 }
 
 
-function guardarNuevaCuenta() {
+function guardarNuevaCuenta(){
 
-    const codigo =
-        document.getElementById("nuevoCodigo")
-        .value
-        .trim()
-        .toUpperCase();
-
-    const nombre =
-        document.getElementById("nuevoNombre")
-        .value
-        .trim()
-        .toUpperCase();
+  const codigo =
+    document
+      .getElementById(
+        "nuevoCodigo"
+      )
+      .value
+      .trim()
+      .toUpperCase();
 
 
-    if (!codigo || !nombre) {
-
-        alert(
-            "DEBES INDICAR EL CÓDIGO Y EL NOMBRE DE LA CUENTA."
-        );
-
-        return;
-
-    }
-
-
-    const existe =
-        cuentas.some(
-            cuenta => cuenta[0] === codigo
-        );
+  const nombre =
+    document
+      .getElementById(
+        "nuevoNombre"
+      )
+      .value
+      .trim()
+      .toUpperCase();
 
 
-    if (existe) {
+  if(
+    !codigo
+    ||
+    !nombre
+  ){
 
-        alert(
-            "ESA CUENTA CONTABLE YA EXISTE."
-        );
-
-        return;
-
-    }
-
-
-    cuentas.push([
-        codigo,
-        nombre
-    ]);
-
-
-    guardarCuentas();
-
-    cargarSelectores();
-
-
-    document.getElementById("cuenta").value =
-        codigo;
-
-
-    cerrarNuevaCuenta();
-
-    mostrarMensaje(
-        "CUENTA CREADA CORRECTAMENTE.",
-        true
+    alert(
+      "DEBES INDICAR EL CÓDIGO Y EL NOMBRE DE LA CUENTA."
     );
+
+    return;
+
+  }
+
+
+  const existe =
+    cuentas.some(
+      cuenta =>
+        cuenta[0]
+        ===
+        codigo
+    );
+
+
+  if(existe){
+
+    alert(
+      "ESA CUENTA CONTABLE YA EXISTE."
+    );
+
+    return;
+
+  }
+
+
+  cuentas.push(
+    [
+      codigo,
+      nombre
+    ]
+  );
+
+
+  guardarCuentas();
+
+  cargarSelectores();
+
+
+  document.getElementById(
+    "cuenta"
+  ).value =
+    codigo;
+
+
+  cerrarNuevaCuenta();
+
+
+  mostrarMensaje(
+    "Cuenta creada correctamente.",
+    true
+  );
 
 }
 
 
 /* =========================================================
-   MOVIMIENTOS
+   CARGAR MOVIMIENTOS
 ========================================================= */
 
-function cargarMovimientos() {
+function cargarMovimientos(){
 
-    const guardados =
-        localStorage.getItem(CLAVE_INGRESOS);
-
-    if (!guardados) {
-
-        movimientos = [];
-
-        return;
-
-    }
+  const guardados =
+    localStorage.getItem(
+      CLAVE_INGRESOS
+    );
 
 
-    try {
+  if(!guardados){
 
-        const datos =
-            JSON.parse(guardados);
+    movimientos = [];
 
-        movimientos =
-            Array.isArray(datos)
-            ? datos
-            : [];
+    return;
 
-    } catch {
+  }
 
-        movimientos = [];
 
-    }
+  try{
+
+    const datos =
+      JSON.parse(
+        guardados
+      );
+
+
+    movimientos =
+      Array.isArray(
+        datos
+      )
+      ?
+      datos
+      :
+      [];
+
+  }
+
+  catch{
+
+    movimientos = [];
+
+  }
 
 }
 
 
-function guardarLocal() {
+/* =========================================================
+   GUARDAR LOCAL
+========================================================= */
 
-    localStorage.setItem(
-        CLAVE_INGRESOS,
-        JSON.stringify(movimientos)
-    );
+function guardarLocal(){
+
+  localStorage.setItem(
+
+    CLAVE_INGRESOS,
+
+    JSON.stringify(
+      movimientos
+    )
+
+  );
 
 }
 
@@ -1036,408 +1446,520 @@ function guardarLocal() {
    GUARDAR INGRESO
 ========================================================= */
 
-function guardarMovimiento() {
+function guardarMovimiento(){
 
-    const fecha =
-        document.getElementById("fecha").value;
-
-    const numeroFactura =
-        document.getElementById("numeroFactura")
-        .value
-        .trim();
-
-    const cuenta =
-        document.getElementById("cuenta").value;
-
-    const origen =
-        document.getElementById("origen").value;
-
-    const proyecto =
-        document.getElementById("proyecto").value;
-
-    const cantidad =
-        parseFloat(
-            document.getElementById("cantidad").value
-        );
-
-
-    if (!fecha) {
-
-        mostrarMensaje(
-            "DEBES INDICAR LA FECHA.",
-            false
-        );
-
-        return;
-
-    }
-
-
-    if (!numeroFactura) {
-
-        mostrarMensaje(
-            "DEBES INDICAR EL NÚMERO DE FACTURA.",
-            false
-        );
-
-        return;
-
-    }
-
-
-    if (!cuenta) {
-
-        mostrarMensaje(
-            "DEBES SELECCIONAR UNA CUENTA.",
-            false
-        );
-
-        return;
-
-    }
-
-
-    if (!proyecto) {
-
-        mostrarMensaje(
-            "DEBES SELECCIONAR UN PROYECTO.",
-            false
-        );
-
-        return;
-
-    }
-
-
-    if (
-        isNaN(cantidad) ||
-        cantidad === 0
-    ) {
-
-        mostrarMensaje(
-            "DEBES INTRODUCIR UN IMPORTE DISTINTO DE CERO.",
-            false
-        );
-
-        return;
-
-    }
-
-
-    const fechaObjeto =
-        new Date(fecha + "T12:00:00");
-
-
-    if (
-        fechaObjeto.getFullYear() !== 2026
-    ) {
-
-        mostrarMensaje(
-            "LA FECHA DEBE PERTENECER AL EJERCICIO 2026.",
-            false
-        );
-
-        return;
-
-    }
-
-
-    const movimiento = {
-
-        id:
-            Date.now() +
-            Math.floor(
-                Math.random() * 1000
-            ),
-
-        fecha: fecha,
-
-        numeroFactura: numeroFactura,
-
-        cuenta: cuenta,
-
-        origen: origen,
-
-        proyecto: proyecto,
-
-        cantidadTotal: cantidad
-
-    };
-
-
-    movimientos.push(movimiento);
-
-
-    guardarLocal();
-
-    construirTodo();
-
-
+  const fecha =
     document.getElementById(
-        "numeroFactura"
-    ).value = "";
+      "fecha"
+    ).value;
 
+
+  const numeroFactura =
     document.getElementById(
+      "numeroFactura"
+    )
+    .value
+    .trim();
+
+
+  const cuenta =
+    document.getElementById(
+      "cuenta"
+    ).value;
+
+
+  const origen =
+    document.getElementById(
+      "origen"
+    ).value;
+
+
+  const proyecto =
+    document.getElementById(
+      "proyecto"
+    ).value;
+
+
+  const cantidad =
+    parseFloat(
+      document.getElementById(
         "cantidad"
-    ).value = "";
-
-
-    mostrarMensaje(
-        "INGRESO GUARDADO CORRECTAMENTE.",
-        true
+      ).value
     );
 
-}
 
-
-/* =========================================================
-   ELIMINAR MOVIMIENTO
-========================================================= */
-
-function eliminarMovimiento(id) {
-
-    const movimiento =
-        movimientos.find(
-            m => m.id === id
-        );
-
-
-    if (!movimiento) {
-        return;
-    }
-
-
-    const factura =
-        movimiento.numeroFactura
-        ? movimiento.numeroFactura
-        : "SIN N.º DE FACTURA";
-
-
-    const confirmar =
-        confirm(
-            "¿ELIMINAR ESTE INGRESO?\n\n" +
-            "FACTURA: " + factura + "\n" +
-            "IMPORTE: " +
-            formatearDinero(
-                movimiento.cantidadTotal
-            ) +
-            "\n\n" +
-            "EL INGRESO DEJARÁ DE CONTAR EN TODAS LAS SUMATORIAS."
-        );
-
-
-    if (!confirmar) {
-        return;
-    }
-
-
-    movimientos =
-        movimientos.filter(
-            m => m.id !== id
-        );
-
-
-    guardarLocal();
-
-    construirTodo();
-
+  if(!fecha){
 
     mostrarMensaje(
-        "INGRESO ELIMINADO CORRECTAMENTE.",
-        true
+      "Debes indicar la fecha.",
+      false
     );
 
+    return;
+
+  }
+
+
+  if(!numeroFactura){
+
+    mostrarMensaje(
+      "Debes indicar el número de factura.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if(!cuenta){
+
+    mostrarMensaje(
+      "Debes seleccionar una cuenta.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if(!proyecto){
+
+    mostrarMensaje(
+      "Debes seleccionar un proyecto.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if(
+    Number.isNaN(
+      cantidad
+    )
+    ||
+    cantidad === 0
+  ){
+
+    mostrarMensaje(
+      "Debes introducir un importe distinto de cero.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  const fechaObjeto =
+    new Date(
+      fecha
+      +
+      "T12:00:00"
+    );
+
+
+  if(
+    fechaObjeto.getFullYear()
+    !==
+    2026
+  ){
+
+    mostrarMensaje(
+      "La fecha debe pertenecer al ejercicio 2026.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  const movimiento = {
+
+    id:
+      Date.now()
+      +
+      Math.floor(
+        Math.random()
+        *
+        1000
+      ),
+
+    fecha:
+      fecha,
+
+    numeroFactura:
+      numeroFactura,
+
+    cuenta:
+      cuenta,
+
+    origen:
+      origen,
+
+    proyecto:
+      proyecto,
+
+    cantidadTotal:
+      cantidad
+
+  };
+
+
+  movimientos.push(
+    movimiento
+  );
+
+
+  guardarLocal();
+
+  construirTodo();
+
+
+  document.getElementById(
+    "numeroFactura"
+  ).value = "";
+
+
+  document.getElementById(
+    "cantidad"
+  ).value = "";
+
+
+  mostrarMensaje(
+    "Ingreso guardado correctamente.",
+    true
+  );
+
 }
 
 
 /* =========================================================
-   NOMBRE DE CUENTA
+   ELIMINAR
 ========================================================= */
 
-function obtenerNombreCuenta(codigo) {
+function eliminarMovimiento(id){
 
-    const cuenta =
-        cuentas.find(
-            c => c[0] === codigo
-        );
+  const movimiento =
+    movimientos.find(
+      m =>
+        m.id === id
+    );
 
-    if (!cuenta) {
-        return codigo;
-    }
 
-    return `${cuenta[0]} · ${cuenta[1]}`;
+  if(!movimiento){
+
+    return;
+
+  }
+
+
+  const factura =
+    movimiento.numeroFactura
+    ||
+    "SIN N.º DE FACTURA";
+
+
+  const confirmar =
+    confirm(
+
+      "¿ELIMINAR ESTE INGRESO?\n\n"
+      +
+      "FACTURA: "
+      +
+      factura
+      +
+      "\n"
+      +
+      "IMPORTE: "
+      +
+      formatearDinero(
+        movimiento.cantidadTotal
+      )
+
+    );
+
+
+  if(!confirmar){
+
+    return;
+
+  }
+
+
+  movimientos =
+    movimientos.filter(
+      m =>
+        m.id !== id
+    );
+
+
+  guardarLocal();
+
+  construirTodo();
+
+
+  mostrarMensaje(
+    "Ingreso eliminado correctamente.",
+    true
+  );
 
 }
 
 
 /* =========================================================
-   FILTROS DE MOVIMIENTOS
+   NOMBRE CUENTA
 ========================================================= */
 
-function limpiarFiltrosMovimientos() {
+function obtenerNombreCuenta(
+  codigo
+){
 
+  const cuenta =
+    cuentas.find(
+      c =>
+        c[0] === codigo
+    );
+
+
+  if(!cuenta){
+
+    return codigo;
+
+  }
+
+
+  return (
+    cuenta[1]
+    +
+    " · "
+    +
+    cuenta[0]
+  );
+
+}
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+function limpiarFiltrosMovimientos(){
+
+  document.getElementById(
+    "filtroCuentaMovimiento"
+  ).value = "";
+
+
+  document.getElementById(
+    "filtroProyectoMovimiento"
+  ).value = "";
+
+
+  construirTablaMovimientos();
+
+}
+
+
+/* =========================================================
+   TABLA MOVIMIENTOS
+========================================================= */
+
+function construirTablaMovimientos(){
+
+  const tbody =
     document.getElementById(
-        "filtroCuentaMovimiento"
-    ).value = "";
+      "tablaMovimientos"
+    );
 
+
+  tbody.innerHTML = "";
+
+
+  const filtroCuenta =
     document.getElementById(
-        "filtroProyectoMovimiento"
-    ).value = "";
-
-    construirTablaMovimientos();
-
-}
+      "filtroCuentaMovimiento"
+    ).value;
 
 
-/* =========================================================
-   TABLA DE MOVIMIENTOS
-========================================================= */
+  const filtroProyecto =
+    document.getElementById(
+      "filtroProyectoMovimiento"
+    ).value;
 
-function construirTablaMovimientos() {
 
-    const tbody =
-        document.getElementById(
-            "tablaMovimientos"
+  const filtrados =
+    movimientos.filter(
+      movimiento => {
+
+
+        if(
+          filtroCuenta
+          &&
+          movimiento.cuenta
+          !==
+          filtroCuenta
+        ){
+
+          return false;
+
+        }
+
+
+        if(
+          filtroProyecto
+          &&
+          movimiento.proyecto
+          !==
+          filtroProyecto
+        ){
+
+          return false;
+
+        }
+
+
+        return true;
+
+      }
+    );
+
+
+  const ordenados =
+    [...filtrados]
+    .sort(
+      (a,b) => {
+
+        const fecha =
+          (b.fecha || "")
+          .localeCompare(
+            a.fecha || ""
+          );
+
+
+        if(fecha !== 0){
+
+          return fecha;
+
+        }
+
+
+        return (
+          Number(b.id) || 0
+        )
+        -
+        (
+          Number(a.id) || 0
         );
 
-    tbody.innerHTML = "";
+      }
+    );
 
 
-    const filtroCuenta =
-        document.getElementById(
-            "filtroCuentaMovimiento"
-        ).value;
+  if(
+    ordenados.length === 0
+  ){
+
+    const tr =
+      document.createElement(
+        "tr"
+      );
 
 
-    const filtroProyecto =
-        document.getElementById(
-            "filtroProyectoMovimiento"
-        ).value;
+    tr.innerHTML = `
+
+      <td
+        colspan="7"
+        style="
+          text-align:center;
+          color:#9ca3af;
+          padding:15px;
+        ">
+
+        NO HAY MOVIMIENTOS
+
+      </td>
+
+    `;
 
 
-    const filtrados =
-        movimientos.filter(
-            movimiento => {
-
-                if (
-                    filtroCuenta &&
-                    movimiento.cuenta !== filtroCuenta
-                ) {
-                    return false;
-                }
+    tbody.appendChild(
+      tr
+    );
 
 
-                if (
-                    filtroProyecto &&
-                    movimiento.proyecto !== filtroProyecto
-                ) {
-                    return false;
-                }
+    return;
+
+  }
 
 
-                return true;
+  ordenados.forEach(
+    movimiento => {
 
-            }
+
+      const tr =
+        document.createElement(
+          "tr"
         );
 
 
-    const ordenados =
-        [...filtrados]
-        .sort((a,b) => {
+      tr.innerHTML = `
 
-            const comparacionFecha =
-                (b.fecha || "")
-                .localeCompare(
-                    a.fecha || ""
-                );
-
-            if (comparacionFecha !== 0) {
-                return comparacionFecha;
-            }
-
-            return (
-                Number(b.id) || 0
-            ) - (
-                Number(a.id) || 0
-            );
-
-        });
+        <td class="texto">
+          ${formatearFecha(movimiento.fecha)}
+        </td>
 
 
-    if (ordenados.length === 0) {
+        <td class="texto">
+          ${movimiento.numeroFactura || "—"}
+        </td>
 
-        const fila =
-            document.createElement("tr");
 
-        fila.innerHTML = `
-            <td
-                colspan="7"
-                class="sin-movimientos">
-                NO HAY MOVIMIENTOS PARA LOS FILTROS SELECCIONADOS
-            </td>
-        `;
+        <td class="texto">
+          ${obtenerNombreCuenta(movimiento.cuenta)}
+        </td>
 
-        tbody.appendChild(fila);
 
-        return;
+        <td class="texto">
+          ${movimiento.origen}
+        </td>
+
+
+        <td class="texto">
+          ${movimiento.proyecto}
+        </td>
+
+
+        <td class="numero">
+          ${formatearDinero(movimiento.cantidadTotal)}
+        </td>
+
+
+        <td style="text-align:center">
+
+          <button
+            class="eliminar"
+            onclick="eliminarMovimiento(${movimiento.id})">
+
+            ELIMINAR
+
+          </button>
+
+        </td>
+
+      `;
+
+
+      tbody.appendChild(
+        tr
+      );
 
     }
-
-
-    ordenados.forEach(movimiento => {
-
-        const fila =
-            document.createElement("tr");
-
-
-        const numeroFactura =
-            movimiento.numeroFactura
-            ? movimiento.numeroFactura
-            : "—";
-
-
-        fila.innerHTML = `
-
-            <td>
-                ${formatearFecha(movimiento.fecha)}
-            </td>
-
-            <td>
-                <strong>
-                    ${numeroFactura}
-                </strong>
-            </td>
-
-            <td>
-                ${obtenerNombreCuenta(movimiento.cuenta)}
-            </td>
-
-            <td>
-                ${movimiento.origen}
-            </td>
-
-            <td>
-                ${movimiento.proyecto}
-            </td>
-
-            <td>
-                ${formatearDinero(movimiento.cantidadTotal)}
-            </td>
-
-            <td>
-                <button
-                    class="boton-rojo"
-                    onclick="eliminarMovimiento(${movimiento.id})">
-                    ELIMINAR
-                </button>
-            </td>
-
-        `;
-
-
-        tbody.appendChild(fila);
-
-    });
+  );
 
 }
 
@@ -1446,192 +1968,289 @@ function construirTablaMovimientos() {
    TABLA MENSUAL
 ========================================================= */
 
-function construirTablaMensual() {
+function construirTablaMensual(){
 
-    const tbody =
-        document.getElementById(
-            "tablaIngresos"
+  const tbody =
+    document.getElementById(
+      "tablaIngresos"
+    );
+
+
+  tbody.innerHTML = "";
+
+
+  const agrupados = {};
+
+
+  movimientos.forEach(
+    movimiento => {
+
+
+      const clave =
+        movimiento.cuenta
+        +
+        "||"
+        +
+        movimiento.proyecto
+        +
+        "||"
+        +
+        movimiento.origen;
+
+
+      if(
+        !agrupados[clave]
+      ){
+
+        agrupados[clave] = {
+
+          cuenta:
+            movimiento.cuenta,
+
+          proyecto:
+            movimiento.proyecto,
+
+          origen:
+            movimiento.origen,
+
+          meses:
+            new Array(12)
+            .fill(0)
+
+        };
+
+      }
+
+
+      const fecha =
+        new Date(
+          movimiento.fecha
+          +
+          "T12:00:00"
         );
 
-    tbody.innerHTML = "";
+
+      if(
+        fecha.getFullYear()
+        !==
+        2026
+      ){
+
+        return;
+
+      }
 
 
-    const agrupados = {};
+      const mes =
+        fecha.getMonth();
 
 
-    movimientos.forEach(movimiento => {
+      agrupados[clave]
+        .meses[mes]
+        +=
+        Number(
+          movimiento.cantidadTotal
+        )
+        ||
+        0;
 
-        const clave =
-            movimiento.cuenta +
-            "||" +
-            movimiento.proyecto +
-            "||" +
-            movimiento.origen;
+    }
+  );
 
 
-        if (!agrupados[clave]) {
+  const totalesMes =
+    new Array(12)
+    .fill(0);
 
-            agrupados[clave] = {
 
-                cuenta: movimiento.cuenta,
+  Object.values(
+    agrupados
+  )
+  .sort(
+    (a,b) => {
 
-                proyecto:
-                    movimiento.proyecto,
+      const proyecto =
+        a.proyecto.localeCompare(
+          b.proyecto
+        );
 
-                origen:
-                    movimiento.origen,
 
-                meses:
-                    new Array(12).fill(0)
+      if(proyecto !== 0){
 
-            };
+        return proyecto;
+
+      }
+
+
+      return a.cuenta.localeCompare(
+        b.cuenta
+      );
+
+    }
+  )
+  .forEach(
+    grupo => {
+
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      let totalFila = 0;
+
+      let mesesHTML = "";
+
+
+      grupo.meses.forEach(
+        (cantidad,indice) => {
+
+
+          totalFila +=
+            cantidad;
+
+
+          totalesMes[indice] +=
+            cantidad;
+
+
+          const clase =
+            Math.abs(cantidad)
+            <
+            0.000001
+
+            ?
+
+            "numero cero"
+
+            :
+
+            "numero valor-con-datos";
+
+
+          mesesHTML += `
+
+            <td class="${clase}">
+
+              ${
+                Math.abs(cantidad)
+                <
+                0.000001
+
+                ?
+
+                "—"
+
+                :
+
+                formatoNumero(
+                  cantidad
+                )
+              }
+
+            </td>
+
+          `;
 
         }
+      );
 
 
-        const fecha =
-            new Date(
-                movimiento.fecha +
-                "T12:00:00"
-            );
+      tr.innerHTML = `
 
-
-        const mes =
-            fecha.getMonth();
-
-
-        agrupados[clave]
-            .meses[mes] +=
-            Number(
-                movimiento.cantidadTotal
-            ) || 0;
-
-    });
-
-
-    const totalesMes =
-        new Array(12).fill(0);
-
-
-    Object.values(agrupados)
-        .sort((a,b) => {
-
-            const proyecto =
-                a.proyecto.localeCompare(
-                    b.proyecto
-                );
-
-            if (proyecto !== 0) {
-                return proyecto;
-            }
-
-            return a.cuenta.localeCompare(
-                b.cuenta
-            );
-
-        })
-        .forEach(grupo => {
-
-            const fila =
-                document.createElement("tr");
-
-
-            let totalFila = 0;
-
-            let celdasMeses = "";
-
-
-            grupo.meses.forEach(
-                (cantidad, indice) => {
-
-                    totalFila += cantidad;
-
-                    totalesMes[indice] +=
-                        cantidad;
-
-
-                    celdasMeses += `
-                        <td>
-                            ${formatearDinero(cantidad)}
-                        </td>
-                    `;
-
-                }
-            );
-
-
-            fila.innerHTML = `
-
-                <td>
-                    ${obtenerNombreCuenta(grupo.cuenta)}
-                </td>
-
-                <td>
-                    ${grupo.proyecto}
-                </td>
-
-                <td>
-                    ${grupo.origen}
-                </td>
-
-                ${celdasMeses}
-
-                <td>
-                    <strong>
-                        ${formatearDinero(totalFila)}
-                    </strong>
-                </td>
-
-            `;
-
-
-            tbody.appendChild(fila);
-
-        });
-
-
-    const filaTotal =
-        document.createElement("tr");
-
-    filaTotal.className = "total";
-
-
-    let totalGeneral = 0;
-
-    let celdasTotales = "";
-
-
-    totalesMes.forEach(cantidad => {
-
-        totalGeneral += cantidad;
-
-        celdasTotales += `
-            <td>
-                ${formatearDinero(cantidad)}
-            </td>
-        `;
-
-    });
-
-
-    filaTotal.innerHTML = `
-
-        <td>TOTAL</td>
-
-        <td></td>
-
-        <td></td>
-
-        ${celdasTotales}
-
-        <td>
-            ${formatearDinero(totalGeneral)}
+        <td class="texto">
+          ${obtenerNombreCuenta(grupo.cuenta)}
         </td>
 
-    `;
+
+        <td class="texto">
+          ${grupo.proyecto}
+        </td>
 
 
-    tbody.appendChild(filaTotal);
+        <td class="texto">
+          ${grupo.origen}
+        </td>
+
+
+        ${mesesHTML}
+
+
+        <td class="numero">
+          <strong>
+            ${formatoNumero(totalFila)}
+          </strong>
+        </td>
+
+      `;
+
+
+      tbody.appendChild(
+        tr
+      );
+
+    }
+  );
+
+
+  const trTotal =
+    document.createElement(
+      "tr"
+    );
+
+
+  trTotal.className =
+    "total";
+
+
+  let totalGeneral = 0;
+
+  let totalesHTML = "";
+
+
+  totalesMes.forEach(
+    cantidad => {
+
+
+      totalGeneral +=
+        cantidad;
+
+
+      totalesHTML += `
+
+        <td class="numero">
+          ${formatoNumero(cantidad)}
+        </td>
+
+      `;
+
+    }
+  );
+
+
+  trTotal.innerHTML = `
+
+    <td class="texto">
+      TOTAL
+    </td>
+
+    <td></td>
+
+    <td></td>
+
+    ${totalesHTML}
+
+    <td class="numero">
+      ${formatoNumero(totalGeneral)}
+    </td>
+
+  `;
+
+
+  tbody.appendChild(
+    trTotal
+  );
 
 }
 
@@ -1640,37 +2259,49 @@ function construirTablaMensual() {
    RESUMEN
 ========================================================= */
 
-function actualizarResumen() {
+function actualizarResumen(){
 
-    const total =
-        movimientos.reduce(
-            (suma,movimiento) =>
-                suma +
-                (
-                    Number(
-                        movimiento.cantidadTotal
-                    ) || 0
-                ),
-            0
-        );
+  const total =
+    movimientos.reduce(
 
+      (
+        suma,
+        movimiento
+      ) =>
 
-    document.getElementById(
-        "totalIngresos"
-    ).textContent =
-        formatearDinero(total);
+        suma
+        +
+        (
+          Number(
+            movimiento.cantidadTotal
+          )
+          ||
+          0
+        ),
 
+      0
 
-    document.getElementById(
-        "numeroMovimientos"
-    ).textContent =
-        movimientos.length;
+    );
 
 
-    document.getElementById(
-        "numeroCuentas"
-    ).textContent =
-        cuentas.length;
+  document.getElementById(
+    "totalIngresos"
+  ).textContent =
+    formatearDinero(
+      total
+    );
+
+
+  document.getElementById(
+    "numeroMovimientos"
+  ).textContent =
+    movimientos.length;
+
+
+  document.getElementById(
+    "numeroCuentas"
+  ).textContent =
+    cuentas.length;
 
 }
 
@@ -1679,80 +2310,97 @@ function actualizarResumen() {
    CONSTRUIR TODO
 ========================================================= */
 
-function construirTodo() {
+function construirTodo(){
 
-    construirTablaMovimientos();
+  construirTablaMovimientos();
 
-    construirTablaMensual();
+  construirTablaMensual();
 
-    actualizarResumen();
+  actualizarResumen();
 
 }
 
 
 /* =========================================================
-   JSON
+   GUARDAR JSON
 ========================================================= */
 
-function descargarJSON() {
+function descargarJSON(){
 
-    const copia = {
+  const copia = {
 
-        aplicacion:
-            "GERAVALON ANALISIS ECONOMICO",
+    aplicacion:
+      "GERAVALON ANALISIS ECONOMICO",
 
-        tipo:
-            "INGRESOS",
+    tipo:
+      "INGRESOS",
 
-        ejercicio:
-            2026,
+    ejercicio:
+      2026,
 
-        fechaCopia:
-            new Date().toISOString(),
+    fechaCopia:
+      new Date().toISOString(),
 
-        cuentas:
-            cuentas,
+    cuentas:
+      cuentas,
 
-        movimientos:
-            movimientos
+    movimientos:
+      movimientos
 
-    };
-
-
-    const blob =
-        new Blob(
-            [
-                JSON.stringify(
-                    copia,
-                    null,
-                    2
-                )
-            ],
-            {
-                type:
-                    "application/json"
-            }
-        );
+  };
 
 
-    const url =
-        URL.createObjectURL(blob);
+  const blob =
+    new Blob(
+
+      [
+        JSON.stringify(
+          copia,
+          null,
+          2
+        )
+      ],
+
+      {
+        type:
+          "application/json"
+      }
+
+    );
 
 
-    const enlace =
-        document.createElement("a");
+  const url =
+    URL.createObjectURL(
+      blob
+    );
 
 
-    enlace.href = url;
-
-    enlace.download =
-        "GERAVALON_INGRESOS_2026.json";
-
-
-    enlace.click();
+  const enlace =
+    document.createElement(
+      "a"
+    );
 
 
-    URL.revokeObjectURL(url);
+  enlace.href =
+    url;
+
+
+  enlace.download =
+    "GERAVALON_INGRESOS_2026.json";
+
+
+  enlace.click();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  mostrarMensaje(
+    "Copia JSON guardada.",
+    true
+  );
 
 }
 
@@ -1761,118 +2409,143 @@ function descargarJSON() {
    CARGAR JSON
 ========================================================= */
 
-function cargarJSON(event) {
+function cargarJSON(event){
 
-    const archivo =
-        event.target.files[0];
-
-
-    if (!archivo) {
-        return;
-    }
+  const archivo =
+    event.target.files[0];
 
 
-    const lector =
-        new FileReader();
+  if(!archivo){
+
+    return;
+
+  }
 
 
-    lector.onload = function(e) {
-
-        try {
-
-            const datos =
-                JSON.parse(
-                    e.target.result
-                );
+  const lector =
+    new FileReader();
 
 
-            let nuevosMovimientos;
+  lector.onload =
+    function(e){
 
 
-            if (Array.isArray(datos)) {
-
-                nuevosMovimientos =
-                    datos;
-
-            } else if (
-                datos &&
-                Array.isArray(
-                    datos.movimientos
-                )
-            ) {
-
-                nuevosMovimientos =
-                    datos.movimientos;
-
-            } else {
-
-                throw new Error();
-
-            }
+      try{
 
 
-            const confirmar =
-                confirm(
-                    "LA COPIA SUSTITUIRÁ LOS INGRESOS ACTUALES. ¿CONTINUAR?"
-                );
+        const datos =
+          JSON.parse(
+            e.target.result
+          );
 
 
-            if (!confirmar) {
-
-                event.target.value = "";
-
-                return;
-
-            }
+        let nuevosMovimientos;
 
 
-            movimientos =
-                nuevosMovimientos;
+        if(
+          Array.isArray(
+            datos
+          )
+        ){
 
+          nuevosMovimientos =
+            datos;
 
-            if (
-                datos &&
-                Array.isArray(
-                    datos.cuentas
-                )
-            ) {
+        }
 
-                cuentas =
-                    datos.cuentas;
+        else if(
+          datos
+          &&
+          Array.isArray(
+            datos.movimientos
+          )
+        ){
 
-                guardarCuentas();
+          nuevosMovimientos =
+            datos.movimientos;
 
-                cargarSelectores();
+        }
 
-            }
+        else{
 
-
-            guardarLocal();
-
-            construirTodo();
-
-
-            mostrarMensaje(
-                "COPIA CARGADA CORRECTAMENTE.",
-                true
-            );
-
-
-        } catch {
-
-            alert(
-                "EL ARCHIVO JSON NO ES VÁLIDO."
-            );
+          throw new Error();
 
         }
 
 
-        event.target.value = "";
+        const confirmar =
+          confirm(
+
+            "LA COPIA SUSTITUIRÁ LOS INGRESOS ACTUALES.\n\n"
+            +
+            "¿CONTINUAR?"
+
+          );
+
+
+        if(!confirmar){
+
+          event.target.value =
+            "";
+
+          return;
+
+        }
+
+
+        movimientos =
+          nuevosMovimientos;
+
+
+        if(
+          datos
+          &&
+          Array.isArray(
+            datos.cuentas
+          )
+        ){
+
+          cuentas =
+            datos.cuentas;
+
+
+          guardarCuentas();
+
+          cargarSelectores();
+
+        }
+
+
+        guardarLocal();
+
+        construirTodo();
+
+
+        mostrarMensaje(
+          "Copia cargada correctamente.",
+          true
+        );
+
+      }
+
+      catch{
+
+        alert(
+          "EL ARCHIVO JSON NO ES VÁLIDO."
+        );
+
+      }
+
+
+      event.target.value =
+        "";
 
     };
 
 
-    lector.readAsText(archivo);
+  lector.readAsText(
+    archivo
+  );
 
 }
 
@@ -1881,44 +2554,82 @@ function cargarJSON(event) {
    FORMATO
 ========================================================= */
 
-function formatearDinero(valor) {
+function formatoNumero(
+  numero
+){
 
-    return new Intl.NumberFormat(
-        "es-ES",
-        {
-            style: "currency",
-            currency: "EUR"
-        }
-    ).format(
-        Number(valor) || 0
-    );
+  return Number(
+    numero
+    ||
+    0
+  )
+  .toLocaleString(
+
+    "es-ES",
+
+    {
+      minimumFractionDigits:
+        2,
+
+      maximumFractionDigits:
+        2
+    }
+
+  );
 
 }
 
 
-function formatearFecha(fecha) {
+function formatearDinero(
+  valor
+){
 
-    if (!fecha) {
-        return "";
-    }
+  return formatoNumero(
+    valor
+  )
+  +
+  " €";
 
-
-    const partes =
-        fecha.split("-");
-
-
-    if (partes.length !== 3) {
-        return fecha;
-    }
+}
 
 
-    return (
-        partes[2] +
-        "/" +
-        partes[1] +
-        "/" +
-        partes[0]
+function formatearFecha(
+  fecha
+){
+
+  if(!fecha){
+
+    return "";
+
+  }
+
+
+  const partes =
+    fecha.split(
+      "-"
     );
+
+
+  if(
+    partes.length !== 3
+  ){
+
+    return fecha;
+
+  }
+
+
+  return (
+    partes[2]
+    +
+    "/"
+    +
+    partes[1]
+    +
+    "/"
+    +
+    partes[0]
+  );
 
 }
 
@@ -1927,50 +2638,69 @@ function formatearFecha(fecha) {
    MENSAJES
 ========================================================= */
 
-function mostrarMensaje(texto, correcto) {
+function mostrarMensaje(
+  texto,
+  correcto
+){
 
-    const elemento =
-        document.getElementById(
-            "mensaje"
-        );
-
-
-    elemento.textContent = texto;
-
-    elemento.className =
-        correcto
-        ? "mensaje ok"
-        : "mensaje error";
+  const elemento =
+    document.getElementById(
+      "mensaje"
+    );
 
 
-    setTimeout(() => {
+  elemento.textContent =
+    texto;
 
-        elemento.textContent = "";
 
-    },4000);
+  elemento.className =
+    correcto
+    ?
+    "estado ok"
+    :
+    "estado error";
+
+
+  setTimeout(
+    () => {
+
+      elemento.textContent =
+        "Los datos se guardan automáticamente en este navegador.";
+
+
+      elemento.className =
+        "estado";
+
+    },
+    4000
+  );
 
 }
 
 
 /* =========================================================
-   CERRAR MODAL HACIENDO CLIC FUERA
+   CERRAR MODAL
 ========================================================= */
 
 document.getElementById(
-    "modalCuenta"
-).addEventListener(
-    "click",
-    function(event) {
+  "modalCuenta"
+)
+.addEventListener(
 
-        if (
-            event.target === this
-        ) {
+  "click",
 
-            cerrarNuevaCuenta();
+  function(event){
 
-        }
+    if(
+      event.target === this
+    ){
+
+      cerrarNuevaCuenta();
 
     }
+
+  }
+
 );
 
 </script>
