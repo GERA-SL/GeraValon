@@ -4,2941 +4,661 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>GERAVALON · Ingresos</title>
-
 <style>
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f3f4f6;
-  color: #1f2937;
-  font-size: 12px;
-}
-
-/* =========================================================
-   CABECERA
-========================================================= */
-
-.cabecera {
-  height: 76px;
-  background: #1f2937;
-  color: white;
-  padding: 14px 22px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.cabecera-titulo h1 {
-  margin: 0;
-  font-size: 21px;
-}
-
-.cabecera-titulo p {
-  margin: 3px 0 0;
-  color: #cbd5e1;
-  font-size: 11px;
-}
-
-.cabecera-derecha {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-.ejercicio {
-  font-weight: bold;
-  font-size: 12px;
-}
-
-.volver {
-  text-decoration: none;
-  background: #374151;
-  color: white;
-  padding: 7px 12px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-/* =========================================================
-   PAGINA
-========================================================= */
-
-.pagina {
-  padding: 14px;
-}
-
-/* =========================================================
-   PANELES
-========================================================= */
-
-.panel {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.07);
-}
-
-.panel-resumen {
-  margin-bottom: 10px;
-}
-
-.panel-entrada {
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.panel-tabla {
-  margin-bottom: 10px;
-  overflow: hidden;
-}
-
-.panel-movimientos {
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.titulo {
-  font-weight: bold;
-  font-size: 13px;
-  margin-bottom: 7px;
-}
-
-/* =========================================================
-   RESUMEN
-========================================================= */
-
-.resumen {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.tarjeta {
-  background: white;
-  border-radius: 8px;
-  padding: 12px 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.07);
-}
-
-.tarjeta .titulo-resumen {
-  color: #6b7280;
-  font-size: 10px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.tarjeta .valor {
-  font-size: 21px;
-  font-weight: bold;
-}
-
-/* =========================================================
-   LINEA DE ENTRADA
-========================================================= */
-
-.linea-entrada {
-  display: grid;
-
-  grid-template-columns:
-    120px
-    135px
-    minmax(250px,1.4fr)
-    100px
-    minmax(210px,1fr)
-    135px
-    95px
-    34px
-    100px
-    100px;
-
-  gap: 5px;
-  align-items: center;
-}
-
-select,
-input {
-  height: 30px;
-  width: 100%;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  background: white;
-  padding: 3px 6px;
-  font-size: 11px;
-}
-
-input[type="number"] {
-  text-align: right;
-}
-
-button {
-  border: 0;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  height: 30px;
-}
-
-.guardar {
-  background: #16a34a;
-  color: white;
-}
-
-.guardar:hover {
-  background: #15803d;
-}
-
-.nueva-cuenta {
-  background: #e5e7eb;
-  color: #111827;
-  height: 30px;
-  padding: 0 8px;
-  white-space: nowrap;
-}
-
-.nueva-cuenta:hover {
-  background: #d1d5db;
-}
-
-.json {
-  height: 30px;
-  padding: 0 8px;
-  background: #2563eb;
-  color: white;
-  font-size: 10px;
-}
-
-.json-gris {
-  height: 30px;
-  padding: 0 8px;
-  background: #e5e7eb;
-  color: #111827;
-  font-size: 10px;
-}
-
-.eliminar {
-  background: #dc2626;
-  color: white;
-  height: 26px;
-  padding: 0 9px;
-  font-size: 10px;
-}
-
-.eliminar:hover {
-  background: #b91c1c;
-}
-
-.fila-cuenta {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 5px;
-}
-
-/* =========================================================
-   PREVISUALIZACION IVA
-========================================================= */
-
-.previsualizacion-iva {
-  margin-top: 8px;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  min-height: 20px;
-  color: #4b5563;
-  font-size: 11px;
-}
-
-.previsualizacion-iva strong {
-  color: #111827;
-}
-
-.previsualizacion-iva .base {
-  color: #047857;
-  font-weight: bold;
-}
-
-/* =========================================================
-   ESTADO
-========================================================= */
-
-.estado {
-  margin-top: 6px;
-  color: #6b7280;
-  font-size: 10px;
-}
-
-.estado.ok {
-  color: #047857;
-  font-weight: bold;
-}
-
-.estado.error {
-  color: #b91c1c;
-  font-weight: bold;
-}
-
-/* =========================================================
-   TABLAS
-========================================================= */
-
-.tabla-contenedor {
-  overflow: auto;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-  min-width: 1250px;
-}
-
-th,
-td {
-  border-right: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 5px 6px;
-  white-space: nowrap;
-}
-
-thead th {
-  background: #1f2937;
-  color: white;
-  text-align: center;
-  font-size: 10px;
-  height: 30px;
-}
-
-tbody tr:hover {
-  background: #f8fafc;
-}
-
-td {
-  font-size: 11px;
-}
-
-.texto {
-  text-align: left;
-}
-
-.numero {
-  text-align: right;
-}
-
-.valor-con-datos {
-  font-weight: bold;
-  background: #ecfdf5;
-}
-
-.cero {
-  color: #b8bdc5;
-}
-
-.total {
-  font-weight: bold;
-  background: #f3f4f6;
-}
-
-/* =========================================================
-   FILTROS MOVIMIENTOS
-========================================================= */
-
-.filtros {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.limpiar-filtros {
-  background: #e5e7eb;
-  color: #111827;
-  padding: 0 12px;
-}
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal-fondo {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.55);
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal {
-  width: 430px;
-  max-width: 92%;
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.modal h3 {
-  margin-top: 0;
-  font-size: 16px;
-}
-
-.modal-campo {
-  margin-bottom: 12px;
-}
-
-.modal-campo label {
-  display: block;
-  font-size: 10px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.modal-botones {
-  display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.boton-cancelar {
-  background: #e5e7eb;
-  color: #111827;
-  padding: 0 12px;
-}
-
-.boton-guardar-cuenta {
-  background: #16a34a;
-  color: white;
-  padding: 0 12px;
-}
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-@media(max-width:1200px) {
-
-  .linea-entrada {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
-}
-
-@media(max-width:900px) {
-
-  .resumen {
-    grid-template-columns: 1fr;
-  }
-
-  .linea-entrada {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .filtros {
-    grid-template-columns: 1fr;
-  }
-
-}
-
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#1f2937;font-size:12px}
+.cabecera{min-height:76px;background:#1f2937;color:white;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+.cabecera-titulo h1{margin:0;font-size:21px}.cabecera-titulo p{margin:3px 0 0;color:#cbd5e1;font-size:11px}
+.cabecera-derecha{display:flex;align-items:center;gap:18px}.ejercicio{font-weight:bold;font-size:12px}
+.volver{text-decoration:none;background:#374151;color:white;padding:7px 12px;border-radius:5px;font-weight:bold}
+.pagina{padding:14px}.panel{background:white;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.panel-resumen{margin-bottom:10px}.panel-entrada{padding:10px;margin-bottom:10px}.panel-tabla{margin-bottom:10px;overflow:hidden}.panel-movimientos{padding:10px;margin-bottom:10px}
+.titulo{font-weight:bold;font-size:13px;margin-bottom:7px}
+.resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tarjeta{background:white;border-radius:8px;padding:12px 14px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.tarjeta .titulo-resumen{color:#6b7280;font-size:10px;font-weight:bold;margin-bottom:5px}.tarjeta .valor{font-size:21px;font-weight:bold}
+.linea-entrada{display:grid;grid-template-columns:120px 135px minmax(250px,1.4fr) 100px minmax(210px,1fr) 135px 95px 34px 125px 100px 100px;gap:5px;align-items:center}
+select,input{height:30px;width:100%;border:1px solid #d1d5db;border-radius:4px;background:white;padding:3px 6px;font-size:11px}
+input[type=number]{text-align:right}button{border:0;border-radius:4px;cursor:pointer;font-weight:bold;height:30px}
+.guardar{background:#16a34a;color:white}.guardar:hover{background:#15803d}
+.nueva-cuenta{background:#e5e7eb;color:#111827;height:30px;padding:0 8px;white-space:nowrap}
+.json{height:30px;padding:0 8px;background:#2563eb;color:white;font-size:10px}
+.json-morado{height:30px;padding:0 8px;background:#7c3aed;color:white;font-size:10px}
+.json-gris{height:30px;padding:0 8px;background:#e5e7eb;color:#111827;font-size:10px}
+.fila-cuenta{display:grid;grid-template-columns:1fr auto;gap:5px}
+.previsualizacion-iva{margin-top:8px;display:flex;gap:20px;align-items:center;min-height:20px;color:#4b5563;font-size:11px}
+.previsualizacion-iva strong{color:#111827}.previsualizacion-iva .base{color:#047857;font-weight:bold}
+.estado{margin-top:6px;color:#6b7280;font-size:10px}.estado.ok{color:#047857;font-weight:bold}.estado.error{color:#b91c1c;font-weight:bold}
+.tabla-contenedor{overflow:auto}table{border-collapse:collapse;width:100%;min-width:1250px}
+th,td{border-right:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;padding:5px 6px;white-space:nowrap}
+thead th{background:#1f2937;color:white;text-align:center;font-size:10px;height:30px}tbody tr:hover{background:#f8fafc}td{font-size:11px}
+.texto{text-align:left}.numero{text-align:right}.valor-con-datos{font-weight:bold;background:#ecfdf5}.cero{color:#b8bdc5}.total{font-weight:bold;background:#f3f4f6}
+.filtros{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px}.limpiar-filtros{background:#e5e7eb;color:#111827;padding:0 12px}
+.editar{background:#f59e0b;color:#111827;height:26px;padding:0 8px;font-size:10px;margin-right:4px}.eliminar{background:#dc2626;color:white;height:26px;padding:0 8px;font-size:10px}
+.etiqueta{display:inline-block;border-radius:999px;padding:2px 6px;font-size:9px;font-weight:bold;margin-left:4px}
+.etiqueta-holded{background:#dbeafe;color:#1e40af}.etiqueta-manual{background:#fef3c7;color:#92400e}.etiqueta-alerta{background:#fecaca;color:#7f1d1d}.etiqueta-rectificativa{background:#fed7aa;color:#7c2d12}.etiqueta-anulada{background:#e5e7eb;color:#374151}
+.fila-alerta td{background:#fee2e2!important;color:#7f1d1d;font-weight:bold}.fila-rectificativa td{background:#ffedd5!important;color:#7c2d12}.fila-anulada td{background:#e5e7eb!important;color:#374151}
+.modal-fondo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);align-items:center;justify-content:center;z-index:1000}
+.modal{width:540px;max-width:94%;background:white;border-radius:8px;padding:20px}.modal h3{margin-top:0;font-size:16px}.modal-campo{margin-bottom:12px}
+.modal-campo label{display:block;font-size:10px;font-weight:bold;margin-bottom:5px}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modal-botones{display:flex;justify-content:flex-end;gap:6px}.boton-cancelar{background:#e5e7eb;color:#111827;padding:0 12px}.boton-guardar{background:#16a34a;color:white;padding:0 12px}
+@media(max-width:1200px){.linea-entrada{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:900px){.resumen{grid-template-columns:1fr}.linea-entrada{grid-template-columns:1fr 1fr}.filtros{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
-
-<!-- =====================================================
-     CABECERA
-====================================================== -->
-
 <div class="cabecera">
-
-  <div class="cabecera-titulo">
-
-    <h1>
-      GERAVALON · INGRESOS
-    </h1>
-
-    <p>
-      ANÁLISIS ECONÓMICO · EJERCICIO 2026
-    </p>
-
-  </div>
-
-
-  <div class="cabecera-derecha">
-
-    <div class="ejercicio">
-      Ejercicio 2026
-    </div>
-
-    <a href="Analisis.html" class="volver">
-      ← VOLVER
-    </a>
-
-  </div>
-
+  <div class="cabecera-titulo"><h1>GERAVALON · INGRESOS</h1><p>ANÁLISIS ECONÓMICO · EJERCICIO 2026</p></div>
+  <div class="cabecera-derecha"><div class="ejercicio">Ejercicio 2026</div><a href="Analisis.html" class="volver">← VOLVER</a></div>
 </div>
-
 
 <div class="pagina">
+  <div class="panel-resumen"><div class="resumen">
+    <div class="tarjeta"><div class="titulo-resumen">INGRESOS ACUMULADOS SIN IVA</div><div class="valor" id="totalIngresos">0,00 €</div></div>
+    <div class="tarjeta"><div class="titulo-resumen">NÚMERO DE MOVIMIENTOS</div><div class="valor" id="numeroMovimientos">0</div></div>
+    <div class="tarjeta"><div class="titulo-resumen">CUENTAS DE INGRESO</div><div class="valor" id="numeroCuentas">0</div></div>
+  </div></div>
 
-
-<!-- =====================================================
-     RESUMEN
-====================================================== -->
-
-<div class="panel-resumen">
-
-  <div class="resumen">
-
-    <div class="tarjeta">
-
-      <div class="titulo-resumen">
-        INGRESOS ACUMULADOS SIN IVA
-      </div>
-
-      <div class="valor" id="totalIngresos">
-        0,00 €
-      </div>
-
+  <div class="panel panel-entrada">
+    <div class="titulo">INTRODUCIR INGRESO</div>
+    <div class="linea-entrada">
+      <input type="date" id="fecha" min="2026-01-01" max="2026-12-31" title="Fecha de factura">
+      <input type="text" id="numeroFactura" placeholder="N.º FACTURA" title="Número de factura">
+      <div class="fila-cuenta"><select id="cuenta" title="Cuenta contable"></select><button type="button" class="nueva-cuenta" onclick="abrirNuevaCuenta()">+ NUEVA</button></div>
+      <select id="origen" title="Origen"><option value="GERA">GERA</option><option value="SIG">SIG</option><option value="DAVID">DAVID</option></select>
+      <select id="proyecto" title="Proyecto"></select>
+      <input type="number" id="cantidad" step="0.01" placeholder="TOTAL FACTURA €" oninput="actualizarCalculoIVA()">
+      <select id="tipoIVA" onchange="actualizarCalculoIVA()" title="Tipo de IVA"><option value="21">IVA 21%</option><option value="10">IVA 10%</option><option value="4">IVA 4%</option><option value="0">SIN IVA</option></select>
+      <button class="guardar" onclick="guardarMovimiento()" title="Guardar ingreso">💾</button>
+      <button class="json-morado" onclick="sincronizarHolded()">ACTUALIZAR HOLDED</button>
+      <button class="json" onclick="descargarJSON()">GUARDAR JSON</button>
+      <button class="json-gris" onclick="document.getElementById('archivoJSON').click()">CARGAR JSON</button>
+      <input type="file" id="archivoJSON" accept=".json" style="display:none" onchange="cargarJSON(event)">
     </div>
-
-
-    <div class="tarjeta">
-
-      <div class="titulo-resumen">
-        NÚMERO DE MOVIMIENTOS
-      </div>
-
-      <div class="valor" id="numeroMovimientos">
-        0
-      </div>
-
+    <div class="previsualizacion-iva">
+      <span>TOTAL: <strong id="vistaTotal">0,00 €</strong></span>
+      <span>IVA: <strong id="vistaIVA">0,00 €</strong></span>
+      <span>BASE SIN IVA: <span class="base" id="vistaBase">0,00 €</span></span>
     </div>
-
-
-    <div class="tarjeta">
-
-      <div class="titulo-resumen">
-        CUENTAS DE INGRESO
-      </div>
-
-      <div class="valor" id="numeroCuentas">
-        0
-      </div>
-
-    </div>
-
+    <div class="estado" id="mensaje">Los datos se guardan automáticamente en este navegador.</div>
   </div>
 
+  <div class="panel panel-tabla"><div style="padding:10px 10px 0"><div class="titulo">INGRESOS POR MES · SIN IVA</div></div>
+    <div class="tabla-contenedor"><table><thead><tr>
+      <th>CUENTA CONTABLE</th><th>PROYECTO</th><th>ORIGEN</th>
+      <th>ENE</th><th>FEB</th><th>MAR</th><th>ABR</th><th>MAY</th><th>JUN</th><th>JUL</th><th>AGO</th><th>SEP</th><th>OCT</th><th>NOV</th><th>DIC</th><th>TOTAL</th>
+    </tr></thead><tbody id="tablaIngresos"></tbody></table></div>
+  </div>
+
+  <div class="panel panel-movimientos">
+    <div class="titulo">MOVIMIENTOS</div>
+    <div class="filtros">
+      <select id="filtroCuentaMovimiento" onchange="construirTablaMovimientos()"></select>
+      <select id="filtroProyectoMovimiento" onchange="construirTablaMovimientos()"></select>
+      <button class="limpiar-filtros" onclick="limpiarFiltrosMovimientos()">LIMPIAR FILTROS</button>
+    </div>
+    <div class="tabla-contenedor"><table><thead><tr>
+      <th>FECHA</th><th>N.º FACTURA</th><th>CUENTA</th><th>ORIGEN</th><th>PROYECTO</th><th>BASE</th><th>IVA</th><th>TOTAL FACTURA</th><th>ACCIÓN</th>
+    </tr></thead><tbody id="tablaMovimientos"></tbody></table></div>
+  </div>
 </div>
 
+<div class="modal-fondo" id="modalCuenta"><div class="modal">
+  <h3>NUEVA CUENTA DE INGRESO</h3>
+  <div class="modal-campo"><label>CÓDIGO CONTABLE</label><input type="text" id="nuevoCodigo" placeholder="Ej. 70500006"></div>
+  <div class="modal-campo"><label>NOMBRE</label><input type="text" id="nuevoNombre" placeholder="Nombre de la cuenta"></div>
+  <div class="modal-botones"><button class="boton-cancelar" onclick="cerrarNuevaCuenta()">CANCELAR</button><button class="boton-guardar" onclick="guardarNuevaCuenta()">GUARDAR CUENTA</button></div>
+</div></div>
 
-<!-- =====================================================
-     INTRODUCIR INGRESO
-====================================================== -->
-
-<div class="panel panel-entrada">
-
-  <div class="titulo">
-    INTRODUCIR INGRESO
+<div class="modal-fondo" id="modalEditar"><div class="modal">
+  <h3>EDITAR MOVIMIENTO</h3>
+  <input type="hidden" id="editarId">
+  <div class="modal-grid">
+    <div class="modal-campo"><label>FECHA</label><input type="date" id="editarFecha" min="2026-01-01" max="2026-12-31"></div>
+    <div class="modal-campo"><label>N.º FACTURA</label><input type="text" id="editarNumeroFactura"></div>
   </div>
-
-
-  <div class="linea-entrada">
-
-
-    <input
-      type="date"
-      id="fecha"
-      min="2026-01-01"
-      max="2026-12-31"
-      title="Fecha de factura"
-    >
-
-
-    <input
-      type="text"
-      id="numeroFactura"
-      placeholder="N.º FACTURA"
-      title="Número de factura"
-    >
-
-
-    <div class="fila-cuenta">
-
-      <select
-        id="cuenta"
-        title="Cuenta contable">
-      </select>
-
-      <button
-        type="button"
-        class="nueva-cuenta"
-        onclick="abrirNuevaCuenta()">
-        + NUEVA
-      </button>
-
-    </div>
-
-
-    <select
-      id="origen"
-      title="Origen">
-
-      <option value="GERA">GERA</option>
-      <option value="SIG">SIG</option>
-      <option value="DAVID">DAVID</option>
-
-    </select>
-
-
-    <select
-      id="proyecto"
-      title="Proyecto">
-    </select>
-
-
-    <input
-      type="number"
-      id="cantidad"
-      step="0.01"
-      placeholder="TOTAL FACTURA €"
-      oninput="actualizarCalculoIVA()"
-    >
-
-
-    <select
-      id="tipoIVA"
-      onchange="actualizarCalculoIVA()"
-      title="Tipo de IVA">
-
-      <option value="21">IVA 21%</option>
-      <option value="10">IVA 10%</option>
-      <option value="4">IVA 4%</option>
-      <option value="0">SIN IVA</option>
-
-    </select>
-
-
-    <button
-      class="guardar"
-      onclick="guardarMovimiento()"
-      title="Guardar ingreso">
-      💾
-    </button>
-
-
-    <button
-      class="json"
-      onclick="descargarJSON()">
-      GUARDAR JSON
-    </button>
-
-
-    <button
-      class="json-gris"
-      onclick="document.getElementById('archivoJSON').click()">
-      CARGAR JSON
-    </button>
-
-
-    <input
-      type="file"
-      id="archivoJSON"
-      accept=".json"
-      style="display:none"
-      onchange="cargarJSON(event)"
-    >
-
+  <div class="modal-campo"><label>CUENTA</label><select id="editarCuenta"></select></div>
+  <div class="modal-grid">
+    <div class="modal-campo"><label>ORIGEN</label><select id="editarOrigen"><option value="GERA">GERA</option><option value="SIG">SIG</option><option value="DAVID">DAVID</option></select></div>
+    <div class="modal-campo"><label>PROYECTO</label><select id="editarProyecto"></select></div>
   </div>
-
-
-  <div class="previsualizacion-iva">
-
-    <span>
-      TOTAL:
-      <strong id="vistaTotal">
-        0,00 €
-      </strong>
-    </span>
-
-    <span>
-      IVA:
-      <strong id="vistaIVA">
-        0,00 €
-      </strong>
-    </span>
-
-    <span>
-      BASE SIN IVA:
-      <span class="base" id="vistaBase">
-        0,00 €
-      </span>
-    </span>
-
+  <div class="modal-grid">
+    <div class="modal-campo"><label>TOTAL CON IVA</label><input type="number" id="editarImporteConIVA" step="0.01"></div>
+    <div class="modal-campo"><label>IVA</label><select id="editarTipoIVA"><option value="21">IVA 21%</option><option value="10">IVA 10%</option><option value="4">IVA 4%</option><option value="0">SIN IVA</option></select></div>
   </div>
-
-
-  <div
-    class="estado"
-    id="mensaje">
-
-    Los datos se guardan automáticamente en este navegador.
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     INGRESOS POR MES
-====================================================== -->
-
-<div class="panel panel-tabla">
-
-  <div style="padding:10px 10px 0">
-
-    <div class="titulo">
-      INGRESOS POR MES · SIN IVA
-    </div>
-
-  </div>
-
-
-  <div class="tabla-contenedor">
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>CUENTA CONTABLE</th>
-          <th>PROYECTO</th>
-          <th>ORIGEN</th>
-
-          <th>ENE</th>
-          <th>FEB</th>
-          <th>MAR</th>
-          <th>ABR</th>
-          <th>MAY</th>
-          <th>JUN</th>
-          <th>JUL</th>
-          <th>AGO</th>
-          <th>SEP</th>
-          <th>OCT</th>
-          <th>NOV</th>
-          <th>DIC</th>
-
-          <th>TOTAL</th>
-
-        </tr>
-
-      </thead>
-
-
-      <tbody id="tablaIngresos">
-      </tbody>
-
-    </table>
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     MOVIMIENTOS
-====================================================== -->
-
-<div class="panel panel-movimientos">
-
-  <div class="titulo">
-    MOVIMIENTOS
-  </div>
-
-
-  <div class="filtros">
-
-    <select
-      id="filtroCuentaMovimiento"
-      onchange="construirTablaMovimientos()">
-    </select>
-
-
-    <select
-      id="filtroProyectoMovimiento"
-      onchange="construirTablaMovimientos()">
-    </select>
-
-
-    <button
-      class="limpiar-filtros"
-      onclick="limpiarFiltrosMovimientos()">
-
-      LIMPIAR FILTROS
-
-    </button>
-
-  </div>
-
-
-  <div class="tabla-contenedor">
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>FECHA</th>
-          <th>N.º FACTURA</th>
-          <th>CUENTA</th>
-          <th>ORIGEN</th>
-          <th>PROYECTO</th>
-
-          <th>BASE</th>
-          <th>IVA</th>
-          <th>TOTAL FACTURA</th>
-
-          <th>ACCIÓN</th>
-
-        </tr>
-
-      </thead>
-
-
-      <tbody id="tablaMovimientos">
-      </tbody>
-
-    </table>
-
-  </div>
-
-</div>
-
-
-</div>
-
-
-<!-- =====================================================
-     MODAL NUEVA CUENTA
-====================================================== -->
-
-<div
-  class="modal-fondo"
-  id="modalCuenta">
-
-  <div class="modal">
-
-    <h3>
-      NUEVA CUENTA DE INGRESO
-    </h3>
-
-
-    <div class="modal-campo">
-
-      <label>
-        CÓDIGO CONTABLE
-      </label>
-
-      <input
-        type="text"
-        id="nuevoCodigo"
-        placeholder="Ej. 70500006">
-
-    </div>
-
-
-    <div class="modal-campo">
-
-      <label>
-        NOMBRE
-      </label>
-
-      <input
-        type="text"
-        id="nuevoNombre"
-        placeholder="Nombre de la cuenta">
-
-    </div>
-
-
-    <div class="modal-botones">
-
-      <button
-        class="boton-cancelar"
-        onclick="cerrarNuevaCuenta()">
-
-        CANCELAR
-
-      </button>
-
-
-      <button
-        class="boton-guardar-cuenta"
-        onclick="guardarNuevaCuenta()">
-
-        GUARDAR CUENTA
-
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
+  <div class="estado">Al guardar se marca como MODIFICADO MANUALMENTE. La sincronización respetará tu corrección.</div>
+  <div class="modal-botones"><button class="boton-cancelar" onclick="cerrarEditarMovimiento()">CANCELAR</button><button class="boton-guardar" onclick="guardarEdicionMovimiento()">GUARDAR CAMBIOS</button></div>
+</div></div>
 
 <script>
+const CLAVE_INGRESOS="geravalon_ingresos_2026";
+const CLAVE_CUENTAS="geravalon_cuentas_ingresos";
+const PROYECTO_SIN_PROYECTO="⚠ SIN PROYECTO";
 
-/* =========================================================
-   CONFIGURACIÓN
-========================================================= */
-
-const CLAVE_INGRESOS =
-  "geravalon_ingresos_2026";
-
-const CLAVE_CUENTAS =
-  "geravalon_cuentas_ingresos";
-
-
-/* =========================================================
-   CUENTAS INICIALES
-========================================================= */
-
-const cuentasIniciales = [
-
-  ["70500005","INSTALACIÓN SEPARADOR DE GRASA"],
-  ["70500004","INSTALACION Y REPARACIONES"],
-  ["70500003","SERVICIOS"],
-  ["70500002","LIMPIEZA RESTAURACION"],
-  ["70500001","LIMPIEZAS SOL DE ALBA"],
-
-  ["70000010","GRG - CONTENEDORES - BIDONES"],
-  ["70000008","SEPARADORES DE GRASA"],
-  ["70000007","ELEMENTOS SISTEMA DE EXTRACCIÓN"],
-  ["70000006","CAMPANAS"],
-  ["70000005","FILTRACIÓN ELECTROSTÁTICA"],
-  ["70000004","CAJAS DE VENTILACIÓN"],
-  ["70000003","VENTA DE FILTROS ESPECIALES"],
-  ["70000002","VENTA DE FILTROS DE COCINA"],
-  ["70000001","VENTA DE ACEITE USADO"],
-  ["70000000","VENTAS DE MERCADERÍAS"]
-
+const cuentasIniciales=[
+ ["70500005","INSTALACIÓN SEPARADOR DE GRASA"],["70500004","INSTALACION Y REPARACIONES"],["70500003","SERVICIOS"],["70500002","LIMPIEZA RESTAURACION"],["70500001","LIMPIEZAS SOL DE ALBA"],["70500000","PRESTACIONES DE SERVICIOS"],
+ ["70000011","CAJA DE VENTILACION"],["70000010","GRG - CONTENEDORES - BIDONES"],["70000009","FILTRO ELECTROSTATICO"],["70000008","SEPARADORES DE GRASA"],["70000007","ELEMENTOS SISTEMA DE EXTRACCIÓN"],["70000006","CAMPANAS"],["70000005","FILTRACIÓN ELECTROSTÁTICA"],["70000004","CAJAS DE VENTILACIÓN"],["70000003","VENTA DE FILTROS ESPECIALES"],["70000002","VENTA DE FILTROS DE COCINA"],["70000001","VENTA DE ACEITE USADO"],["70000000","VENTAS DE MERCADERÍAS"]
 ];
 
+const proyectos=["RECICLAJE DE ACEITES Y GRASAS","LIMPIEZA INDUSTRIAL","LIMPIEZA HOSTELERIA","SERVICIOS VARIOS","INSTALACION Y REPARACION","GASTOS GENERALES","TRADER",PROYECTO_SIN_PROYECTO];
 
-/* =========================================================
-   PROYECTOS
-========================================================= */
+let movimientos=[]; let cuentas=[]; let mapaHoldedCuentas={}; let mapaHoldedProyectos={};
 
-const proyectos = [
+document.addEventListener("DOMContentLoaded",()=>{cargarCuentas();cargarSelectores();cargarMovimientos();ponerFechaHoy();actualizarCalculoIVA();construirTodo();});
 
-  "RECICLAJE DE ACEITES Y GRASAS",
-  "LIMPIEZA INDUSTRIAL",
-  "LIMPIEZA HOSTELERIA",
-  "SERVICIOS VARIOS",
-  "INSTALACION Y REPARACION",
-  "GASTOS GENERALES",
-  "TRADER"
+function redondear2(n){return Math.round((Number(n)||0)*100)/100}
+function crearIdMovimiento(){return Date.now()+Math.floor(Math.random()*100000)}
+function ponerFechaHoy(){const h=new Date();if(h.getFullYear()!==2026)return;document.getElementById("fecha").value=`2026-${String(h.getMonth()+1).padStart(2,"0")}-${String(h.getDate()).padStart(2,"0")}`}
+function calcularImportesIVA(total,tipoIVA){const t=Number(total)||0,p=Number(tipoIVA)||0;if(!p)return{total:t,base:t,iva:0};const b=t/(1+p/100);return{total:t,base:b,iva:t-b}}
+function actualizarCalculoIVA(){const t=parseFloat(document.getElementById("cantidad").value)||0,p=parseFloat(document.getElementById("tipoIVA").value)||0,c=calcularImportesIVA(t,p);document.getElementById("vistaTotal").textContent=formatearDinero(c.total);document.getElementById("vistaIVA").textContent=formatearDinero(c.iva);document.getElementById("vistaBase").textContent=formatearDinero(c.base)}
 
-];
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-let movimientos = [];
-let cuentas = [];
-
-
-/* =========================================================
-   INICIO
-========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function(){
-
-    cargarCuentas();
-
-    cargarSelectores();
-
-    cargarMovimientos();
-
-    ponerFechaHoy();
-
-    actualizarCalculoIVA();
-
-    construirTodo();
-
-  }
-);
-
-
-/* =========================================================
-   FECHA
-========================================================= */
-
-function ponerFechaHoy(){
-
-  const hoy =
-    new Date();
-
-
-  if(
-    hoy.getFullYear()
-    !==
-    2026
-  ){
-
-    return;
-
-  }
-
-
-  const mm =
-    String(
-      hoy.getMonth() + 1
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  const dd =
-    String(
-      hoy.getDate()
-    ).padStart(
-      2,
-      "0"
-    );
-
-
-  document
-    .getElementById(
-      "fecha"
-    )
-    .value =
-    `2026-${mm}-${dd}`;
-
-}
-
-
-/* =========================================================
-   CALCULO IVA
-========================================================= */
-
-function calcularImportesIVA(
-  total,
-  tipoIVA
-){
-
-  const importeTotal =
-    Number(total) || 0;
-
-  const porcentajeIVA =
-    Number(tipoIVA) || 0;
-
-
-  if(
-    porcentajeIVA === 0
-  ){
-
-    return {
-
-      total:
-        importeTotal,
-
-      base:
-        importeTotal,
-
-      iva:
-        0
-
-    };
-
-  }
-
-
-  const base =
-    importeTotal
-    /
-    (
-      1
-      +
-      porcentajeIVA / 100
-    );
-
-
-  const iva =
-    importeTotal
-    -
-    base;
-
-
-  return {
-
-    total:
-      importeTotal,
-
-    base:
-      base,
-
-    iva:
-      iva
-
-  };
-
-}
-
-
-function actualizarCalculoIVA(){
-
-  const total =
-    parseFloat(
-      document.getElementById(
-        "cantidad"
-      ).value
-    )
-    ||
-    0;
-
-
-  const tipoIVA =
-    parseFloat(
-      document.getElementById(
-        "tipoIVA"
-      ).value
-    )
-    ||
-    0;
-
-
-  const calculo =
-    calcularImportesIVA(
-      total,
-      tipoIVA
-    );
-
-
-  document.getElementById(
-    "vistaTotal"
-  ).textContent =
-    formatearDinero(
-      calculo.total
-    );
-
-
-  document.getElementById(
-    "vistaIVA"
-  ).textContent =
-    formatearDinero(
-      calculo.iva
-    );
-
-
-  document.getElementById(
-    "vistaBase"
-  ).textContent =
-    formatearDinero(
-      calculo.base
-    );
-
-}
-
-
-/* =========================================================
-   CUENTAS
-========================================================= */
-
+function cuentaEsIngreso(c){return /^7\d{7}$/.test(String(c?.[0] ?? ""))}
 function cargarCuentas(){
-
-  const guardadas =
-    localStorage.getItem(
-      CLAVE_CUENTAS
-    );
-
-
-  if(guardadas){
-
-    try{
-
-      cuentas =
-        JSON.parse(
-          guardadas
-        );
-
-    }
-
-    catch{
-
-      cuentas =
-        JSON.parse(
-          JSON.stringify(
-            cuentasIniciales
-          )
-        );
-
-    }
-
-  }
-
-  else{
-
-    cuentas =
-      JSON.parse(
-        JSON.stringify(
-          cuentasIniciales
-        )
-      );
-
-
-    guardarCuentas();
-
-  }
-
-}
-
-
-function guardarCuentas(){
-
-  localStorage.setItem(
-
-    CLAVE_CUENTAS,
-
-    JSON.stringify(
-      cuentas
-    )
-
-  );
-
-}
-
-
-/* =========================================================
-   SELECTORES
-========================================================= */
-
-function cargarSelectores(){
-
-  const selectorCuenta =
-    document.getElementById(
-      "cuenta"
-    );
-
-
-  selectorCuenta.innerHTML =
-    "";
-
-
-  cuentas
-    .sort(
-      (a,b) =>
-        a[0].localeCompare(
-          b[0]
-        )
-    )
-    .forEach(
-      cuenta => {
-
-        const opcion =
-          document.createElement(
-            "option"
-          );
-
-
-        opcion.value =
-          cuenta[0];
-
-
-        opcion.textContent =
-          cuenta[1]
-          +
-          " · "
-          +
-          cuenta[0];
-
-
-        selectorCuenta.appendChild(
-          opcion
-        );
-
-      }
-    );
-
-
-  const selectorProyecto =
-    document.getElementById(
-      "proyecto"
-    );
-
-
-  selectorProyecto.innerHTML =
-    "";
-
-
-  proyectos.forEach(
-    proyecto => {
-
-      const opcion =
-        document.createElement(
-          "option"
-        );
-
-
-      opcion.value =
-        proyecto;
-
-
-      opcion.textContent =
-        proyecto;
-
-
-      selectorProyecto.appendChild(
-        opcion
-      );
-
-    }
-  );
-
-
-  const filtroCuenta =
-    document.getElementById(
-      "filtroCuentaMovimiento"
-    );
-
-
-  filtroCuenta.innerHTML =
-    '<option value="">TODAS LAS CUENTAS</option>';
-
-
-  cuentas.forEach(
-    cuenta => {
-
-      const opcion =
-        document.createElement(
-          "option"
-        );
-
-
-      opcion.value =
-        cuenta[0];
-
-
-      opcion.textContent =
-        cuenta[1]
-        +
-        " · "
-        +
-        cuenta[0];
-
-
-      filtroCuenta.appendChild(
-        opcion
-      );
-
-    }
-  );
-
-
-  const filtroProyecto =
-    document.getElementById(
-      "filtroProyectoMovimiento"
-    );
-
-
-  filtroProyecto.innerHTML =
-    '<option value="">TODOS LOS PROYECTOS</option>';
-
-
-  proyectos.forEach(
-    proyecto => {
-
-      const opcion =
-        document.createElement(
-          "option"
-        );
-
-
-      opcion.value =
-        proyecto;
-
-
-      opcion.textContent =
-        proyecto;
-
-
-      filtroProyecto.appendChild(
-        opcion
-      );
-
-    }
-  );
-
-
-  actualizarResumen();
-
-}
-
-
-/* =========================================================
-   NUEVA CUENTA
-========================================================= */
-
-function abrirNuevaCuenta(){
-
-  document.getElementById(
-    "nuevoCodigo"
-  ).value = "";
-
-
-  document.getElementById(
-    "nuevoNombre"
-  ).value = "";
-
-
-  document.getElementById(
-    "modalCuenta"
-  ).style.display =
-    "flex";
-
-}
-
-
-function cerrarNuevaCuenta(){
-
-  document.getElementById(
-    "modalCuenta"
-  ).style.display =
-    "none";
-
-}
-
-
-function guardarNuevaCuenta(){
-
-  const codigo =
-    document
-      .getElementById(
-        "nuevoCodigo"
-      )
-      .value
-      .trim()
-      .toUpperCase();
-
-
-  const nombre =
-    document
-      .getElementById(
-        "nuevoNombre"
-      )
-      .value
-      .trim()
-      .toUpperCase();
-
-
-  if(
-    !codigo
-    ||
-    !nombre
-  ){
-
-    alert(
-      "DEBES INDICAR EL CÓDIGO Y EL NOMBRE DE LA CUENTA."
-    );
-
-    return;
-
-  }
-
-
-  const existe =
-    cuentas.some(
-      cuenta =>
-        cuenta[0]
-        ===
-        codigo
-    );
-
-
-  if(existe){
-
-    alert(
-      "ESA CUENTA CONTABLE YA EXISTE."
-    );
-
-    return;
-
-  }
-
-
-  cuentas.push(
-    [
-      codigo,
-      nombre
-    ]
-  );
-
-
+  const g=localStorage.getItem(CLAVE_CUENTAS);
+  try{cuentas=g?JSON.parse(g):JSON.parse(JSON.stringify(cuentasIniciales))}
+  catch{cuentas=JSON.parse(JSON.stringify(cuentasIniciales))}
+  cuentas=Array.isArray(cuentas)?cuentas.filter(cuentaEsIngreso):[];
+  cuentasIniciales.forEach(ci=>{if(!cuentas.some(c=>c[0]===ci[0]))cuentas.push(ci)});
   guardarCuentas();
-
-  cargarSelectores();
-
-
-  document.getElementById(
-    "cuenta"
-  ).value =
-    codigo;
-
-
-  cerrarNuevaCuenta();
-
-
-  mostrarMensaje(
-    "Cuenta creada correctamente.",
-    true
-  );
-
 }
+function guardarCuentas(){localStorage.setItem(CLAVE_CUENTAS,JSON.stringify(cuentas))}
+function cuentasOrdenadas(){return [...cuentas].filter(cuentaEsIngreso).sort((a,b)=>a[0].localeCompare(b[0]))}
+function cargarSelectorCuenta(id,empty){const s=document.getElementById(id);s.innerHTML="";if(empty){const o=document.createElement("option");o.value="";o.textContent="SELECCIONAR CUENTA";s.appendChild(o)}cuentasOrdenadas().forEach(c=>{const o=document.createElement("option");o.value=c[0];o.textContent=c[1]+" · "+c[0];s.appendChild(o)})}
+function cargarSelectorProyecto(id,empty){const s=document.getElementById(id);s.innerHTML="";if(empty){const o=document.createElement("option");o.value="";o.textContent="SELECCIONAR PROYECTO";s.appendChild(o)}proyectos.forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;s.appendChild(o)})}
+function cargarSelectores(){cargarSelectorCuenta("cuenta",false);cargarSelectorProyecto("proyecto",false);const fc=document.getElementById("filtroCuentaMovimiento");fc.innerHTML='<option value="">TODAS LAS CUENTAS</option>';cuentasOrdenadas().forEach(c=>{const o=document.createElement("option");o.value=c[0];o.textContent=c[1]+" · "+c[0];fc.appendChild(o)});const fp=document.getElementById("filtroProyectoMovimiento");fp.innerHTML='<option value="">TODOS LOS PROYECTOS</option>';proyectos.forEach(p=>{const o=document.createElement("option");o.value=p;o.textContent=p;fp.appendChild(o)});actualizarResumen()}
 
+function abrirNuevaCuenta(){document.getElementById("nuevoCodigo").value="";document.getElementById("nuevoNombre").value="";document.getElementById("modalCuenta").style.display="flex"}
+function cerrarNuevaCuenta(){document.getElementById("modalCuenta").style.display="none"}
+function guardarNuevaCuenta(){const c=document.getElementById("nuevoCodigo").value.trim().toUpperCase(),n=document.getElementById("nuevoNombre").value.trim().toUpperCase();if(!c||!n){alert("DEBES INDICAR EL CÓDIGO Y EL NOMBRE DE LA CUENTA.");return}if(cuentas.some(x=>x[0]===c)){alert("ESA CUENTA CONTABLE YA EXISTE.");return}cuentas.push([c,n]);guardarCuentas();cargarSelectores();document.getElementById("cuenta").value=c;cerrarNuevaCuenta();mostrarMensaje("Cuenta creada correctamente.",true)}
 
-/* =========================================================
-   MOVIMIENTOS
-========================================================= */
-
-function cargarMovimientos(){
-
-  const guardados =
-    localStorage.getItem(
-      CLAVE_INGRESOS
-    );
-
-
-  if(!guardados){
-
-    movimientos = [];
-
-    return;
-
-  }
-
-
-  try{
-
-    const datos =
-      JSON.parse(
-        guardados
-      );
-
-
-    movimientos =
-      Array.isArray(
-        datos
-      )
-      ?
-      datos
-      :
-      [];
-
-  }
-
-  catch{
-
-    movimientos = [];
-
-  }
-
-}
-
-
-function guardarLocal(){
-
-  localStorage.setItem(
-
-    CLAVE_INGRESOS,
-
-    JSON.stringify(
-      movimientos
-    )
-
-  );
-
-}
-
-
-/* =========================================================
-   GUARDAR INGRESO
-========================================================= */
+function cargarMovimientos(){const g=localStorage.getItem(CLAVE_INGRESOS);if(!g){movimientos=[];return}try{const d=JSON.parse(g);movimientos=Array.isArray(d)?d:[]}catch{movimientos=[]}movimientos=movimientos.filter(m=>!(m?.origenDatos==="HOLDED"&&Number(m?.importeConIVA||0)===0&&Number(m?.cantidadTotal||0)===0&&Number(m?.importeIVA||0)===0));guardarLocal()}
+function guardarLocal(){localStorage.setItem(CLAVE_INGRESOS,JSON.stringify(movimientos))}
 
 function guardarMovimiento(){
-
-  const fecha =
-    document.getElementById(
-      "fecha"
-    ).value;
-
-
-  const numeroFactura =
-    document.getElementById(
-      "numeroFactura"
-    )
-    .value
-    .trim();
-
-
-  const cuenta =
-    document.getElementById(
-      "cuenta"
-    ).value;
-
-
-  const origen =
-    document.getElementById(
-      "origen"
-    ).value;
-
-
-  const proyecto =
-    document.getElementById(
-      "proyecto"
-    ).value;
-
-
-  const importeConIVA =
-    parseFloat(
-      document.getElementById(
-        "cantidad"
-      ).value
-    );
-
-
-  const tipoIVA =
-    parseFloat(
-      document.getElementById(
-        "tipoIVA"
-      ).value
-    )
-    ||
-    0;
-
-
-  if(!fecha){
-
-    mostrarMensaje(
-      "Debes indicar la fecha.",
-      false
-    );
-
-    return;
-
-  }
-
-
-  if(!numeroFactura){
-
-    mostrarMensaje(
-      "Debes indicar el número de factura.",
-      false
-    );
-
-    return;
-
-  }
-
-
-  if(!cuenta){
-
-    mostrarMensaje(
-      "Debes seleccionar una cuenta.",
-      false
-    );
-
-    return;
-
-  }
-
-
-  if(!proyecto){
-
-    mostrarMensaje(
-      "Debes seleccionar un proyecto.",
-      false
-    );
-
-    return;
-
-  }
-
-
-  if(
-    Number.isNaN(
-      importeConIVA
-    )
-    ||
-    importeConIVA === 0
-  ){
-
-    mostrarMensaje(
-      "Debes introducir un importe distinto de cero.",
-      false
-    );
-
-    return;
-
-  }
-
-
-  const fechaObjeto =
-    new Date(
-      fecha
-      +
-      "T12:00:00"
-    );
-
-
-  if(
-    fechaObjeto.getFullYear()
-    !==
-    2026
-  ){
-
-    mostrarMensaje(
-      "La fecha debe pertenecer al ejercicio 2026.",
-      false
-    );
-
-    return;
-
-  }
-
-
-  const calculo =
-    calcularImportesIVA(
-      importeConIVA,
-      tipoIVA
-    );
-
-
-  const movimiento = {
-
-    id:
-      Date.now()
-      +
-      Math.floor(
-        Math.random()
-        *
-        1000
-      ),
-
-    fecha:
-      fecha,
-
-    numeroFactura:
-      numeroFactura,
-
-    cuenta:
-      cuenta,
-
-    origen:
-      origen,
-
-    proyecto:
-      proyecto,
-
-    importeConIVA:
-      calculo.total,
-
-    tipoIVA:
-      tipoIVA,
-
-    importeIVA:
-      calculo.iva,
-
-    cantidadTotal:
-      calculo.base
-
-  };
-
-
-  movimientos.push(
-    movimiento
-  );
-
-
-  guardarLocal();
-
-  construirTodo();
-
-
-  document.getElementById(
-    "numeroFactura"
-  ).value = "";
-
-
-  document.getElementById(
-    "cantidad"
-  ).value = "";
-
-
-  actualizarCalculoIVA();
-
-
-  mostrarMensaje(
-    "Ingreso guardado sin IVA: "
-    +
-    formatearDinero(
-      calculo.base
-    ),
-    true
-  );
-
+ const fecha=document.getElementById("fecha").value,numero=document.getElementById("numeroFactura").value.trim(),cuenta=document.getElementById("cuenta").value,origen=document.getElementById("origen").value,proyecto=document.getElementById("proyecto").value,total=parseFloat(document.getElementById("cantidad").value),tipo=parseFloat(document.getElementById("tipoIVA").value)||0;
+ if(!fecha||!numero||!cuenta||!proyecto||Number.isNaN(total)||total===0){mostrarMensaje("Completa fecha, factura, cuenta, proyecto e importe.",false);return}
+ const c=calcularImportesIVA(total,tipo);
+ movimientos.push({id:crearIdMovimiento(),fecha,numeroFactura:numero,cuenta,origen,proyecto,importeConIVA:redondear2(c.total),tipoIVA:tipo,importeIVA:redondear2(c.iva),cantidadTotal:redondear2(c.base),origenDatos:"MANUAL",modificadoManual:false});
+ guardarLocal();construirTodo();document.getElementById("numeroFactura").value="";document.getElementById("cantidad").value="";actualizarCalculoIVA();mostrarMensaje("Ingreso guardado sin IVA: "+formatearDinero(c.base),true)
 }
 
-
-/* =========================================================
-   ELIMINAR
-========================================================= */
-
-function eliminarMovimiento(id){
-
-  const movimiento =
-    movimientos.find(
-      m =>
-        m.id === id
-    );
-
-
-  if(!movimiento){
-
-    return;
-
-  }
-
-
-  const confirmar =
-    confirm(
-
-      "¿ELIMINAR ESTE INGRESO?\n\n"
-      +
-      "FACTURA: "
-      +
-      (
-        movimiento.numeroFactura
-        ||
-        "—"
-      )
-      +
-      "\n"
-      +
-      "BASE: "
-      +
-      formatearDinero(
-        movimiento.cantidadTotal
-      )
-
-    );
-
-
-  if(!confirmar){
-
-    return;
-
-  }
-
-
-  movimientos =
-    movimientos.filter(
-      m =>
-        m.id !== id
-    );
-
-
-  guardarLocal();
-
-  construirTodo();
-
-
-  mostrarMensaje(
-    "Ingreso eliminado correctamente.",
-    true
-  );
-
+function eliminarMovimiento(id){const m=movimientos.find(x=>Number(x.id)===Number(id));if(!m)return;if(!confirm("¿ELIMINAR ESTE INGRESO?\n\nFACTURA: "+(m.numeroFactura||"—")+"\nBASE: "+formatearDinero(m.cantidadTotal)))return;movimientos=movimientos.filter(x=>Number(x.id)!==Number(id));guardarLocal();construirTodo();mostrarMensaje("Ingreso eliminado correctamente.",true)}
+function abrirEditarMovimiento(id){const m=movimientos.find(x=>Number(x.id)===Number(id));if(!m)return;cargarSelectorCuenta("editarCuenta",true);cargarSelectorProyecto("editarProyecto",true);document.getElementById("editarId").value=m.id;document.getElementById("editarFecha").value=m.fecha||"";document.getElementById("editarNumeroFactura").value=m.numeroFactura||"";document.getElementById("editarCuenta").value=m.cuenta||"";document.getElementById("editarOrigen").value=m.origen||"GERA";document.getElementById("editarProyecto").value=m.proyecto||"";document.getElementById("editarImporteConIVA").value=redondear2(m.importeConIVA??m.cantidadTotal??0);document.getElementById("editarTipoIVA").value=String(Number(m.tipoIVA)||0);document.getElementById("modalEditar").style.display="flex"}
+function cerrarEditarMovimiento(){document.getElementById("modalEditar").style.display="none"}
+function guardarEdicionMovimiento(){
+ const id=Number(document.getElementById("editarId").value),m=movimientos.find(x=>Number(x.id)===id);if(!m)return;
+ const fecha=document.getElementById("editarFecha").value,numero=document.getElementById("editarNumeroFactura").value.trim(),cuenta=document.getElementById("editarCuenta").value,origen=document.getElementById("editarOrigen").value,proyecto=document.getElementById("editarProyecto").value,total=parseFloat(document.getElementById("editarImporteConIVA").value),tipo=parseFloat(document.getElementById("editarTipoIVA").value)||0;
+ if(!fecha||!numero||!cuenta||!proyecto||Number.isNaN(total)){alert("DEBES COMPLETAR FECHA, FACTURA, CUENTA, PROYECTO E IMPORTE.");return}
+ const c=calcularImportesIVA(total,tipo);Object.assign(m,{fecha,numeroFactura:numero,cuenta,origen,proyecto,importeConIVA:redondear2(c.total),tipoIVA:tipo,importeIVA:redondear2(c.iva),cantidadTotal:redondear2(c.base),modificadoManual:true,fechaModificacionManual:new Date().toISOString()});
+ guardarLocal();construirTodo();cerrarEditarMovimiento();mostrarMensaje("Movimiento modificado manualmente. La sincronización respetará tu corrección.",true)
 }
 
-
-/* =========================================================
-   NOMBRE CUENTA
-========================================================= */
-
-function obtenerNombreCuenta(
-  codigo
-){
-
-  const cuenta =
-    cuentas.find(
-      c =>
-        c[0] === codigo
-    );
-
-
-  if(!cuenta){
-
-    return codigo;
-
-  }
-
-
-  return (
-    cuenta[1]
-    +
-    " · "
-    +
-    cuenta[0]
-  );
-
-}
-
-
-/* =========================================================
-   FILTROS
-========================================================= */
-
-function limpiarFiltrosMovimientos(){
-
-  document.getElementById(
-    "filtroCuentaMovimiento"
-  ).value = "";
-
-
-  document.getElementById(
-    "filtroProyectoMovimiento"
-  ).value = "";
-
-
-  construirTablaMovimientos();
-
-}
-
-
-/* =========================================================
-   TABLA MOVIMIENTOS
-========================================================= */
+function escapeHTML(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function obtenerNombreCuenta(codigo){const c=cuentas.find(x=>x[0]===codigo);return c?c[1]+" · "+c[0]:(codigo?"⚠ CUENTA NO RECONOCIDA: "+codigo:"⚠ SIN CUENTA")}
+function tieneAlerta(m){return !m.proyecto||m.proyecto===PROYECTO_SIN_PROYECTO}
+function esRectificativa(m){return !!m.rectificativa}
+function esAnulada(m){return !!m.anulada}
 
 function construirTablaMovimientos(){
-
-  const tbody =
-    document.getElementById(
-      "tablaMovimientos"
-    );
-
-
-  tbody.innerHTML = "";
-
-
-  const filtroCuenta =
-    document.getElementById(
-      "filtroCuentaMovimiento"
-    ).value;
-
-
-  const filtroProyecto =
-    document.getElementById(
-      "filtroProyectoMovimiento"
-    ).value;
-
-
-  const filtrados =
-    movimientos.filter(
-      movimiento => {
-
-
-        if(
-          filtroCuenta
-          &&
-          movimiento.cuenta
-          !==
-          filtroCuenta
-        ){
-
-          return false;
-
-        }
-
-
-        if(
-          filtroProyecto
-          &&
-          movimiento.proyecto
-          !==
-          filtroProyecto
-        ){
-
-          return false;
-
-        }
-
-
-        return true;
-
-      }
-    );
-
-
-  const ordenados =
-    [...filtrados]
-    .sort(
-      (a,b) => {
-
-        const fecha =
-          (b.fecha || "")
-          .localeCompare(
-            a.fecha || ""
-          );
-
-
-        if(fecha !== 0){
-
-          return fecha;
-
-        }
-
-
-        return (
-          Number(b.id) || 0
-        )
-        -
-        (
-          Number(a.id) || 0
-        );
-
-      }
-    );
-
-
-  if(
-    ordenados.length === 0
-  ){
-
-    const tr =
-      document.createElement(
-        "tr"
-      );
-
-
-    tr.innerHTML = `
-
-      <td
-        colspan="9"
-        style="
-          text-align:center;
-          color:#9ca3af;
-          padding:15px;
-        ">
-
-        NO HAY MOVIMIENTOS
-
-      </td>
-
-    `;
-
-
-    tbody.appendChild(
-      tr
-    );
-
-
-    return;
-
-  }
-
-
-  ordenados.forEach(
-    movimiento => {
-
-
-      const tr =
-        document.createElement(
-          "tr"
-        );
-
-
-      /*
-        MOVIMIENTOS ANTIGUOS:
-        Si no tienen los campos de IVA,
-        conservamos su cantidadTotal tal cual.
-      */
-
-      const esNuevoConIVA =
-        movimiento.importeConIVA !== undefined;
-
-
-      const base =
-        Number(
-          movimiento.cantidadTotal
-        )
-        ||
-        0;
-
-
-      const iva =
-        esNuevoConIVA
-        ?
-        Number(
-          movimiento.importeIVA
-        )
-        ||
-        0
-        :
-        0;
-
-
-      const total =
-        esNuevoConIVA
-        ?
-        Number(
-          movimiento.importeConIVA
-        )
-        ||
-        0
-        :
-        base;
-
-
-      const textoIVA =
-        esNuevoConIVA
-        ?
-        formatearDinero(iva)
-        +
-        " ("
-        +
-        (
-          Number(
-            movimiento.tipoIVA
-          )
-          ||
-          0
-        )
-        +
-        "%)"
-        :
-        "—";
-
-
-      tr.innerHTML = `
-
-        <td class="texto">
-          ${formatearFecha(movimiento.fecha)}
-        </td>
-
-
-        <td class="texto">
-          ${movimiento.numeroFactura || "—"}
-        </td>
-
-
-        <td class="texto">
-          ${obtenerNombreCuenta(movimiento.cuenta)}
-        </td>
-
-
-        <td class="texto">
-          ${movimiento.origen}
-        </td>
-
-
-        <td class="texto">
-          ${movimiento.proyecto}
-        </td>
-
-
-        <td class="numero">
-          ${formatearDinero(base)}
-        </td>
-
-
-        <td class="numero">
-          ${textoIVA}
-        </td>
-
-
-        <td class="numero">
-          ${formatearDinero(total)}
-        </td>
-
-
-        <td style="text-align:center">
-
-          <button
-            class="eliminar"
-            onclick="eliminarMovimiento(${movimiento.id})">
-
-            ELIMINAR
-
-          </button>
-
-        </td>
-
-      `;
-
-
-      tbody.appendChild(
-        tr
-      );
-
-    }
-  );
-
+ const tb=document.getElementById("tablaMovimientos");tb.innerHTML="";const fc=document.getElementById("filtroCuentaMovimiento").value,fp=document.getElementById("filtroProyectoMovimiento").value;
+ let arr=movimientos.filter(m=>(!fc||m.cuenta===fc)&&(!fp||m.proyecto===fp)).sort((a,b)=>(b.fecha||"").localeCompare(a.fecha||"")||(Number(b.id)||0)-(Number(a.id)||0));
+ if(!arr.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:15px">NO HAY MOVIMIENTOS</td></tr>';return}
+ arr.forEach(m=>{
+  const tr=document.createElement("tr");
+  if(tieneAlerta(m))tr.className="fila-alerta";else if(esAnulada(m))tr.className="fila-anulada";else if(esRectificativa(m))tr.className="fila-rectificativa";
+  let tags="";
+  if(m.origenDatos==="HOLDED")tags+='<span class="etiqueta etiqueta-holded">HOLDED</span>';
+  if(m.modificadoManual)tags+='<span class="etiqueta etiqueta-manual">MODIFICADO</span>';
+  if(tieneAlerta(m))tags+='<span class="etiqueta etiqueta-alerta">REVISAR</span>';
+  if(esRectificativa(m))tags+='<span class="etiqueta etiqueta-rectificativa">RECTIFICATIVA</span>';
+  if(esAnulada(m))tags+='<span class="etiqueta etiqueta-anulada">ANULADA</span>';
+  const base=Number(m.cantidadTotal)||0,iva=Number(m.importeIVA)||0,total=Number(m.importeConIVA);const t=Number(m.tipoIVA)||0;
+  tr.innerHTML=`<td class="texto">${formatearFecha(m.fecha)}</td><td class="texto">${escapeHTML(m.numeroFactura||"—")} ${tags}</td><td class="texto">${escapeHTML(obtenerNombreCuenta(m.cuenta))}</td><td class="texto">${escapeHTML(m.origen||"")}</td><td class="texto">${escapeHTML(m.proyecto||"")}</td><td class="numero">${formatearDinero(base)}</td><td class="numero">${formatearDinero(iva)}</td><td class="numero">${formatearDinero(total)}</td><td style="text-align:center"><button class="editar" onclick="abrirEditarMovimiento(${Number(m.id)})">EDITAR</button><button class="eliminar" onclick="eliminarMovimiento(${Number(m.id)})">ELIMINAR</button></td>`;
+  tb.appendChild(tr);
+ })
 }
-
-
-/* =========================================================
-   TABLA MENSUAL
-========================================================= */
 
 function construirTablaMensual(){
+ const tb=document.getElementById("tablaIngresos");tb.innerHTML="";const grupos={};
+ movimientos.forEach(m=>{const f=new Date((m.fecha||"")+"T12:00:00");if(f.getFullYear()!==2026)return;const k=(m.cuenta||"")+"||"+(m.proyecto||"")+"||"+(m.origen||"");if(!grupos[k])grupos[k]={cuenta:m.cuenta,proyecto:m.proyecto,origen:m.origen,meses:new Array(12).fill(0)};grupos[k].meses[f.getMonth()]+=Number(m.cantidadTotal)||0});
+ const tm=new Array(12).fill(0);let tg=0;
+ Object.values(grupos).sort((a,b)=>a.proyecto.localeCompare(b.proyecto)||a.cuenta.localeCompare(b.cuenta)).forEach(g=>{
+  const tr=document.createElement("tr");let total=0;let mh="";
+  g.meses.forEach((v,i)=>{total+=v;tm[i]+=v;mh+=`<td class="${Math.abs(v)<.000001?"numero cero":"numero valor-con-datos"}">${Math.abs(v)<.000001?"—":formatoNumero(v)}</td>`});tg+=total;
+  tr.innerHTML=`<td class="texto">${escapeHTML(obtenerNombreCuenta(g.cuenta))}</td><td class="texto">${escapeHTML(g.proyecto)}</td><td class="texto">${escapeHTML(g.origen)}</td>${mh}<td class="numero"><strong>${formatoNumero(total)}</strong></td>`;tb.appendChild(tr)
+ });
+ const tr=document.createElement("tr");tr.className="total";tr.innerHTML=`<td class="texto">TOTAL</td><td></td><td></td>${tm.map(v=>`<td class="numero">${formatoNumero(v)}</td>`).join("")}<td class="numero">${formatoNumero(tg)}</td>`;tb.appendChild(tr)
+}
+function actualizarResumen(){const total=movimientos.reduce((s,m)=>s+(Number(m.cantidadTotal)||0),0);document.getElementById("totalIngresos").textContent=formatearDinero(total);document.getElementById("numeroMovimientos").textContent=movimientos.length;document.getElementById("numeroCuentas").textContent=cuentas.length}
+function construirTodo(){construirTablaMovimientos();construirTablaMensual();actualizarResumen()}
+function limpiarFiltrosMovimientos(){document.getElementById("filtroCuentaMovimiento").value="";document.getElementById("filtroProyectoMovimiento").value="";construirTablaMovimientos()}
 
-  const tbody =
-    document.getElementById(
-      "tablaIngresos"
-    );
-
-
-  tbody.innerHTML = "";
-
-
-  const agrupados = {};
-
-
-  movimientos.forEach(
-    movimiento => {
-
-
-      const clave =
-        movimiento.cuenta
-        +
-        "||"
-        +
-        movimiento.proyecto
-        +
-        "||"
-        +
-        movimiento.origen;
-
-
-      if(
-        !agrupados[clave]
-      ){
-
-        agrupados[clave] = {
-
-          cuenta:
-            movimiento.cuenta,
-
-          proyecto:
-            movimiento.proyecto,
-
-          origen:
-            movimiento.origen,
-
-          meses:
-            new Array(12)
-            .fill(0)
-
-        };
-
-      }
-
-
-      const fecha =
-        new Date(
-          movimiento.fecha
-          +
-          "T12:00:00"
-        );
-
-
-      if(
-        fecha.getFullYear()
-        !==
-        2026
-      ){
-
-        return;
-
-      }
-
-
-      const mes =
-        fecha.getMonth();
-
-
-      agrupados[clave]
-        .meses[mes]
-        +=
-        Number(
-          movimiento.cantidadTotal
-        )
-        ||
-        0;
-
+function identificarRectificativa(doc,line){
+ const txt=JSON.stringify({type:doc?.type,document_type:doc?.document_type,doc_type:doc?.doc_type,category:doc?.category,kind:doc?.kind,status:doc?.status,name:doc?.name,lineType:line?.type}).toLowerCase();
+ return txt.includes("rectific")
+}
+function identificarAnulada(doc,line){
+ const txt=JSON.stringify({status:doc?.status,state:doc?.state,category:doc?.category,kind:doc?.kind,type:doc?.type,line_status:line?.status}).toLowerCase();
+ return txt.includes("deleted")||txt.includes("elimin")||txt.includes("cancel")||txt.includes("void")||txt.includes("anulad")
+}
+function valorNumeroSeguro(v){
+  if(v===null||v===undefined||v==="") return null;
+  if(typeof v==="number") return Number.isFinite(v)?v:null;
+  const n=Number(String(v).trim().replace(/\./g,"").replace(",","."));
+  return Number.isFinite(n)?n:null;
+}
+function valorLinea(line,nombres){
+  if(!line || typeof line !== "object") return null;
+  for(const n of nombres){
+    if(line[n] !== undefined && line[n] !== null && line[n] !== ""){
+      const v=valorNumeroSeguro(line[n]);
+      if(v!==null) return v;
     }
+  }
+  return null;
+}
+
+function valorLineaProfundo(line,nombres){
+  const directo = valorLinea(line,nombres);
+  if(directo !== null) return directo;
+
+  if(!line || typeof line !== "object") return null;
+
+  const visitado = new Set();
+  const stack = [line];
+
+  while(stack.length){
+    const actual = stack.pop();
+    if(!actual || typeof actual !== "object") continue;
+    if(visitado.has(actual)) continue;
+    visitado.add(actual);
+
+    for(const clave of nombres){
+      if(actual[clave] !== undefined && actual[clave] !== null && actual[clave] !== ""){
+        const v = Number(actual[clave]);
+        if(Number.isFinite(v)) return v;
+      }
+    }
+
+    for(const v of Object.values(actual)){
+      if(v && typeof v === "object") stack.push(v);
+    }
+  }
+
+  return null;
+}
+
+function textoLinea(line,nombres){
+  if(!line || typeof line !== "object") return "";
+  for(const n of nombres){
+    if(line[n] !== undefined && line[n] !== null && line[n] !== ""){
+      return String(line[n]);
+    }
+  }
+  return "";
+}
+
+function obtenerLineasFactura(doc){
+  if(Array.isArray(doc?.lines)) return doc.lines;
+  if(Array.isArray(doc?.items)) return doc.items;
+  if(Array.isArray(doc?.line_items)) return doc.line_items;
+  if(Array.isArray(doc?.details)) return doc.details;
+  return [];
+}
+
+function obtenerFechaDoc(doc){
+  let d=doc?.date||doc?.invoice_date||doc?.created_at||"";
+  if(typeof d==="number"){
+    const x=new Date(d<1e12?d*1000:d);
+    return x.toISOString().slice(0,10);
+  }
+  if(typeof d==="string"&&d.length>=10){
+    const m=d.match(/(\d{4})[-/](\d{2})[-/](\d{2})/);
+    if(m) return `${m[1]}-${m[2]}-${m[3]}`;
+    const x=new Date(d);
+    if(!Number.isNaN(x.getTime())) return x.toISOString().slice(0,10);
+  }
+  return "";
+}
+
+function obtenerNumeroDoc(doc){
+  return String(doc?.document_number??doc?.number??doc?.invoice_number??doc?.code??"");
+}
+
+function obtenerIdLinea(line,idx){
+  return String(line?.id??line?.line_id??line?.lineId??idx);
+}
+
+function resolverReferencia(obj){
+  if(obj === null || obj === undefined || obj === "") return "";
+  if(typeof obj !== "object") return String(obj);
+
+  return String(
+    obj.id ??
+    obj.account_id ??
+    obj.accountId ??
+    obj.project_id ??
+    obj.projectId ??
+    obj.number ??
+    obj.code ??
+    obj.key ??
+    ""
+  );
+}
+
+function obtenerCuentaLinea(line,doc){
+  const candidatos = [
+    line?.account,
+    line?.account_id,
+    line?.accountId,
+    line?.account_number,
+    line?.accountNumber,
+    line?.account_code,
+    line?.accountCode,
+    doc?.account,
+    doc?.account_id,
+    doc?.accountId
+  ];
+
+  for(const c of candidatos){
+    const r = resolverReferencia(c);
+    if(r) return r;
+  }
+
+  return "";
+}
+
+function obtenerProyectoLinea(line,doc){
+  const candidatos = [
+    line?.project_id,
+    line?.projectId,
+    line?.project,
+    line?.project_code,
+    line?.projectCode,
+    doc?.project_id,
+    doc?.projectId,
+    doc?.project
+  ];
+
+  for(const c of candidatos){
+    const r = resolverReferencia(c);
+    if(r) return r;
+  }
+
+  return "";
+}
+
+function traducirCuenta(id){
+  const s=String(id||"");
+  if(!s) return "";
+
+  const dato = mapaHoldedCuentas?.[s];
+  if(dato){
+    if(Array.isArray(dato)) return String(dato[0] || "");
+    if(typeof dato === "object"){
+      return String(dato.number ?? dato.code ?? dato.account_number ?? dato.id ?? "");
+    }
+  }
+
+  const porNumero = Object.values(mapaHoldedCuentas || {}).find(x =>
+    Array.isArray(x)
+      ? String(x[0] || "") === s
+      : String(x?.number ?? x?.code ?? "") === s
   );
 
+  return porNumero
+    ? (Array.isArray(porNumero) ? String(porNumero[0] || s) : String(porNumero.number ?? porNumero.code ?? s))
+    : s;
+}
 
-  const totalesMes =
-    new Array(12)
-    .fill(0);
+function traducirProyecto(id){
+  const s=String(id||"");
+  if(!s) return PROYECTO_SIN_PROYECTO;
 
+  const dato = mapaHoldedProyectos?.[s];
+  if(dato){
+    if(typeof dato === "string") return dato;
+    if(typeof dato === "object") return String(dato.name ?? "");
+  }
 
-  Object.values(
-    agrupados
-  )
-  .sort(
-    (a,b) => {
+  const porNombre = Object.values(mapaHoldedProyectos || {}).find(x =>
+    String(x?.name ?? x) === s
+  );
 
-      const proyecto =
-        a.proyecto.localeCompare(
-          b.proyecto
-        );
+  return porNombre
+    ? String(porNombre?.name ?? porNombre)
+    : PROYECTO_SIN_PROYECTO;
+}
 
+async function fetchJSON(url){
+ const r=await fetch(url,{headers:{"Accept":"application/json"}});
+ if(!r.ok)throw new Error((await r.text()).slice(0,500)||`HTTP ${r.status}`);
+ return await r.json();
+}
 
-      if(proyecto !== 0){
+async function sincronizarHolded(){
+  const b=document.querySelector(".json-morado");
+  const viejo=b.textContent;
+  b.disabled=true;
+  b.textContent="SINCRONIZANDO...";
+  mostrarMensaje("Leyendo Holded…",true);
 
-        return proyecto;
+  try{
+    const data=await fetchJSON("/api/holded/bootstrap?year=2026");
+    mapaHoldedCuentas=data.accountMap||{};
+    mapaHoldedProyectos=data.projectMap||{};
 
-      }
-
-
-      return a.cuenta.localeCompare(
-        b.cuenta
-      );
-
-    }
-  )
-  .forEach(
-    grupo => {
-
-
-      const tr =
-        document.createElement(
-          "tr"
-        );
-
-
-      let totalFila = 0;
-
-      let mesesHTML = "";
-
-
-      grupo.meses.forEach(
-        (cantidad,indice) => {
-
-
-          totalFila +=
-            cantidad;
-
-
-          totalesMes[indice] +=
-            cantidad;
-
-
-          const clase =
-            Math.abs(cantidad)
-            <
-            0.000001
-
-            ?
-
-            "numero cero"
-
-            :
-
-            "numero valor-con-datos";
-
-
-          mesesHTML += `
-
-            <td class="${clase}">
-
-              ${
-                Math.abs(cantidad)
-                <
-                0.000001
-
-                ?
-
-                "—"
-
-                :
-
-                formatoNumero(
-                  cantidad
-                )
-              }
-
-            </td>
-
-          `;
-
+    if(Array.isArray(data.accounts)){
+      data.accounts.forEach(a=>{
+        const numero=String(a.number??a.code??"");
+        const nombre=String(a.name??"");
+        if(/^7\d{7}$/.test(numero) && !cuentas.some(c=>c[0]===numero)){
+          cuentas.push([numero,nombre]);
         }
-      );
-
-
-      tr.innerHTML = `
-
-        <td class="texto">
-          ${obtenerNombreCuenta(grupo.cuenta)}
-        </td>
-
-
-        <td class="texto">
-          ${grupo.proyecto}
-        </td>
-
-
-        <td class="texto">
-          ${grupo.origen}
-        </td>
-
-
-        ${mesesHTML}
-
-
-        <td class="numero">
-          <strong>
-            ${formatoNumero(totalFila)}
-          </strong>
-        </td>
-
-      `;
-
-
-      tbody.appendChild(
-        tr
-      );
-
+      });
+      cuentas=cuentas.filter(cuentaEsIngreso);
+      cuentasIniciales.forEach(ci=>{
+        if(!cuentas.some(c=>c[0]===ci[0])) cuentas.push(ci);
+      });
+      guardarCuentas();
+      cargarSelectores();
     }
-  );
 
+    const invoices=Array.isArray(data.invoices)?data.invoices:[];
+    let creados=0, actualizados=0, saltados=0, alertas=0;
 
-  const trTotal =
-    document.createElement(
-      "tr"
-    );
+    for(const doc of invoices){
+      const fecha=obtenerFechaDoc(doc);
+      if(!fecha || !fecha.startsWith("2026-")) continue;
 
+      const invoiceId=String(doc.id??doc.document_id??doc._id??"");
+      if(!invoiceId) continue;
 
-  trTotal.className =
-    "total";
+      const numero=obtenerNumeroDoc(doc);
+      const rect=identificarRectificativa(doc,null);
+      const anulada=identificarAnulada(doc,null);
+      const lineas=obtenerLineasFactura(doc);
+      if(!lineas.length) continue;
 
+      const docSubtotal=
+        valorNumeroSeguro(doc.subtotal??doc.base??doc.tax_base??0)||0;
+      const docTax=
+        valorNumeroSeguro(doc.tax??doc.vat??doc.iva??0)||0;
+      const ratioIVA=
+        docSubtotal!==0 ? docTax/docSubtotal : 0;
 
-  let totalGeneral = 0;
+      lineas.forEach((line,idx)=>{
+        const lineId=obtenerIdLinea(line,idx);
+        const cuentaId=obtenerCuentaLinea(line,doc);
+        const proyectoId=obtenerProyectoLinea(line,doc);
 
-  let totalesHTML = "";
+        const qty=valorLinea(line,["quantity","units","qty"]);
+        const price=valorLinea(line,["price","unit_price","unitPrice"]);
+        const discountRaw=valorLinea(line,["discount","discount_percent","discountPercentage"]);
 
+        let base=valorLinea(line,[
+          "subtotal","base","net","net_amount","amount",
+          "amount_without_tax","net_amount_before_tax"
+        ]);
+        let total=valorLinea(line,[
+          "total","gross","total_amount","amount_with_tax","gross_amount"
+        ]);
+        let iva=valorLinea(line,[
+          "tax_amount","vat_amount","iva_amount","taxes_amount"
+        ]);
 
-  totalesMes.forEach(
-    cantidad => {
+        if(base===null && qty!==null && price!==null){
+          const discount=discountRaw===null?0:discountRaw;
+          base=(qty*price)*(1-discount/100);
+        }
 
+        if(base===null && total!==null && iva!==null){
+          base=total-iva;
+        }
 
-      totalGeneral +=
-        cantidad;
+        if(base===null) return;
 
+        if(iva===null || iva===0){
+          iva=base*ratioIVA;
+        }
 
-      totalesHTML += `
+        if(total===null || total===0){
+          total=base+iva;
+        }
 
-        <td class="numero">
-          ${formatoNumero(cantidad)}
-        </td>
+        if(rect){
+          if(base>0) base=-base;
+          if(iva>0) iva=-iva;
+          if(total>0) total=-total;
+        }
 
-      `;
+        const cuenta=traducirCuenta(cuentaId);
+        const proyecto=traducirProyecto(proyectoId);
+        const sinProyecto=proyecto===PROYECTO_SIN_PROYECTO;
+        // Primero buscamos por la clave estable Holded.
+        let existing=movimientos.find(m=>
+          String(m?.holdedId??"")===invoiceId &&
+          String(m?.holdedLineId??"")===lineId
+        );
 
+        // Migración de movimientos antiguos: si fueron importados antes de
+        // guardar holdedId/holdedLineId, intentamos reconocerlos por factura
+        // + cuenta + proyecto + base + total. Así no se vuelven a crear.
+        if(!existing){
+          existing=movimientos.find(m=>{
+            if(m?.holdedId || m?.holdedLineId) return false;
+            if(String(m?.numeroFactura??"")!==numero) return false;
+            if(String(m?.cuenta??"")!==cuenta) return false;
+            if(String(m?.proyecto??"")!==proyecto) return false;
+            const mb=Math.round((Number(m?.cantidadTotal)||0)*100);
+            const mt=Math.round((Number(m?.importeConIVA)||0)*100);
+            const ib=Math.round((Number(base)||0)*100);
+            const it=Math.round((Number(total)||0)*100);
+            return mb===ib && mt===it && !m.__syncMatched;
+          });
+        }
+
+        if(existing){
+          existing.__syncMatched=true;
+          existing.holdedId=invoiceId;
+          existing.holdedLineId=lineId;
+
+          if(existing.modificadoManual===true || existing.manual===true){
+            // Nunca sobrescribir una corrección manual.
+            existing.estadoSync="MODIFICADO MANUALMENTE";
+            existing.ultimaSyncHolded=new Date().toISOString();
+            saltados++;
+          }else{
+            Object.assign(existing,{
+              fecha,
+              numeroFactura:numero,
+              cuenta,
+              proyecto,
+              importeConIVA:redondear2(total),
+              tipoIVA:base!==0?redondear2((iva/base)*100):0,
+              importeIVA:redondear2(iva),
+              cantidadTotal:redondear2(base),
+              rectificativa:rect,
+              anulada,
+              holdedStatus:doc.status??doc.state??"",
+              holdedDocumentType:doc.type??doc.document_type??"",
+              origenDatos:"HOLDED",
+              estadoSync:"ACTUALIZADO HOLDED",
+              ultimaSyncHolded:new Date().toISOString()
+            });
+            actualizados++;
+          }
+          if(sinProyecto) alertas++;
+          return;
+        }
+
+        movimientos.push({
+          id:crearIdMovimiento(),
+          fecha,
+          numeroFactura:numero,
+          cuenta,
+          origen:"GERA",
+          proyecto,
+          importeConIVA:redondear2(total),
+          tipoIVA:base!==0?redondear2((iva/base)*100):0,
+          importeIVA:redondear2(iva),
+          cantidadTotal:redondear2(base),
+          origenDatos:"HOLDED",
+          holdedId:invoiceId,
+          holdedLineId:lineId,
+          holdedStatus:doc.status??doc.state??"",
+          holdedDocumentType:doc.type??doc.document_type??"",
+          rectificativa:rect,
+          anulada,
+          modificadoManual:false,
+          manual:false,
+          description:line?.description??line?.name??doc?.description??"",
+          estadoSync:"NUEVO HOLDED",
+          ultimaSyncHolded:new Date().toISOString()
+        });
+
+        creados++;
+        if(sinProyecto) alertas++;
+      });
     }
-  );
 
+    // IMPORTANTE: la sincronización NUNCA borra movimientos locales.
+    // Una factura que ya existe pero no venga en esta consulta se conserva.
+    movimientos.forEach(m=>{delete m.__syncMatched});
+    guardarLocal();
+    construirTodo();
 
-  trTotal.innerHTML = `
-
-    <td class="texto">
-      TOTAL
-    </td>
-
-    <td></td>
-
-    <td></td>
-
-    ${totalesHTML}
-
-    <td class="numero">
-      ${formatoNumero(totalGeneral)}
-    </td>
-
-  `;
-
-
-  tbody.appendChild(
-    trTotal
-  );
-
-}
-
-
-/* =========================================================
-   RESUMEN
-========================================================= */
-
-function actualizarResumen(){
-
-  const total =
-    movimientos.reduce(
-
-      (
-        suma,
-        movimiento
-      ) =>
-
-        suma
-        +
-        (
-          Number(
-            movimiento.cantidadTotal
-          )
-          ||
-          0
-        ),
-
-      0
-
+    mostrarMensaje(
+      `Holded actualizado: ${creados} nuevas · ${actualizados} actualizadas · ${saltados} manuales respetadas · ${movimientos.length} total.`
+      + (alertas?` ${alertas} para revisar.`:""),
+      true
     );
 
-
-  document.getElementById(
-    "totalIngresos"
-  ).textContent =
-    formatearDinero(
-      total
-    );
-
-
-  document.getElementById(
-    "numeroMovimientos"
-  ).textContent =
-    movimientos.length;
-
-
-  document.getElementById(
-    "numeroCuentas"
-  ).textContent =
-    cuentas.length;
-
+  }catch(e){
+    console.error(e);
+    mostrarMensaje("ERROR AL ACTUALIZAR HOLDED: "+e.message,false);
+  }finally{
+    b.disabled=false;
+    b.textContent=viejo;
+  }
 }
-
-
-/* =========================================================
-   CONSTRUIR TODO
-========================================================= */
-
-function construirTodo(){
-
-  construirTablaMovimientos();
-
-  construirTablaMensual();
-
-  actualizarResumen();
-
-}
-
-
-/* =========================================================
-   JSON
-========================================================= */
 
 function descargarJSON(){
-
-  const copia = {
-
-    aplicacion:
-      "GERAVALON ANALISIS ECONOMICO",
-
-    tipo:
-      "INGRESOS",
-
-    ejercicio:
-      2026,
-
-    fechaCopia:
-      new Date().toISOString(),
-
-    cuentas:
-      cuentas,
-
-    movimientos:
-      movimientos
-
-  };
-
-
-  const blob =
-    new Blob(
-
-      [
-        JSON.stringify(
-          copia,
-          null,
-          2
-        )
-      ],
-
-      {
-        type:
-          "application/json"
-      }
-
-    );
-
-
-  const url =
-    URL.createObjectURL(
-      blob
-    );
-
-
-  const enlace =
-    document.createElement(
-      "a"
-    );
-
-
-  enlace.href =
-    url;
-
-
-  enlace.download =
-    "GERAVALON_INGRESOS_2026.json";
-
-
-  enlace.click();
-
-
-  URL.revokeObjectURL(
-    url
-  );
-
-
-  mostrarMensaje(
-    "Copia JSON guardada.",
-    true
-  );
-
+ const copia={aplicacion:"GERAVALON ANALISIS ECONOMICO",tipo:"INGRESOS",ejercicio:2026,fechaCopia:new Date().toISOString(),cuentas,movimientos};
+ const blob=new Blob([JSON.stringify(copia,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="GERAVALON_INGRESOS_2026.json";a.click();URL.revokeObjectURL(url);mostrarMensaje("Copia JSON guardada.",true)
 }
-
-
-/* =========================================================
-   CARGAR JSON
-========================================================= */
-
 function cargarJSON(event){
-
-  const archivo =
-    event.target.files[0];
-
-
-  if(!archivo){
-
-    return;
-
-  }
-
-
-  const lector =
-    new FileReader();
-
-
-  lector.onload =
-    function(e){
-
-
-      try{
-
-
-        const datos =
-          JSON.parse(
-            e.target.result
-          );
-
-
-        let nuevosMovimientos;
-
-
-        if(
-          Array.isArray(
-            datos
-          )
-        ){
-
-          nuevosMovimientos =
-            datos;
-
-        }
-
-        else if(
-          datos
-          &&
-          Array.isArray(
-            datos.movimientos
-          )
-        ){
-
-          nuevosMovimientos =
-            datos.movimientos;
-
-        }
-
-        else{
-
-          throw new Error();
-
-        }
-
-
-        const confirmar =
-          confirm(
-
-            "LA COPIA SUSTITUIRÁ LOS INGRESOS ACTUALES.\n\n"
-            +
-            "¿CONTINUAR?"
-
-          );
-
-
-        if(!confirmar){
-
-          event.target.value =
-            "";
-
-          return;
-
-        }
-
-
-        movimientos =
-          nuevosMovimientos;
-
-
-        if(
-          datos
-          &&
-          Array.isArray(
-            datos.cuentas
-          )
-        ){
-
-          cuentas =
-            datos.cuentas;
-
-
-          guardarCuentas();
-
-          cargarSelectores();
-
-        }
-
-
-        guardarLocal();
-
-        construirTodo();
-
-
-        mostrarMensaje(
-          "Copia cargada correctamente.",
-          true
-        );
-
-      }
-
-      catch{
-
-        alert(
-          "EL ARCHIVO JSON NO ES VÁLIDO."
-        );
-
-      }
-
-
-      event.target.value =
-        "";
-
-    };
-
-
-  lector.readAsText(
-    archivo
-  );
-
+ const a=event.target.files[0];if(!a)return;const fr=new FileReader();
+ fr.onload=e=>{try{const d=JSON.parse(e.target.result),nm=Array.isArray(d)?d:d?.movimientos;if(!Array.isArray(nm))throw new Error();if(!confirm("LA COPIA SUSTITUIRÁ LOS INGRESOS ACTUALES.\n\n¿CONTINUAR?")){event.target.value="";return}movimientos=nm;if(Array.isArray(d?.cuentas)){cuentas=d.cuentas;guardarCuentas();cargarSelectores()}guardarLocal();construirTodo();mostrarMensaje("Copia cargada correctamente.",true)}catch{alert("EL ARCHIVO JSON NO ES VÁLIDO.")}event.target.value=""};fr.readAsText(a)
 }
+function formatoNumero(n){return Number(n||0).toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})}
+function formatearDinero(v){return formatoNumero(v)+" €"}
+function formatearFecha(f){if(!f)return"";const p=f.split("-");return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:f}
+function mostrarMensaje(t,ok){const e=document.getElementById("mensaje");e.textContent=t;e.className=ok?"estado ok":"estado error";setTimeout(()=>{e.textContent="Los datos se guardan automáticamente en este navegador.";e.className="estado"},7000)}
 
-
-/* =========================================================
-   FORMATO
-========================================================= */
-
-function formatoNumero(
-  numero
-){
-
-  return Number(
-    numero
-    ||
-    0
-  )
-  .toLocaleString(
-
-    "es-ES",
-
-    {
-      minimumFractionDigits:
-        2,
-
-      maximumFractionDigits:
-        2
-    }
-
-  );
-
-}
-
-
-function formatearDinero(
-  valor
-){
-
-  return formatoNumero(
-    valor
-  )
-  +
-  " €";
-
-}
-
-
-function formatearFecha(
-  fecha
-){
-
-  if(!fecha){
-
-    return "";
-
-  }
-
-
-  const partes =
-    fecha.split(
-      "-"
-    );
-
-
-  if(
-    partes.length !== 3
-  ){
-
-    return fecha;
-
-  }
-
-
-  return (
-    partes[2]
-    +
-    "/"
-    +
-    partes[1]
-    +
-    "/"
-    +
-    partes[0]
-  );
-
-}
-
-
-/* =========================================================
-   MENSAJES
-========================================================= */
-
-function mostrarMensaje(
-  texto,
-  correcto
-){
-
-  const elemento =
-    document.getElementById(
-      "mensaje"
-    );
-
-
-  elemento.textContent =
-    texto;
-
-
-  elemento.className =
-    correcto
-    ?
-    "estado ok"
-    :
-    "estado error";
-
-
-  setTimeout(
-    () => {
-
-      elemento.textContent =
-        "Los datos se guardan automáticamente en este navegador.";
-
-
-      elemento.className =
-        "estado";
-
-    },
-    4000
-  );
-
-}
-
-
-/* =========================================================
-   CERRAR MODAL
-========================================================= */
-
-document.getElementById(
-  "modalCuenta"
-)
-.addEventListener(
-
-  "click",
-
-  function(event){
-
-    if(
-      event.target === this
-    ){
-
-      cerrarNuevaCuenta();
-
-    }
-
-  }
-
-);
-
+document.getElementById("modalCuenta").addEventListener("click",function(e){if(e.target===this)cerrarNuevaCuenta()});
+document.getElementById("modalEditar").addEventListener("click",function(e){if(e.target===this)cerrarEditarMovimiento()});
 </script>
-
 </body>
 </html>
