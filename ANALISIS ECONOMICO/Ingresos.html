@@ -445,7 +445,7 @@ async function sincronizarHolded(){
   mostrarMensaje("Leyendo Holded…",true);
 
   try{
-    const data=await fetchJSON("/api/holded/bootstrap?year=2026");
+    const data=await fetchJSON("http://127.0.0.1:8787/api/holded/bootstrap?year=2026");
     mapaHoldedCuentas=data.accountMap||{};
     mapaHoldedProyectos=data.projectMap||{};
 
