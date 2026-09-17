@@ -721,12 +721,20 @@ async function sincronizarHolded(){
           });
         }
 
-        if(existing){
-          existing.__syncMatched=true;
-          existing.holdedId=invoiceId;
-          existing.holdedLineId=lineId;
+       if(existing){
+  existing.__syncMatched=true;
+  existing.holdedId=invoiceId;
+  existing.holdedLineId=lineId;
 
-          if(existing.modificadoManual===true || existing.manual===true){
+  if(existing.ignorado===true){
+    // El usuario decidió excluir esta línea.
+    // Se conserva internamente para que Holded no vuelva a crearla,
+    // pero no se actualiza ni se contabiliza.
+    existing.estadoSync="IGNORADO MANUALMENTE";
+    existing.ultimaSyncHolded=new Date().toISOString();
+    saltados++;
+  }
+  else if(existing.modificadoManual===true || existing.manual===true){
             // Nunca sobrescribir una corrección manual.
             existing.estadoSync="MODIFICADO MANUALMENTE";
             existing.ultimaSyncHolded=new Date().toISOString();
