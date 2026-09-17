@@ -342,7 +342,25 @@ if(ordenMovimientos.campo==="factura" && indicadorFactura){
 
 function construirTablaMensual(){
  const tb=document.getElementById("tablaIngresos");tb.innerHTML="";const grupos={};
- movimientos.forEach(m=>{const f=new Date((m.fecha||"")+"T12:00:00");if(f.getFullYear()!==2026)return;const k=(m.cuenta||"")+"||"+(m.proyecto||"")+"||"+(m.origen||"");if(!grupos[k])grupos[k]={cuenta:m.cuenta,proyecto:m.proyecto,origen:m.origen,meses:new Array(12).fill(0)};grupos[k].meses[f.getMonth()]+=Number(m.cantidadTotal)||0});
+ movimientos.forEach(m=>{
+  if(m.ignorado) return;
+
+  const f=new Date((m.fecha||"")+"T12:00:00");
+  if(f.getFullYear()!==2026) return;
+
+  const k=(m.cuenta||"")+"||"+(m.proyecto||"")+"||"+(m.origen||"");
+
+  if(!grupos[k]){
+    grupos[k]={
+      cuenta:m.cuenta,
+      proyecto:m.proyecto,
+      origen:m.origen,
+      meses:new Array(12).fill(0)
+    };
+  }
+
+  grupos[k].meses[f.getMonth()]+=Number(m.cantidadTotal)||0;
+});
  const tm=new Array(12).fill(0);let tg=0;
  Object.values(grupos).sort((a,b)=>a.proyecto.localeCompare(b.proyecto)||a.cuenta.localeCompare(b.cuenta)).forEach(g=>{
   const tr=document.createElement("tr");let total=0;let mh="";
