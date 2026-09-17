@@ -99,7 +99,13 @@ thead th{background:#1f2937;color:white;text-align:center;font-size:10px;height:
       <button class="limpiar-filtros" onclick="limpiarFiltrosMovimientos()">LIMPIAR FILTROS</button>
     </div>
     <div class="tabla-contenedor"><table><thead><tr>
-      <th>FECHA</th><th>N.º FACTURA</th><th>CUENTA</th><th>ORIGEN</th><th>PROYECTO</th><th>BASE</th><th>IVA</th><th>TOTAL FACTURA</th><th>ACCIÓN</th>
+     <th onclick="ordenarMovimientos('fecha')" style="cursor:pointer" title="Ordenar por fecha">
+  FECHA <span id="ordenFecha">▼</span>
+</th>
+<th onclick="ordenarMovimientos('factura')" style="cursor:pointer" title="Ordenar por número de factura">
+  N.º FACTURA <span id="ordenFactura"></span>
+</th>
+<th>CUENTA</th><th>ORIGEN</th><th>PROYECTO</th><th>BASE</th><th>IVA</th><th>TOTAL FACTURA</th><th>ACCIÓN</th>
     </tr></thead><tbody id="tablaMovimientos"></tbody></table></div>
   </div>
 </div>
@@ -200,9 +206,80 @@ function tieneAlerta(m){return !m.proyecto||m.proyecto===PROYECTO_SIN_PROYECTO}
 function esRectificativa(m){return !!m.rectificativa}
 function esAnulada(m){return !!m.anulada}
 
+  let ordenMovimientos = {
+  campo: "fecha",
+  direccion: "desc"
+};
+
+function ordenarMovimientos(campo){
+  if(ordenMovimientos.campo === campo){
+    ordenMovimientos.direccion =
+      ordenMovimientos.direccion === "asc" ? "desc" : "asc";
+  }else{
+    ordenMovimientos.campo = campo;
+    ordenMovimientos.direccion = "asc";
+  }
+
+  construirTablaMovimientos();
+}
+
+function compararNumeroFactura(a,b){
+  return String(a || "").localeCompare(
+    String(b || ""),
+    "es",
+    {
+      numeric:true,
+      sensitivity:"base"
+    }
+  );
+}
+  
 function construirTablaMovimientos(){
  const tb=document.getElementById("tablaMovimientos");tb.innerHTML="";const fc=document.getElementById("filtroCuentaMovimiento").value,fp=document.getElementById("filtroProyectoMovimiento").value;
- let arr=movimientos.filter(m=>(!fc||m.cuenta===fc)&&(!fp||m.proyecto===fp)).sort((a,b)=>(b.fecha||"").localeCompare(a.fecha||"")||(Number(b.id)||0)-(Number(a.id)||0));
+let arr=movimientos.filter(m=>
+  (!fc || m.cuenta===fc) &&
+  (!fp || m.proyecto===fp)
+);
+
+arr.sort((a,b)=>{
+  let resultado=0;
+
+  if(ordenMovimientos.campo==="fecha"){
+    resultado=(a.fecha||"").localeCompare(b.fecha||"");
+
+    if(resultado===0){
+      resultado=compararNumeroFactura(a.numeroFactura,b.numeroFactura);
+    }
+  }
+
+  if(ordenMovimientos.campo==="factura"){
+    resultado=compararNumeroFactura(a.numeroFactura,b.numeroFactura);
+
+    if(resultado===0){
+      resultado=(a.fecha||"").localeCompare(b.fecha||"");
+    }
+  }
+
+  return ordenMovimientos.direccion==="asc"
+    ? resultado
+    : -resultado;
+});
+
+const indicadorFecha=document.getElementById("ordenFecha");
+const indicadorFactura=document.getElementById("ordenFactura");
+
+if(indicadorFecha) indicadorFecha.textContent="";
+if(indicadorFactura) indicadorFactura.textContent="";
+
+const flecha=ordenMovimientos.direccion==="asc" ? "▲" : "▼";
+
+if(ordenMovimientos.campo==="fecha" && indicadorFecha){
+  indicadorFecha.textContent=flecha;
+}
+
+if(ordenMovimientos.campo==="factura" && indicadorFactura){
+  indicadorFactura.textContent=flecha;
+}
  if(!arr.length){tb.innerHTML='<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:15px">NO HAY MOVIMIENTOS</td></tr>';return}
  arr.forEach(m=>{
   const tr=document.createElement("tr");
