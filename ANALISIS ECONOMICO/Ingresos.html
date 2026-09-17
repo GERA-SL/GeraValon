@@ -190,7 +190,49 @@ function guardarMovimiento(){
  guardarLocal();construirTodo();document.getElementById("numeroFactura").value="";document.getElementById("cantidad").value="";actualizarCalculoIVA();mostrarMensaje("Ingreso guardado sin IVA: "+formatearDinero(c.base),true)
 }
 
-function eliminarMovimiento(id){const m=movimientos.find(x=>Number(x.id)===Number(id));if(!m)return;if(!confirm("¿ELIMINAR ESTE INGRESO?\n\nFACTURA: "+(m.numeroFactura||"—")+"\nBASE: "+formatearDinero(m.cantidadTotal)))return;movimientos=movimientos.filter(x=>Number(x.id)!==Number(id));guardarLocal();construirTodo();mostrarMensaje("Ingreso eliminado correctamente.",true)}
+function eliminarMovimiento(id){
+  const m=movimientos.find(x=>Number(x.id)===Number(id));
+  if(!m) return;
+
+  const esHolded = m.origenDatos==="HOLDED" && m.holdedId;
+
+  if(esHolded){
+
+    if(!confirm(
+      "¿IGNORAR ESTE INGRESO DE HOLDED?\n\n"+
+      "FACTURA: "+(m.numeroFactura||"—")+"\n"+
+      "BASE: "+formatearDinero(m.cantidadTotal)+"\n\n"+
+      "No se tendrá en cuenta y no volverá a aparecer al actualizar Holded."
+    )) return;
+
+    m.ignorado=true;
+    m.fechaIgnorado=new Date().toISOString();
+    m.estadoSync="IGNORADO MANUALMENTE";
+
+    guardarLocal();
+    construirTodo();
+
+    mostrarMensaje(
+      "Factura ignorada. No contará y Holded no volverá a incorporarla.",
+      true
+    );
+
+    return;
+  }
+
+  if(!confirm(
+    "¿ELIMINAR ESTE INGRESO?\n\n"+
+    "FACTURA: "+(m.numeroFactura||"—")+"\n"+
+    "BASE: "+formatearDinero(m.cantidadTotal)
+  )) return;
+
+  movimientos=movimientos.filter(x=>Number(x.id)!==Number(id));
+
+  guardarLocal();
+  construirTodo();
+
+  mostrarMensaje("Ingreso eliminado correctamente.",true);
+}
 function abrirEditarMovimiento(id){const m=movimientos.find(x=>Number(x.id)===Number(id));if(!m)return;cargarSelectorCuenta("editarCuenta",true);cargarSelectorProyecto("editarProyecto",true);document.getElementById("editarId").value=m.id;document.getElementById("editarFecha").value=m.fecha||"";document.getElementById("editarNumeroFactura").value=m.numeroFactura||"";document.getElementById("editarCuenta").value=m.cuenta||"";document.getElementById("editarOrigen").value=m.origen||"GERA";document.getElementById("editarProyecto").value=m.proyecto||"";document.getElementById("editarImporteConIVA").value=redondear2(m.importeConIVA??m.cantidadTotal??0);document.getElementById("editarTipoIVA").value=String(Number(m.tipoIVA)||0);document.getElementById("modalEditar").style.display="flex"}
 function cerrarEditarMovimiento(){document.getElementById("modalEditar").style.display="none"}
 function guardarEdicionMovimiento(){
