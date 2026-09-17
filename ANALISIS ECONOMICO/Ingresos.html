@@ -5,341 +5,84 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GERAVALON · Ingresos</title>
-
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f4f6;color:#1f2937;font-size:12px}
-
-.cabecera{
-  min-height:76px;
-  background:#1f2937;
-  color:white;
-  padding:14px 22px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between
-}
-
+.cabecera{min-height:76px;background:#1f2937;color:white;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
 .cabecera-titulo h1{margin:0;font-size:21px}
 .cabecera-titulo p{margin:3px 0 0;color:#cbd5e1;font-size:11px}
-
-.cabecera-derecha{
-  display:flex;
-  align-items:center;
-  gap:18px
-}
-
+.cabecera-derecha{display:flex;align-items:center;gap:18px}
 .ejercicio{font-weight:bold;font-size:12px}
-
-.volver{
-  text-decoration:none;
-  background:#374151;
-  color:white;
-  padding:7px 12px;
-  border-radius:5px;
-  font-weight:bold
-}
-
+.volver{text-decoration:none;background:#374151;color:white;padding:7px 12px;border-radius:5px;font-weight:bold}
 .pagina{padding:14px}
-
-.panel{
-  background:white;
-  border-radius:8px;
-  box-shadow:0 2px 8px rgba(0,0,0,.07)
-}
-
+.panel{background:white;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
 .panel-resumen{margin-bottom:10px}
 .panel-entrada{padding:10px;margin-bottom:10px}
 .panel-tabla{margin-bottom:10px;overflow:hidden}
 .panel-movimientos{padding:10px;margin-bottom:10px}
-
-.titulo{
-  font-weight:bold;
-  font-size:13px;
-  margin-bottom:7px
-}
-
-.resumen{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px
-}
-
-.tarjeta{
-  background:white;
-  border-radius:8px;
-  padding:12px 14px;
-  box-shadow:0 2px 8px rgba(0,0,0,.07)
-}
-
-.tarjeta .titulo-resumen{
-  color:#6b7280;
-  font-size:10px;
-  font-weight:bold;
-  margin-bottom:5px
-}
-
-.tarjeta .valor{
-  font-size:21px;
-  font-weight:bold
-}
-
-.linea-entrada{
-  display:grid;
-  grid-template-columns:120px 135px minmax(250px,1.4fr) 100px minmax(210px,1fr) 135px 95px 34px 125px 100px 100px;
-  gap:5px;
-  align-items:center
-}
-
-select,input{
-  height:30px;
-  width:100%;
-  border:1px solid #d1d5db;
-  border-radius:4px;
-  background:white;
-  padding:3px 6px;
-  font-size:11px
-}
-
+.titulo{font-weight:bold;font-size:13px;margin-bottom:7px}
+.resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tarjeta{background:white;border-radius:8px;padding:12px 14px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.tarjeta .titulo-resumen{color:#6b7280;font-size:10px;font-weight:bold;margin-bottom:5px}
+.tarjeta .valor{font-size:21px;font-weight:bold}
+.linea-entrada{display:grid;grid-template-columns:120px 135px minmax(250px,1.4fr) 100px minmax(210px,1fr) 135px 95px 34px 125px 100px 100px;gap:5px;align-items:center}
+select,input{height:30px;width:100%;border:1px solid #d1d5db;border-radius:4px;background:white;padding:3px 6px;font-size:11px}
 input[type=number]{text-align:right}
-
-button{
-  border:0;
-  border-radius:4px;
-  cursor:pointer;
-  font-weight:bold;
-  height:30px
-}
-
+button{border:0;border-radius:4px;cursor:pointer;font-weight:bold;height:30px}
 .guardar{background:#16a34a;color:white}
 .guardar:hover{background:#15803d}
-
-.nueva-cuenta{
-  background:#e5e7eb;
-  color:#111827;
-  height:30px;
-  padding:0 8px;
-  white-space:nowrap
-}
-
-.json{
-  height:30px;
-  padding:0 8px;
-  background:#2563eb;
-  color:white;
-  font-size:10px
-}
-
-.json-morado{
-  height:30px;
-  padding:0 8px;
-  background:#7c3aed;
-  color:white;
-  font-size:10px
-}
-
-.json-gris{
-  height:30px;
-  padding:0 8px;
-  background:#e5e7eb;
-  color:#111827;
-  font-size:10px
-}
-
-.fila-cuenta{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:5px
-}
-
-.previsualizacion-iva{
-  margin-top:8px;
-  display:flex;
-  gap:20px;
-  align-items:center;
-  min-height:20px;
-  color:#4b5563;
-  font-size:11px
-}
-
+.nueva-cuenta{background:#e5e7eb;color:#111827;height:30px;padding:0 8px;white-space:nowrap}
+.json{height:30px;padding:0 8px;background:#2563eb;color:white;font-size:10px}
+.json-morado{height:30px;padding:0 8px;background:#7c3aed;color:white;font-size:10px}
+.json-gris{height:30px;padding:0 8px;background:#e5e7eb;color:#111827;font-size:10px}
+.fila-cuenta{display:grid;grid-template-columns:1fr auto;gap:5px}
+.previsualizacion-iva{margin-top:8px;display:flex;gap:20px;align-items:center;min-height:20px;color:#4b5563;font-size:11px}
 .previsualizacion-iva strong{color:#111827}
 .previsualizacion-iva .base{color:#047857;font-weight:bold}
-
-.estado{
-  margin-top:6px;
-  color:#6b7280;
-  font-size:10px
-}
-
+.estado{margin-top:6px;color:#6b7280;font-size:10px}
 .estado.ok{color:#047857;font-weight:bold}
 .estado.error{color:#b91c1c;font-weight:bold}
-
 .tabla-contenedor{overflow:auto}
-
-table{
-  border-collapse:collapse;
-  width:100%;
-  min-width:1250px
-}
-
-th,td{
-  border-right:1px solid #e5e7eb;
-  border-bottom:1px solid #e5e7eb;
-  padding:5px 6px;
-  white-space:nowrap
-}
-
-thead th{
-  background:#1f2937;
-  color:white;
-  text-align:center;
-  font-size:10px;
-  height:30px
-}
-
+table{border-collapse:collapse;width:100%;min-width:1250px}
+th,td{border-right:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;padding:5px 6px;white-space:nowrap}
+thead th{background:#1f2937;color:white;text-align:center;font-size:10px;height:30px}
 tbody tr:hover{background:#f8fafc}
 td{font-size:11px}
-
 .texto{text-align:left}
 .numero{text-align:right}
 .valor-con-datos{font-weight:bold;background:#ecfdf5}
 .cero{color:#b8bdc5}
 .total{font-weight:bold;background:#f3f4f6}
-
-.filtros{
-  display:grid;
-  grid-template-columns:1fr 1fr auto;
-  gap:8px;
-  align-items:center;
-  margin-bottom:8px
-}
-
-.limpiar-filtros{
-  background:#e5e7eb;
-  color:#111827;
-  padding:0 12px
-}
-
-.editar{
-  background:#f59e0b;
-  color:#111827;
-  height:26px;
-  padding:0 8px;
-  font-size:10px;
-  margin-right:4px
-}
-
-.eliminar{
-  background:#dc2626;
-  color:white;
-  height:26px;
-  padding:0 8px;
-  font-size:10px
-}
-
-.etiqueta{
-  display:inline-block;
-  border-radius:999px;
-  padding:2px 6px;
-  font-size:9px;
-  font-weight:bold;
-  margin-left:4px
-}
-
+.filtros{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px}
+.limpiar-filtros{background:#e5e7eb;color:#111827;padding:0 12px}
+.editar{background:#f59e0b;color:#111827;height:26px;padding:0 8px;font-size:10px;margin-right:4px}
+.eliminar{background:#dc2626;color:white;height:26px;padding:0 8px;font-size:10px}
+.etiqueta{display:inline-block;border-radius:999px;padding:2px 6px;font-size:9px;font-weight:bold;margin-left:4px}
 .etiqueta-holded{background:#dbeafe;color:#1e40af}
 .etiqueta-manual{background:#fef3c7;color:#92400e}
 .etiqueta-alerta{background:#fecaca;color:#7f1d1d}
 .etiqueta-rectificativa{background:#fed7aa;color:#7c2d12}
 .etiqueta-anulada{background:#e5e7eb;color:#374151}
-
-.fila-alerta td{
-  background:#fee2e2!important;
-  color:#7f1d1d;
-  font-weight:bold
-}
-
-.fila-rectificativa td{
-  background:#ffedd5!important;
-  color:#7c2d12
-}
-
-.fila-anulada td{
-  background:#e5e7eb!important;
-  color:#374151
-}
-
-.modal-fondo{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  align-items:center;
-  justify-content:center;
-  z-index:1000
-}
-
-.modal{
-  width:540px;
-  max-width:94%;
-  background:white;
-  border-radius:8px;
-  padding:20px
-}
-
-.modal h3{
-  margin-top:0;
-  font-size:16px
-}
-
+.fila-alerta td{background:#fee2e2!important;color:#7f1d1d;font-weight:bold}
+.fila-rectificativa td{background:#ffedd5!important;color:#7c2d12}
+.fila-anulada td{background:#e5e7eb!important;color:#374151}
+.modal-fondo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);align-items:center;justify-content:center;z-index:1000}
+.modal{width:540px;max-width:94%;background:white;border-radius:8px;padding:20px}
+.modal h3{margin-top:0;font-size:16px}
 .modal-campo{margin-bottom:12px}
-
-.modal-campo label{
-  display:block;
-  font-size:10px;
-  font-weight:bold;
-  margin-bottom:5px
-}
-
-.modal-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px
-}
-
-.modal-botones{
-  display:flex;
-  justify-content:flex-end;
-  gap:6px
-}
-
-.boton-cancelar{
-  background:#e5e7eb;
-  color:#111827;
-  padding:0 12px
-}
-
-.boton-guardar{
-  background:#16a34a;
-  color:white;
-  padding:0 12px
-}
-
-@media(max-width:1200px){
-  .linea-entrada{grid-template-columns:1fr 1fr 1fr}
-}
-
-@media(max-width:900px){
-  .resumen{grid-template-columns:1fr}
-  .linea-entrada{grid-template-columns:1fr 1fr}
-  .filtros{grid-template-columns:1fr}
-}
+.modal-campo label{display:block;font-size:10px;font-weight:bold;margin-bottom:5px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.modal-botones{display:flex;justify-content:flex-end;gap:6px}
+.boton-cancelar{background:#e5e7eb;color:#111827;padding:0 12px}
+.boton-guardar{background:#16a34a;color:white;padding:0 12px}
+@media(max-width:1200px){.linea-entrada{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:900px){.resumen{grid-template-columns:1fr}.linea-entrada{grid-template-columns:1fr 1fr}.filtros{grid-template-columns:1fr}}
 </style>
 </head>
 
 <body>
 
 <div class="cabecera">
-
   <div class="cabecera-titulo">
     <h1>GERAVALON · INGRESOS</h1>
     <p>ANÁLISIS ECONÓMICO · EJERCICIO 2026</p>
@@ -349,429 +92,341 @@ td{font-size:11px}
     <div class="ejercicio">Ejercicio 2026</div>
     <a href="Analisis.html" class="volver">← VOLVER</a>
   </div>
-
 </div>
-
 
 <div class="pagina">
 
-<div class="panel-resumen">
-
-<div class="resumen">
-
-<div class="tarjeta">
-<div class="titulo-resumen">INGRESOS ACUMULADOS SIN IVA</div>
-<div class="valor" id="totalIngresos">0,00 €</div>
-</div>
-
-<div class="tarjeta">
-<div class="titulo-resumen">NÚMERO DE MOVIMIENTOS</div>
-<div class="valor" id="numeroMovimientos">0</div>
-</div>
-
-<div class="tarjeta">
-<div class="titulo-resumen">CUENTAS DE INGRESO</div>
-<div class="valor" id="numeroCuentas">0</div>
-</div>
-
-</div>
-</div>
-
-
-<div class="panel panel-entrada">
-
-<div class="titulo">INTRODUCIR INGRESO</div>
-
-<div class="linea-entrada">
-
-<input type="date"
-id="fecha"
-min="2026-01-01"
-max="2026-12-31"
-title="Fecha de factura">
-
-<input type="text"
-id="numeroFactura"
-placeholder="N.º FACTURA"
-title="Número de factura">
-
-<div class="fila-cuenta">
-
-<select id="cuenta"
-title="Cuenta contable">
-</select>
-
-<button type="button"
-class="nueva-cuenta"
-onclick="abrirNuevaCuenta()">
-+ NUEVA
-</button>
-
-</div>
-
-<select id="origen"
-title="Origen">
-
-<option value="GERA">GERA</option>
-<option value="SIG">SIG</option>
-<option value="DAVID">DAVID</option>
-
-</select>
-
-<select id="proyecto"
-title="Proyecto">
-</select>
-
-<input type="number"
-id="cantidad"
-step="0.01"
-placeholder="TOTAL FACTURA €"
-oninput="actualizarCalculoIVA()">
-
-<select id="tipoIVA"
-onchange="actualizarCalculoIVA()"
-title="Tipo de IVA">
-
-<option value="21">IVA 21%</option>
-<option value="10">IVA 10%</option>
-<option value="4">IVA 4%</option>
-<option value="0">SIN IVA</option>
-
-</select>
-
-<button class="guardar"
-onclick="guardarMovimiento()"
-title="Guardar ingreso">
-💾
-</button>
-
-<button class="json-morado"
-onclick="sincronizarHolded()">
-ACTUALIZAR HOLDED
-</button>
-
-<button class="json"
-onclick="descargarJSON()">
-GUARDAR JSON
-</button>
-
-<button class="json-gris"
-onclick="document.getElementById('archivoJSON').click()">
-CARGAR JSON
-</button>
-
-<input type="file"
-id="archivoJSON"
-accept=".json"
-style="display:none"
-onchange="cargarJSON(event)">
-
-</div>
-
-
-<div class="previsualizacion-iva">
-
-<span>
-TOTAL:
-<strong id="vistaTotal">0,00 €</strong>
-</span>
-
-<span>
-IVA:
-<strong id="vistaIVA">0,00 €</strong>
-</span>
-
-<span>
-BASE SIN IVA:
-<span class="base" id="vistaBase">0,00 €</span>
-</span>
-
-</div>
-
-<div class="estado" id="mensaje">
-Los datos se guardan automáticamente en este navegador.
-</div>
-
-</div>
-
-
-<div class="panel panel-tabla">
-
-<div style="padding:10px 10px 0">
-<div class="titulo">
-INGRESOS POR MES · SIN IVA
-</div>
-</div>
-
-<div class="tabla-contenedor">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>CUENTA CONTABLE</th>
-<th>PROYECTO</th>
-<th>ORIGEN</th>
-
-<th>ENE</th>
-<th>FEB</th>
-<th>MAR</th>
-<th>ABR</th>
-<th>MAY</th>
-<th>JUN</th>
-<th>JUL</th>
-<th>AGO</th>
-<th>SEP</th>
-<th>OCT</th>
-<th>NOV</th>
-<th>DIC</th>
-
-<th>TOTAL</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tablaIngresos"></tbody>
-
-</table>
-
-</div>
-</div>
-
-
-<div class="panel panel-movimientos">
-
-<div class="titulo">
-MOVIMIENTOS
-</div>
-
-<div class="filtros">
-
-<select id="filtroCuentaMovimiento"
-onchange="construirTablaMovimientos()">
-</select>
-
-<select id="filtroProyectoMovimiento"
-onchange="construirTablaMovimientos()">
-</select>
-
-<button class="limpiar-filtros"
-onclick="limpiarFiltrosMovimientos()">
-LIMPIAR FILTROS
-</button>
-
-</div>
-
-
-<div class="tabla-contenedor">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th onclick="ordenarMovimientos('fecha')"
-style="cursor:pointer"
-title="Ordenar por fecha">
-FECHA
-<span id="ordenFecha">▼</span>
-</th>
-
-<th onclick="ordenarMovimientos('factura')"
-style="cursor:pointer"
-title="Ordenar por número de factura">
-N.º FACTURA
-<span id="ordenFactura"></span>
-</th>
-
-<th>CUENTA</th>
-<th>ORIGEN</th>
-<th>PROYECTO</th>
-<th>BASE</th>
-<th>IVA</th>
-<th>TOTAL FACTURA</th>
-<th>ACCIÓN</th>
-
-</tr>
-
-</thead>
-
-<tbody id="tablaMovimientos"></tbody>
-
-</table>
-
-</div>
-</div>
+  <div class="panel-resumen">
+    <div class="resumen">
+      <div class="tarjeta">
+        <div class="titulo-resumen">INGRESOS ACUMULADOS SIN IVA</div>
+        <div class="valor" id="totalIngresos">0,00 €</div>
+      </div>
+
+      <div class="tarjeta">
+        <div class="titulo-resumen">NÚMERO DE MOVIMIENTOS</div>
+        <div class="valor" id="numeroMovimientos">0</div>
+      </div>
+
+      <div class="tarjeta">
+        <div class="titulo-resumen">CUENTAS DE INGRESO</div>
+        <div class="valor" id="numeroCuentas">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-entrada">
+
+    <div class="titulo">INTRODUCIR INGRESO</div>
+
+    <div class="linea-entrada">
+
+      <input type="date"
+             id="fecha"
+             min="2026-01-01"
+             max="2026-12-31"
+             title="Fecha de factura">
+
+      <input type="text"
+             id="numeroFactura"
+             placeholder="N.º FACTURA"
+             title="Número de factura">
+
+      <div class="fila-cuenta">
+        <select id="cuenta" title="Cuenta contable"></select>
+
+        <button type="button"
+                class="nueva-cuenta"
+                onclick="abrirNuevaCuenta()">
+          + NUEVA
+        </button>
+      </div>
+
+      <select id="origen" title="Origen">
+        <option value="GERA">GERA</option>
+        <option value="SIG">SIG</option>
+        <option value="DAVID">DAVID</option>
+      </select>
+
+      <select id="proyecto" title="Proyecto"></select>
+
+      <input type="number"
+             id="cantidad"
+             step="0.01"
+             placeholder="TOTAL FACTURA €"
+             oninput="actualizarCalculoIVA()">
+
+      <select id="tipoIVA"
+              onchange="actualizarCalculoIVA()"
+              title="Tipo de IVA">
+
+        <option value="21">IVA 21%</option>
+        <option value="10">IVA 10%</option>
+        <option value="4">IVA 4%</option>
+        <option value="0">SIN IVA</option>
+
+      </select>
+
+      <button class="guardar"
+              onclick="guardarMovimiento()"
+              title="Guardar ingreso">
+        💾
+      </button>
+
+      <button class="json-morado"
+              onclick="sincronizarHolded()">
+        ACTUALIZAR HOLDED
+      </button>
+
+      <button class="json"
+              onclick="descargarJSON()">
+        GUARDAR JSON
+      </button>
+
+      <button class="json-gris"
+              onclick="document.getElementById('archivoJSON').click()">
+        CARGAR JSON
+      </button>
+
+      <input type="file"
+             id="archivoJSON"
+             accept=".json"
+             style="display:none"
+             onchange="cargarJSON(event)">
+
+    </div>
+
+    <div class="previsualizacion-iva">
+      <span>TOTAL: <strong id="vistaTotal">0,00 €</strong></span>
+      <span>IVA: <strong id="vistaIVA">0,00 €</strong></span>
+      <span>BASE SIN IVA: <span class="base" id="vistaBase">0,00 €</span></span>
+    </div>
+
+    <div class="estado" id="mensaje">
+      Los datos se guardan automáticamente en este navegador.
+    </div>
+
+  </div>
+    <div class="panel panel-tabla">
+    <div style="padding:10px 10px 0">
+      <div class="titulo">INGRESOS POR MES · SIN IVA</div>
+    </div>
+
+    <div class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>CUENTA CONTABLE</th>
+            <th>PROYECTO</th>
+            <th>ORIGEN</th>
+            <th>ENE</th><th>FEB</th><th>MAR</th><th>ABR</th>
+            <th>MAY</th><th>JUN</th><th>JUL</th><th>AGO</th>
+            <th>SEP</th><th>OCT</th><th>NOV</th><th>DIC</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody id="tablaIngresos"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-movimientos">
+
+    <div class="titulo">MOVIMIENTOS</div>
+
+    <div class="filtros">
+
+      <select id="filtroCuentaMovimiento"
+              onchange="construirTablaMovimientos()">
+      </select>
+
+      <select id="filtroProyectoMovimiento"
+              onchange="construirTablaMovimientos()">
+      </select>
+
+      <button class="limpiar-filtros"
+              onclick="limpiarFiltrosMovimientos()">
+        LIMPIAR FILTROS
+      </button>
+
+    </div>
+
+    <div class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+          <tr>
+
+            <th onclick="ordenarMovimientos('fecha')"
+                style="cursor:pointer"
+                title="Ordenar por fecha">
+              FECHA <span id="ordenFecha">▼</span>
+            </th>
+
+            <th onclick="ordenarMovimientos('factura')"
+                style="cursor:pointer"
+                title="Ordenar por número de factura">
+              N.º FACTURA <span id="ordenFactura"></span>
+            </th>
+
+            <th>CUENTA</th>
+            <th>ORIGEN</th>
+            <th>PROYECTO</th>
+            <th>BASE</th>
+            <th>IVA</th>
+            <th>TOTAL FACTURA</th>
+            <th>ACCIÓN</th>
+
+          </tr>
+        </thead>
+
+        <tbody id="tablaMovimientos"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
 
 </div>
 
 
 <div class="modal-fondo" id="modalCuenta">
 
-<div class="modal">
+  <div class="modal">
 
-<h3>NUEVA CUENTA DE INGRESO</h3>
+    <h3>NUEVA CUENTA DE INGRESO</h3>
 
-<div class="modal-campo">
+    <div class="modal-campo">
+      <label>CÓDIGO CONTABLE</label>
+      <input type="text"
+             id="nuevoCodigo"
+             placeholder="Ej. 70500006">
+    </div>
 
-<label>CÓDIGO CONTABLE</label>
+    <div class="modal-campo">
+      <label>NOMBRE</label>
+      <input type="text"
+             id="nuevoNombre"
+             placeholder="Nombre de la cuenta">
+    </div>
 
-<input type="text"
-id="nuevoCodigo"
-placeholder="Ej. 70500006">
+    <div class="modal-botones">
 
-</div>
+      <button class="boton-cancelar"
+              onclick="cerrarNuevaCuenta()">
+        CANCELAR
+      </button>
 
-<div class="modal-campo">
+      <button class="boton-guardar"
+              onclick="guardarNuevaCuenta()">
+        GUARDAR CUENTA
+      </button>
 
-<label>NOMBRE</label>
+    </div>
 
-<input type="text"
-id="nuevoNombre"
-placeholder="Nombre de la cuenta">
+  </div>
 
-</div>
-
-<div class="modal-botones">
-
-<button class="boton-cancelar"
-onclick="cerrarNuevaCuenta()">
-CANCELAR
-</button>
-
-<button class="boton-guardar"
-onclick="guardarNuevaCuenta()">
-GUARDAR CUENTA
-</button>
-
-</div>
-
-</div>
 </div>
 
 
 <div class="modal-fondo" id="modalEditar">
 
-<div class="modal">
+  <div class="modal">
 
-<h3>EDITAR MOVIMIENTO</h3>
+    <h3>EDITAR MOVIMIENTO</h3>
 
-<input type="hidden" id="editarId">
+    <input type="hidden" id="editarId">
 
-<div class="modal-grid">
+    <div class="modal-grid">
 
-<div class="modal-campo">
+      <div class="modal-campo">
+        <label>FECHA</label>
+        <input type="date"
+               id="editarFecha"
+               min="2026-01-01"
+               max="2026-12-31">
+      </div>
 
-<label>FECHA</label>
+      <div class="modal-campo">
+        <label>N.º FACTURA</label>
+        <input type="text"
+               id="editarNumeroFactura">
+      </div>
 
-<input type="date"
-id="editarFecha"
-min="2026-01-01"
-max="2026-12-31">
+    </div>
 
-</div>
+    <div class="modal-campo">
+      <label>CUENTA</label>
+      <select id="editarCuenta"></select>
+    </div>
 
-<div class="modal-campo">
+    <div class="modal-grid">
 
-<label>N.º FACTURA</label>
+      <div class="modal-campo">
+        <label>ORIGEN</label>
 
-<input type="text"
-id="editarNumeroFactura">
+        <select id="editarOrigen">
+          <option value="GERA">GERA</option>
+          <option value="SIG">SIG</option>
+          <option value="DAVID">DAVID</option>
+        </select>
 
-</div>
+      </div>
 
-</div>
+      <div class="modal-campo">
+        <label>PROYECTO</label>
+        <select id="editarProyecto"></select>
+      </div>
 
+    </div>
 
-<div class="modal-campo">
+    <div class="modal-grid">
 
-<label>CUENTA</label>
+      <div class="modal-campo">
+        <label>TOTAL CON IVA</label>
+        <input type="number"
+               id="editarImporteConIVA"
+               step="0.01">
+      </div>
 
-<select id="editarCuenta"></select>
+      <div class="modal-campo">
 
-</div>
+        <label>IVA</label>
 
+        <select id="editarTipoIVA">
+          <option value="21">IVA 21%</option>
+          <option value="10">IVA 10%</option>
+          <option value="4">IVA 4%</option>
+          <option value="0">SIN IVA</option>
+        </select>
 
-<div class="modal-grid">
+      </div>
 
-<div class="modal-campo">
+    </div>
 
-<label>ORIGEN</label>
+    <div class="estado">
+      Al guardar se marca como MODIFICADO MANUALMENTE.
+      La sincronización respetará tu corrección.
+    </div>
 
-<select id="editarOrigen">
+    <div class="modal-botones">
 
-<option value="GERA">GERA</option>
-<option value="SIG">SIG</option>
-<option value="DAVID">DAVID</option>
+      <button class="boton-cancelar"
+              onclick="cerrarEditarMovimiento()">
+        CANCELAR
+      </button>
 
-</select>
+      <button class="boton-guardar"
+              onclick="guardarEdicionMovimiento()">
+        GUARDAR CAMBIOS
+      </button>
 
-</div>
+    </div>
 
-<div class="modal-campo">
+  </div>
 
-<label>PROYECTO</label>
-
-<select id="editarProyecto"></select>
-
-</div>
-
-</div>
-
-
-<div class="modal-grid">
-
-<div class="modal-campo">
-
-<label>TOTAL CON IVA</label>
-
-<input type="number"
-id="editarImporteConIVA"
-step="0.01">
-
-</div>
-
-<div class="modal-campo">
-
-<label>IVA</label>
-
-<select id="editarTipoIVA">
-
-<option value="21">IVA 21%</option>
-<option value="10">IVA 10%</option>
-<option value="4">IVA 4%</option>
-<option value="0">SIN IVA</option>
-
-</select>
-
-</div>
-
-</div>
-
-<div class="estado">
-Al guardar se marca como MODIFICADO MANUALMENTE.
-La sincronización respetará tu corrección.
-</div>
-
-<div class="modal-botones">
-
-<button class="boton-cancelar"
-onclick="cerrarEditarMovimiento()">
-CANCELAR
-</button>
-
-<button class="boton-guardar"
-onclick="guardarEdicionMovimiento()">
-GUARDAR CAMBIOS
-</button>
-
-</div>
-
-</div>
 </div>
 
 
@@ -779,45 +434,44 @@ GUARDAR CAMBIOS
 
 const CLAVE_INGRESOS="geravalon_ingresos_2026";
 const CLAVE_CUENTAS="geravalon_cuentas_ingresos";
-
 const PROYECTO_SIN_PROYECTO="⚠ SIN PROYECTO";
 
 
 const cuentasIniciales=[
 
-["70500005","INSTALACIÓN SEPARADOR DE GRASA"],
-["70500004","INSTALACION Y REPARACIONES"],
-["70500003","SERVICIOS"],
-["70500002","LIMPIEZA RESTAURACION"],
-["70500001","LIMPIEZAS SOL DE ALBA"],
-["70500000","PRESTACIONES DE SERVICIOS"],
+  ["70500005","INSTALACIÓN SEPARADOR DE GRASA"],
+  ["70500004","INSTALACION Y REPARACIONES"],
+  ["70500003","SERVICIOS"],
+  ["70500002","LIMPIEZA RESTAURACION"],
+  ["70500001","LIMPIEZAS SOL DE ALBA"],
+  ["70500000","PRESTACIONES DE SERVICIOS"],
 
-["70000011","CAJA DE VENTILACION"],
-["70000010","GRG - CONTENEDORES - BIDONES"],
-["70000009","FILTRO ELECTROSTATICO"],
-["70000008","SEPARADORES DE GRASA"],
-["70000007","ELEMENTOS SISTEMA DE EXTRACCIÓN"],
-["70000006","CAMPANAS"],
-["70000005","FILTRACIÓN ELECTROSTÁTICA"],
-["70000004","CAJAS DE VENTILACIÓN"],
-["70000003","VENTA DE FILTROS ESPECIALES"],
-["70000002","VENTA DE FILTROS DE COCINA"],
-["70000001","VENTA DE ACEITE USADO"],
-["70000000","VENTAS DE MERCADERÍAS"]
+  ["70000011","CAJA DE VENTILACION"],
+  ["70000010","GRG - CONTENEDORES - BIDONES"],
+  ["70000009","FILTRO ELECTROSTATICO"],
+  ["70000008","SEPARADORES DE GRASA"],
+  ["70000007","ELEMENTOS SISTEMA DE EXTRACCIÓN"],
+  ["70000006","CAMPANAS"],
+  ["70000005","FILTRACIÓN ELECTROSTÁTICA"],
+  ["70000004","CAJAS DE VENTILACIÓN"],
+  ["70000003","VENTA DE FILTROS ESPECIALES"],
+  ["70000002","VENTA DE FILTROS DE COCINA"],
+  ["70000001","VENTA DE ACEITE USADO"],
+  ["70000000","VENTAS DE MERCADERÍAS"]
 
 ];
 
 
 const proyectos=[
 
-"RECICLAJE DE ACEITES Y GRASAS",
-"LIMPIEZA INDUSTRIAL",
-"LIMPIEZA HOSTELERIA",
-"SERVICIOS VARIOS",
-"INSTALACION Y REPARACION",
-"GASTOS GENERALES",
-"TRADER",
-PROYECTO_SIN_PROYECTO
+  "RECICLAJE DE ACEITES Y GRASAS",
+  "LIMPIEZA INDUSTRIAL",
+  "LIMPIEZA HOSTELERIA",
+  "SERVICIOS VARIOS",
+  "INSTALACION Y REPARACION",
+  "GASTOS GENERALES",
+  "TRADER",
+  PROYECTO_SIN_PROYECTO
 
 ];
 
@@ -830,3402 +484,4380 @@ let mapaHoldedProyectos={};
 
 document.addEventListener("DOMContentLoaded",()=>{
 
-cargarCuentas();
-cargarSelectores();
-cargarMovimientos();
-ponerFechaHoy();
-actualizarCalculoIVA();
-construirTodo();
+  cargarCuentas();
+  cargarSelectores();
+  cargarMovimientos();
+  ponerFechaHoy();
+  actualizarCalculoIVA();
+  construirTodo();
 
 });
 
 
 function redondear2(n){
-
-return Math.round(
-(Number(n)||0)*100
-)/100;
-
+  return Math.round((Number(n)||0)*100)/100;
 }
 
 
 function crearIdMovimiento(){
-
-return Date.now()+
-Math.floor(
-Math.random()*100000
-);
-
+  return Date.now()+Math.floor(Math.random()*100000);
 }
 
 
 function ponerFechaHoy(){
 
-const h=new Date();
+  const h=new Date();
 
-if(h.getFullYear()!==2026)
-return;
+  if(h.getFullYear()!==2026) return;
 
-document.getElementById("fecha").value=
-
-`2026-${String(h.getMonth()+1).padStart(2,"0")}-${String(h.getDate()).padStart(2,"0")}`;
+  document.getElementById("fecha").value=
+    `2026-${String(h.getMonth()+1).padStart(2,"0")}-${String(h.getDate()).padStart(2,"0")}`;
 
 }
 
 
 function calcularImportesIVA(total,tipoIVA){
 
-const t=Number(total)||0;
-const p=Number(tipoIVA)||0;
+  const t=Number(total)||0;
+  const p=Number(tipoIVA)||0;
 
-if(!p){
+  if(!p){
+    return {
+      total:t,
+      base:t,
+      iva:0
+    };
+  }
 
-return{
-total:t,
-base:t,
-iva:0
-};
+  const b=t/(1+p/100);
 
-}
-
-const b=
-t/(1+p/100);
-
-return{
-total:t,
-base:b,
-iva:t-b
-};
+  return {
+    total:t,
+    base:b,
+    iva:t-b
+  };
 
 }
 
 
 function actualizarCalculoIVA(){
 
-const t=
-parseFloat(
-document.getElementById("cantidad").value
-)||0;
+  const t=parseFloat(
+    document.getElementById("cantidad").value
+  )||0;
 
-const p=
-parseFloat(
-document.getElementById("tipoIVA").value
-)||0;
+  const p=parseFloat(
+    document.getElementById("tipoIVA").value
+  )||0;
 
-const c=
-calcularImportesIVA(t,p);
+  const c=calcularImportesIVA(t,p);
 
-document.getElementById("vistaTotal").textContent=
-formatearDinero(c.total);
+  document.getElementById("vistaTotal").textContent=
+    formatearDinero(c.total);
 
-document.getElementById("vistaIVA").textContent=
-formatearDinero(c.iva);
+  document.getElementById("vistaIVA").textContent=
+    formatearDinero(c.iva);
 
-document.getElementById("vistaBase").textContent=
-formatearDinero(c.base);
+  document.getElementById("vistaBase").textContent=
+    formatearDinero(c.base);
 
 }
 
 
 function cuentaEsIngreso(c){
 
-return /^7\d{7}$/.test(
-String(c?.[0] ?? "")
-);
+  return /^7\d{7}$/.test(
+    String(c?.[0] ?? "")
+  );
 
 }
 
 
 function cargarCuentas(){
 
-const g=
-localStorage.getItem(
-CLAVE_CUENTAS
-);
+  const g=localStorage.getItem(CLAVE_CUENTAS);
 
-try{
+  try{
 
-cuentas=
-g
-?
-JSON.parse(g)
-:
-JSON.parse(
-JSON.stringify(
-cuentasIniciales
-)
-);
+    cuentas=g
+      ? JSON.parse(g)
+      : JSON.parse(JSON.stringify(cuentasIniciales));
 
-}catch{
+  }catch{
 
-cuentas=
-JSON.parse(
-JSON.stringify(
-cuentasIniciales
-)
-);
+    cuentas=JSON.parse(
+      JSON.stringify(cuentasIniciales)
+    );
 
-}
+  }
 
-cuentas=
-Array.isArray(cuentas)
-?
-cuentas.filter(cuentaEsIngreso)
-:
-[];
+  cuentas=Array.isArray(cuentas)
+    ? cuentas.filter(cuentaEsIngreso)
+    : [];
 
-cuentasIniciales.forEach(ci=>{
+  cuentasIniciales.forEach(ci=>{
 
-if(
-!cuentas.some(
-c=>c[0]===ci[0]
-)
-)
-cuentas.push(ci);
+    if(!cuentas.some(c=>c[0]===ci[0])){
+      cuentas.push(ci);
+    }
 
-});
+  });
 
-guardarCuentas();
+  guardarCuentas();
 
 }
 
 
 function guardarCuentas(){
 
-localStorage.setItem(
-CLAVE_CUENTAS,
-JSON.stringify(cuentas)
-);
+  localStorage.setItem(
+    CLAVE_CUENTAS,
+    JSON.stringify(cuentas)
+  );
 
 }
 
 
 function cuentasOrdenadas(){
 
-return [...cuentas]
-.filter(cuentaEsIngreso)
-.sort(
-(a,b)=>
-a[0].localeCompare(b[0])
-);
+  return [...cuentas]
+    .filter(cuentaEsIngreso)
+    .sort((a,b)=>a[0].localeCompare(b[0]));
 
 }
 
 
 function cargarSelectorCuenta(id,empty){
 
-const s=
-document.getElementById(id);
+  const s=document.getElementById(id);
 
-s.innerHTML="";
+  s.innerHTML="";
 
-if(empty){
+  if(empty){
 
-const o=
-document.createElement("option");
+    const o=document.createElement("option");
 
-o.value="";
-o.textContent=
-"SELECCIONAR CUENTA";
+    o.value="";
+    o.textContent="SELECCIONAR CUENTA";
 
-s.appendChild(o);
+    s.appendChild(o);
 
-}
+  }
 
-cuentasOrdenadas().forEach(c=>{
+  cuentasOrdenadas().forEach(c=>{
 
-const o=
-document.createElement("option");
+    const o=document.createElement("option");
 
-o.value=c[0];
+    o.value=c[0];
+    o.textContent=c[1]+" · "+c[0];
 
-o.textContent=
-c[1]+" · "+c[0];
+    s.appendChild(o);
 
-s.appendChild(o);
-
-});
+  });
 
 }
 
 
 function cargarSelectorProyecto(id,empty){
 
-const s=
-document.getElementById(id);
+  const s=document.getElementById(id);
 
-s.innerHTML="";
+  s.innerHTML="";
 
-if(empty){
+  if(empty){
 
-const o=
-document.createElement("option");
+    const o=document.createElement("option");
 
-o.value="";
-o.textContent=
-"SELECCIONAR PROYECTO";
+    o.value="";
+    o.textContent="SELECCIONAR PROYECTO";
 
-s.appendChild(o);
+    s.appendChild(o);
 
-}
+  }
 
-proyectos.forEach(p=>{
+  proyectos.forEach(p=>{
 
-const o=
-document.createElement("option");
+    const o=document.createElement("option");
 
-o.value=p;
-o.textContent=p;
+    o.value=p;
+    o.textContent=p;
 
-s.appendChild(o);
+    s.appendChild(o);
 
-});
+  });
 
 }
+  function cargarSelectores(){
+
+  cargarSelectorCuenta("cuenta",false);
+  cargarSelectorProyecto("proyecto",false);
+
+  const fc=document.getElementById("filtroCuentaMovimiento");
+
+  fc.innerHTML=
+    '<option value="">TODAS LAS CUENTAS</option>';
+
+  cuentasOrdenadas().forEach(c=>{
+
+    const o=document.createElement("option");
+
+    o.value=c[0];
+    o.textContent=c[1]+" · "+c[0];
+
+    fc.appendChild(o);
+
+  });
 
 
-function cargarSelectores(){
+  const fp=document.getElementById("filtroProyectoMovimiento");
 
-cargarSelectorCuenta(
-"cuenta",
-false
-);
+  fp.innerHTML=
+    '<option value="">TODOS LOS PROYECTOS</option>';
 
-cargarSelectorProyecto(
-"proyecto",
-false
-);
+  proyectos.forEach(p=>{
 
+    const o=document.createElement("option");
 
-const fc=
-document.getElementById(
-"filtroCuentaMovimiento"
-);
+    o.value=p;
+    o.textContent=p;
 
-fc.innerHTML=
-'<option value="">TODAS LAS CUENTAS</option>';
+    fp.appendChild(o);
 
-cuentasOrdenadas().forEach(c=>{
+  });
 
-const o=
-document.createElement("option");
-
-o.value=c[0];
-
-o.textContent=
-c[1]+" · "+c[0];
-
-fc.appendChild(o);
-
-});
-
-
-const fp=
-document.getElementById(
-"filtroProyectoMovimiento"
-);
-
-fp.innerHTML=
-'<option value="">TODOS LOS PROYECTOS</option>';
-
-proyectos.forEach(p=>{
-
-const o=
-document.createElement("option");
-
-o.value=p;
-o.textContent=p;
-
-fp.appendChild(o);
-
-});
-
-actualizarResumen();
+  actualizarResumen();
 
 }
 
 
 function abrirNuevaCuenta(){
 
-document.getElementById("nuevoCodigo").value="";
-document.getElementById("nuevoNombre").value="";
+  document.getElementById("nuevoCodigo").value="";
+  document.getElementById("nuevoNombre").value="";
 
-document.getElementById("modalCuenta").style.display="flex";
+  document.getElementById("modalCuenta").style.display="flex";
 
 }
 
 
 function cerrarNuevaCuenta(){
 
-document.getElementById("modalCuenta").style.display="none";
+  document.getElementById("modalCuenta").style.display="none";
 
 }
 
 
 function guardarNuevaCuenta(){
 
-const c=
-document.getElementById("nuevoCodigo")
-.value
-.trim()
-.toUpperCase();
+  const c=document
+    .getElementById("nuevoCodigo")
+    .value
+    .trim()
+    .toUpperCase();
 
-const n=
-document.getElementById("nuevoNombre")
-.value
-.trim()
-.toUpperCase();
+  const n=document
+    .getElementById("nuevoNombre")
+    .value
+    .trim()
+    .toUpperCase();
 
-if(!c||!n){
 
-alert(
-"DEBES INDICAR EL CÓDIGO Y EL NOMBRE DE LA CUENTA."
-);
+  if(!c || !n){
 
-return;
+    alert(
+      "DEBES INDICAR EL CÓDIGO Y EL NOMBRE DE LA CUENTA."
+    );
 
-}
+    return;
 
-if(
-cuentas.some(
-x=>x[0]===c
-)
-){
+  }
 
-alert(
-"ESA CUENTA CONTABLE YA EXISTE."
-);
 
-return;
+  if(cuentas.some(x=>x[0]===c)){
 
-}
+    alert(
+      "ESA CUENTA CONTABLE YA EXISTE."
+    );
 
-cuentas.push([c,n]);
+    return;
 
-guardarCuentas();
-cargarSelectores();
+  }
 
-document.getElementById("cuenta").value=c;
 
-cerrarNuevaCuenta();
+  cuentas.push([c,n]);
 
-mostrarMensaje(
-"Cuenta creada correctamente.",
-true
-);
+  guardarCuentas();
+  cargarSelectores();
+
+  document.getElementById("cuenta").value=c;
+
+  cerrarNuevaCuenta();
+
+  mostrarMensaje(
+    "Cuenta creada correctamente.",
+    true
+  );
 
 }
 
 
 function cargarMovimientos(){
 
-const g=
-localStorage.getItem(
-CLAVE_INGRESOS
-);
+  const g=localStorage.getItem(CLAVE_INGRESOS);
 
-if(!g){
+  if(!g){
 
-movimientos=[];
-return;
+    movimientos=[];
+    return;
 
-}
+  }
 
-try{
+  try{
 
-const d=
-JSON.parse(g);
+    const d=JSON.parse(g);
 
-movimientos=
-Array.isArray(d)
-?
-d
-:
-[];
+    movimientos=Array.isArray(d)
+      ? d
+      : [];
 
-}catch{
+  }catch{
 
-movimientos=[];
+    movimientos=[];
 
-}
+  }
 
-guardarLocal();
+
+  movimientos=movimientos.filter(m=>
+    !(
+      m?.origenDatos==="HOLDED" &&
+      Number(m?.importeConIVA||0)===0 &&
+      Number(m?.cantidadTotal||0)===0 &&
+      Number(m?.importeIVA||0)===0
+    )
+  );
+
+  guardarLocal();
 
 }
 
 
 function guardarLocal(){
 
-localStorage.setItem(
-CLAVE_INGRESOS,
-JSON.stringify(movimientos)
-);
+  localStorage.setItem(
+    CLAVE_INGRESOS,
+    JSON.stringify(movimientos)
+  );
 
 }
 
 
 function guardarMovimiento(){
 
-const fecha=
-document.getElementById("fecha").value;
+  const fecha=
+    document.getElementById("fecha").value;
 
-const numero=
-document.getElementById("numeroFactura")
-.value
-.trim();
+  const numero=
+    document.getElementById("numeroFactura").value.trim();
 
-const cuenta=
-document.getElementById("cuenta").value;
+  const cuenta=
+    document.getElementById("cuenta").value;
 
-const origen=
-document.getElementById("origen").value;
+  const origen=
+    document.getElementById("origen").value;
 
-const proyecto=
-document.getElementById("proyecto").value;
+  const proyecto=
+    document.getElementById("proyecto").value;
 
-const total=
-parseFloat(
-document.getElementById("cantidad").value
-);
+  const total=
+    parseFloat(
+      document.getElementById("cantidad").value
+    );
 
-const tipo=
-parseFloat(
-document.getElementById("tipoIVA").value
-)||0;
+  const tipo=
+    parseFloat(
+      document.getElementById("tipoIVA").value
+    )||0;
 
 
-if(
-!fecha||
-!numero||
-!cuenta||
-!proyecto||
-Number.isNaN(total)||
-total===0
-){
+  if(
+    !fecha ||
+    !numero ||
+    !cuenta ||
+    !proyecto ||
+    Number.isNaN(total) ||
+    total===0
+  ){
 
-mostrarMensaje(
-"Completa fecha, factura, cuenta, proyecto e importe.",
-false
-);
+    mostrarMensaje(
+      "Completa fecha, factura, cuenta, proyecto e importe.",
+      false
+    );
 
-return;
+    return;
 
-}
-
-
-const c=
-calcularImportesIVA(
-total,
-tipo
-);
+  }
 
 
-movimientos.push({
-
-id:crearIdMovimiento(),
-
-fecha,
-
-numeroFactura:numero,
-
-cuenta,
-
-origen,
-
-proyecto,
-
-importeConIVA:
-redondear2(c.total),
-
-tipoIVA:tipo,
-
-importeIVA:
-redondear2(c.iva),
-
-cantidadTotal:
-redondear2(c.base),
-
-origenDatos:"MANUAL",
-
-modificadoManual:false
-
-});
+  const c=calcularImportesIVA(total,tipo);
 
 
-guardarLocal();
-construirTodo();
+  movimientos.push({
 
-document.getElementById("numeroFactura").value="";
-document.getElementById("cantidad").value="";
+    id:crearIdMovimiento(),
 
-actualizarCalculoIVA();
+    fecha,
 
-mostrarMensaje(
-"Ingreso guardado sin IVA: "+
-formatearDinero(c.base),
-true
-);
+    numeroFactura:numero,
+
+    cuenta,
+
+    origen,
+
+    proyecto,
+
+    importeConIVA:redondear2(c.total),
+
+    tipoIVA:tipo,
+
+    importeIVA:redondear2(c.iva),
+
+    cantidadTotal:redondear2(c.base),
+
+    origenDatos:"MANUAL",
+
+    modificadoManual:false
+
+  });
+
+
+  guardarLocal();
+
+  construirTodo();
+
+
+  document.getElementById("numeroFactura").value="";
+  document.getElementById("cantidad").value="";
+
+  actualizarCalculoIVA();
+
+
+  mostrarMensaje(
+    "Ingreso guardado sin IVA: "+
+    formatearDinero(c.base),
+    true
+  );
 
 }
 
 
 function eliminarMovimiento(id){
 
-const m=
-movimientos.find(
-x=>Number(x.id)===Number(id)
-);
+  const m=movimientos.find(
+    x=>Number(x.id)===Number(id)
+  );
 
-if(!m)
-return;
+  if(!m) return;
 
 
-const esHolded=
-m.origenDatos==="HOLDED" &&
-m.holdedId;
+  const esHolded=
+    m.origenDatos==="HOLDED" &&
+    m.holdedId;
 
 
-if(esHolded){
+  if(esHolded){
 
-if(
-!confirm(
+    if(!confirm(
 
-"¿IGNORAR ESTE INGRESO DE HOLDED?\n\n"+
+      "¿IGNORAR ESTE INGRESO DE HOLDED?\n\n"+
 
-"FACTURA: "+
-(m.numeroFactura||"—")+
-"\n"+
+      "FACTURA: "+
+      (m.numeroFactura||"—")+
+      "\n"+
 
-"PROYECTO: "+
-(m.proyecto||"—")+
-"\n"+
+      "BASE: "+
+      formatearDinero(m.cantidadTotal)+
+      "\n\n"+
 
-"BASE: "+
-formatearDinero(
-m.cantidadTotal
-)+
-"\n\n"+
+      "No se tendrá en cuenta y no volverá a aparecer al actualizar Holded."
 
-"No se tendrá en cuenta y no volverá a aparecer al actualizar Holded."
-
-)
-)
-return;
+    )) return;
 
 
-m.ignorado=true;
+    m.ignorado=true;
 
-m.fechaIgnorado=
-new Date().toISOString();
+    m.fechaIgnorado=
+      new Date().toISOString();
 
-m.estadoSync=
-"IGNORADO MANUALMENTE";
-
-
-guardarLocal();
-construirTodo();
+    m.estadoSync=
+      "IGNORADO MANUALMENTE";
 
 
-mostrarMensaje(
-"Ingreso ignorado. No contará y Holded no volverá a incorporarlo.",
-true
-);
+    guardarLocal();
 
-return;
-
-}
+    construirTodo();
 
 
-if(
-!confirm(
+    mostrarMensaje(
 
-"¿ELIMINAR ESTE INGRESO?\n\n"+
+      "Factura ignorada. No contará y Holded no volverá a incorporarla.",
 
-"FACTURA: "+
-(m.numeroFactura||"—")+
-"\n"+
+      true
 
-"BASE: "+
-formatearDinero(
-m.cantidadTotal
-)
-
-)
-)
-return;
+    );
 
 
-movimientos=
-movimientos.filter(
-x=>Number(x.id)!==Number(id)
-);
+    return;
+
+  }
 
 
-guardarLocal();
-construirTodo();
+  if(!confirm(
 
-mostrarMensaje(
-"Ingreso eliminado correctamente.",
-true
-);
+    "¿ELIMINAR ESTE INGRESO?\n\n"+
+
+    "FACTURA: "+
+    (m.numeroFactura||"—")+
+    "\n"+
+
+    "BASE: "+
+    formatearDinero(m.cantidadTotal)
+
+  )) return;
+
+
+  movimientos=
+    movimientos.filter(
+      x=>Number(x.id)!==Number(id)
+    );
+
+
+  guardarLocal();
+
+  construirTodo();
+
+
+  mostrarMensaje(
+    "Ingreso eliminado correctamente.",
+    true
+  );
 
 }
 
 
 function abrirEditarMovimiento(id){
 
-const m=
-movimientos.find(
-x=>Number(x.id)===Number(id)
-);
+  const m=movimientos.find(
+    x=>Number(x.id)===Number(id)
+  );
 
-if(!m)
-return;
+  if(!m) return;
 
 
-cargarSelectorCuenta(
-"editarCuenta",
-true
-);
+  cargarSelectorCuenta(
+    "editarCuenta",
+    true
+  );
 
-cargarSelectorProyecto(
-"editarProyecto",
-true
-);
+  cargarSelectorProyecto(
+    "editarProyecto",
+    true
+  );
 
 
-document.getElementById("editarId").value=m.id;
+  document.getElementById("editarId").value=
+    m.id;
 
-document.getElementById("editarFecha").value=m.fecha||"";
+  document.getElementById("editarFecha").value=
+    m.fecha||"";
 
-document.getElementById("editarNumeroFactura").value=m.numeroFactura||"";
+  document.getElementById("editarNumeroFactura").value=
+    m.numeroFactura||"";
 
-document.getElementById("editarCuenta").value=m.cuenta||"";
+  document.getElementById("editarCuenta").value=
+    m.cuenta||"";
 
-document.getElementById("editarOrigen").value=m.origen||"GERA";
+  document.getElementById("editarOrigen").value=
+    m.origen||"GERA";
 
-document.getElementById("editarProyecto").value=m.proyecto||"";
+  document.getElementById("editarProyecto").value=
+    m.proyecto||"";
 
-document.getElementById("editarImporteConIVA").value=
-redondear2(
-m.importeConIVA??
-m.cantidadTotal??
-0
-);
+  document.getElementById("editarImporteConIVA").value=
+    redondear2(
+      m.importeConIVA ??
+      m.cantidadTotal ??
+      0
+    );
 
-document.getElementById("editarTipoIVA").value=
-String(
-Number(m.tipoIVA)||0
-);
+  document.getElementById("editarTipoIVA").value=
+    String(
+      Number(m.tipoIVA)||0
+    );
 
-document.getElementById("modalEditar").style.display="flex";
+
+  document.getElementById("modalEditar").style.display=
+    "flex";
 
 }
 
 
 function cerrarEditarMovimiento(){
 
-document.getElementById("modalEditar").style.display="none";
+  document.getElementById("modalEditar").style.display=
+    "none";
 
 }
 
 
 function guardarEdicionMovimiento(){
 
-const id=
-Number(
-document.getElementById("editarId").value
-);
+  const id=
+    Number(
+      document.getElementById("editarId").value
+    );
 
-const m=
-movimientos.find(
-x=>Number(x.id)===id
-);
+  const m=
+    movimientos.find(
+      x=>Number(x.id)===id
+    );
 
-if(!m)
-return;
-
-
-const fecha=
-document.getElementById("editarFecha").value;
-
-const numero=
-document.getElementById("editarNumeroFactura")
-.value
-.trim();
-
-const cuenta=
-document.getElementById("editarCuenta").value;
-
-const origen=
-document.getElementById("editarOrigen").value;
-
-const proyecto=
-document.getElementById("editarProyecto").value;
-
-const total=
-parseFloat(
-document.getElementById("editarImporteConIVA").value
-);
-
-const tipo=
-parseFloat(
-document.getElementById("editarTipoIVA").value
-)||0;
+  if(!m) return;
 
 
-if(
-!fecha||
-!numero||
-!cuenta||
-!proyecto||
-Number.isNaN(total)
-){
+  const fecha=
+    document.getElementById("editarFecha").value;
 
-alert(
-"DEBES COMPLETAR FECHA, FACTURA, CUENTA, PROYECTO E IMPORTE."
-);
+  const numero=
+    document.getElementById("editarNumeroFactura").value.trim();
 
-return;
+  const cuenta=
+    document.getElementById("editarCuenta").value;
 
-}
+  const origen=
+    document.getElementById("editarOrigen").value;
 
+  const proyecto=
+    document.getElementById("editarProyecto").value;
 
-const c=
-calcularImportesIVA(
-total,
-tipo
-);
+  const total=
+    parseFloat(
+      document.getElementById("editarImporteConIVA").value
+    );
 
-
-Object.assign(
-m,
-{
-
-fecha,
-
-numeroFactura:numero,
-
-cuenta,
-
-origen,
-
-proyecto,
-
-importeConIVA:
-redondear2(c.total),
-
-tipoIVA:tipo,
-
-importeIVA:
-redondear2(c.iva),
-
-cantidadTotal:
-redondear2(c.base),
-
-modificadoManual:true,
-
-fechaModificacionManual:
-new Date().toISOString()
-
-}
-);
+  const tipo=
+    parseFloat(
+      document.getElementById("editarTipoIVA").value
+    )||0;
 
 
-guardarLocal();
-construirTodo();
-cerrarEditarMovimiento();
+  if(
+    !fecha ||
+    !numero ||
+    !cuenta ||
+    !proyecto ||
+    Number.isNaN(total)
+  ){
+
+    alert(
+      "DEBES COMPLETAR FECHA, FACTURA, CUENTA, PROYECTO E IMPORTE."
+    );
+
+    return;
+
+  }
 
 
-mostrarMensaje(
-"Movimiento modificado manualmente. La sincronización respetará tu corrección.",
-true
-);
+  const c=
+    calcularImportesIVA(
+      total,
+      tipo
+    );
+
+
+  Object.assign(
+    m,
+    {
+
+      fecha,
+
+      numeroFactura:numero,
+
+      cuenta,
+
+      origen,
+
+      proyecto,
+
+      importeConIVA:
+        redondear2(c.total),
+
+      tipoIVA:tipo,
+
+      importeIVA:
+        redondear2(c.iva),
+
+      cantidadTotal:
+        redondear2(c.base),
+
+      modificadoManual:true,
+
+      fechaModificacionManual:
+        new Date().toISOString()
+
+    }
+  );
+
+
+  guardarLocal();
+
+  construirTodo();
+
+  cerrarEditarMovimiento();
+
+
+  mostrarMensaje(
+
+    "Movimiento modificado manualmente. La sincronización respetará tu corrección.",
+
+    true
+
+  );
 
 }
 
 
 function escapeHTML(v){
 
-return String(v??"")
-.replace(
-/[&<>"']/g,
-c=>({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#039;"
-}[c])
-);
+  return String(v??"").replace(
+
+    /[&<>"']/g,
+
+    c=>({
+
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+
+    }[c])
+
+  );
 
 }
 
 
 function obtenerNombreCuenta(codigo){
 
-const c=
-cuentas.find(
-x=>x[0]===codigo
-);
+  const c=
+    cuentas.find(
+      x=>x[0]===codigo
+    );
 
-return c
-?
-c[1]+" · "+c[0]
-:
-(
-codigo
-?
-"⚠ CUENTA NO RECONOCIDA: "+codigo
-:
-"⚠ SIN CUENTA"
-);
+
+  return c
+    ? c[1]+" · "+c[0]
+    : (
+        codigo
+          ? "⚠ CUENTA NO RECONOCIDA: "+codigo
+          : "⚠ SIN CUENTA"
+      );
 
 }
 
 
 function tieneAlerta(m){
 
-return !m.proyecto||
-m.proyecto===
-PROYECTO_SIN_PROYECTO;
+  return (
+    !m.proyecto ||
+    m.proyecto===PROYECTO_SIN_PROYECTO
+  );
 
 }
 
 
 function esRectificativa(m){
 
-return !!m.rectificativa;
+  return !!m.rectificativa;
 
 }
 
 
 function esAnulada(m){
 
-return !!m.anulada;
+  return !!m.anulada;
 
 }
 
 
 let ordenMovimientos={
 
-campo:"fecha",
+  campo:"fecha",
 
-direccion:"desc"
+  direccion:"desc"
 
 };
 
 
 function ordenarMovimientos(campo){
 
-if(
-ordenMovimientos.campo===
-campo
-){
+  if(
+    ordenMovimientos.campo===campo
+  ){
 
-ordenMovimientos.direccion=
+    ordenMovimientos.direccion=
+      ordenMovimientos.direccion==="asc"
+        ? "desc"
+        : "asc";
 
-ordenMovimientos.direccion===
-"asc"
-?
-"desc"
-:
-"asc";
+  }else{
 
-}else{
+    ordenMovimientos.campo=campo;
 
-ordenMovimientos.campo=campo;
+    ordenMovimientos.direccion="asc";
 
-ordenMovimientos.direccion="asc";
+  }
 
-}
 
-construirTablaMovimientos();
+  construirTablaMovimientos();
 
 }
 
 
 function compararNumeroFactura(a,b){
 
-return String(a||"")
-.localeCompare(
+  return String(a||"").localeCompare(
 
-String(b||""),
+    String(b||""),
 
-"es",
+    "es",
 
-{
-numeric:true,
-sensitivity:"base"
-}
+    {
+      numeric:true,
+      sensitivity:"base"
+    }
 
-);
-
-}
-
-
-function construirTablaMovimientos(){
-
-const tb=
-document.getElementById(
-"tablaMovimientos"
-);
-
-tb.innerHTML="";
-
-
-const fc=
-document.getElementById(
-"filtroCuentaMovimiento"
-).value;
-
-const fp=
-document.getElementById(
-"filtroProyectoMovimiento"
-).value;
-
-
-let arr=
-movimientos.filter(
-m=>
-
-!m.ignorado &&
-
-(
-!fc||
-m.cuenta===fc
-) &&
-
-(
-!fp||
-m.proyecto===fp
-)
-
-);
-
-
-arr.sort((a,b)=>{
-
-let resultado=0;
-
-
-if(
-ordenMovimientos.campo===
-"fecha"
-){
-
-resultado=
-(a.fecha||"")
-.localeCompare(
-b.fecha||""
-);
-
-if(resultado===0){
-
-resultado=
-compararNumeroFactura(
-a.numeroFactura,
-b.numeroFactura
-);
+  );
 
 }
 
-}
+  function construirTablaMovimientos(){
 
+  const tb=document.getElementById("tablaMovimientos");
+  tb.innerHTML="";
 
-if(
-ordenMovimientos.campo===
-"factura"
-){
+  const fc=document.getElementById("filtroCuentaMovimiento").value;
+  const fp=document.getElementById("filtroProyectoMovimiento").value;
 
-resultado=
-compararNumeroFactura(
-a.numeroFactura,
-b.numeroFactura
-);
+  let arr=movimientos.filter(m=>
+    !m.ignorado &&
+    (!fc || m.cuenta===fc) &&
+    (!fp || m.proyecto===fp)
+  );
 
-if(resultado===0){
 
-resultado=
-(a.fecha||"")
-.localeCompare(
-b.fecha||""
-);
+  arr.sort((a,b)=>{
 
-}
+    let resultado=0;
 
-}
+    if(ordenMovimientos.campo==="fecha"){
 
+      resultado=(a.fecha||"").localeCompare(b.fecha||"");
 
-return ordenMovimientos.direccion===
-"asc"
-?
-resultado
-:
--resultado;
+      if(resultado===0){
+        resultado=compararNumeroFactura(
+          a.numeroFactura,
+          b.numeroFactura
+        );
+      }
 
-});
+    }
 
 
-const indicadorFecha=
-document.getElementById(
-"ordenFecha"
-);
+    if(ordenMovimientos.campo==="factura"){
 
-const indicadorFactura=
-document.getElementById(
-"ordenFactura"
-);
+      resultado=compararNumeroFactura(
+        a.numeroFactura,
+        b.numeroFactura
+      );
 
+      if(resultado===0){
+        resultado=(a.fecha||"").localeCompare(b.fecha||"");
+      }
 
-if(indicadorFecha)
-indicadorFecha.textContent="";
+    }
 
-if(indicadorFactura)
-indicadorFactura.textContent="";
 
+    return ordenMovimientos.direccion==="asc"
+      ? resultado
+      : -resultado;
 
-const flecha=
-ordenMovimientos.direccion===
-"asc"
-?
-"▲"
-:
-"▼";
+  });
 
 
-if(
-ordenMovimientos.campo===
-"fecha" &&
-indicadorFecha
-){
+  const indicadorFecha=
+    document.getElementById("ordenFecha");
 
-indicadorFecha.textContent=
-flecha;
+  const indicadorFactura=
+    document.getElementById("ordenFactura");
 
-}
 
+  if(indicadorFecha)
+    indicadorFecha.textContent="";
 
-if(
-ordenMovimientos.campo===
-"factura" &&
-indicadorFactura
-){
+  if(indicadorFactura)
+    indicadorFactura.textContent="";
 
-indicadorFactura.textContent=
-flecha;
 
-}
+  const flecha=
+    ordenMovimientos.direccion==="asc"
+      ? "▲"
+      : "▼";
 
 
-if(!arr.length){
+  if(
+    ordenMovimientos.campo==="fecha" &&
+    indicadorFecha
+  ){
+    indicadorFecha.textContent=flecha;
+  }
 
-tb.innerHTML=
-'<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:15px">NO HAY MOVIMIENTOS</td></tr>';
 
-return;
+  if(
+    ordenMovimientos.campo==="factura" &&
+    indicadorFactura
+  ){
+    indicadorFactura.textContent=flecha;
+  }
 
-}
 
+  if(!arr.length){
 
-arr.forEach(m=>{
+    tb.innerHTML=
+      '<tr><td colspan="9" style="text-align:center;color:#9ca3af;padding:15px">NO HAY MOVIMIENTOS</td></tr>';
 
-const tr=
-document.createElement(
-"tr"
-);
+    return;
 
+  }
 
-if(tieneAlerta(m))
-tr.className="fila-alerta";
 
-else if(esAnulada(m))
-tr.className="fila-anulada";
+  arr.forEach(m=>{
 
-else if(esRectificativa(m))
-tr.className="fila-rectificativa";
+    const tr=document.createElement("tr");
 
 
-let tags="";
+    if(tieneAlerta(m))
+      tr.className="fila-alerta";
 
+    else if(esAnulada(m))
+      tr.className="fila-anulada";
 
-if(m.origenDatos==="HOLDED")
+    else if(esRectificativa(m))
+      tr.className="fila-rectificativa";
 
-tags+=
-'<span class="etiqueta etiqueta-holded">HOLDED</span>';
 
+    let tags="";
 
-if(m.modificadoManual)
 
-tags+=
-'<span class="etiqueta etiqueta-manual">MODIFICADO</span>';
+    if(m.origenDatos==="HOLDED")
+      tags+='<span class="etiqueta etiqueta-holded">HOLDED</span>';
 
 
-if(tieneAlerta(m))
+    if(m.modificadoManual)
+      tags+='<span class="etiqueta etiqueta-manual">MODIFICADO</span>';
 
-tags+=
-'<span class="etiqueta etiqueta-alerta">REVISAR</span>';
 
+    if(tieneAlerta(m))
+      tags+='<span class="etiqueta etiqueta-alerta">REVISAR</span>';
 
-if(esRectificativa(m))
 
-tags+=
-'<span class="etiqueta etiqueta-rectificativa">RECTIFICATIVA</span>';
+    if(esRectificativa(m))
+      tags+='<span class="etiqueta etiqueta-rectificativa">RECTIFICATIVA</span>';
 
 
-if(esAnulada(m))
+    if(esAnulada(m))
+      tags+='<span class="etiqueta etiqueta-anulada">ANULADA</span>';
 
-tags+=
-'<span class="etiqueta etiqueta-anulada">ANULADA</span>';
 
+    const base=
+      Number(m.cantidadTotal)||0;
 
-const base=
-Number(m.cantidadTotal)||0;
+    const iva=
+      Number(m.importeIVA)||0;
 
-const iva=
-Number(m.importeIVA)||0;
+    const total=
+      Number(m.importeConIVA);
 
-const total=
-Number(m.importeConIVA)||0;
 
+    tr.innerHTML=`
 
-tr.innerHTML=
+      <td class="texto">
+        ${formatearFecha(m.fecha)}
+      </td>
 
-`<td class="texto">${formatearFecha(m.fecha)}</td>
+      <td class="texto">
+        ${escapeHTML(m.numeroFactura||"—")} ${tags}
+      </td>
 
-<td class="texto">
-${escapeHTML(m.numeroFactura||"—")}
-${tags}
-</td>
+      <td class="texto">
+        ${escapeHTML(obtenerNombreCuenta(m.cuenta))}
+      </td>
 
-<td class="texto">
-${escapeHTML(obtenerNombreCuenta(m.cuenta))}
-</td>
+      <td class="texto">
+        ${escapeHTML(m.origen||"")}
+      </td>
 
-<td class="texto">
-${escapeHTML(m.origen||"")}
-</td>
+      <td class="texto">
+        ${escapeHTML(m.proyecto||"")}
+      </td>
 
-<td class="texto">
-${escapeHTML(m.proyecto||"")}
-</td>
+      <td class="numero">
+        ${formatearDinero(base)}
+      </td>
 
-<td class="numero">
-${formatearDinero(base)}
-</td>
+      <td class="numero">
+        ${formatearDinero(iva)}
+      </td>
 
-<td class="numero">
-${formatearDinero(iva)}
-</td>
+      <td class="numero">
+        ${formatearDinero(total)}
+      </td>
 
-<td class="numero">
-${formatearDinero(total)}
-</td>
+      <td style="text-align:center">
 
-<td style="text-align:center">
+        <button
+          class="editar"
+          onclick="abrirEditarMovimiento(${Number(m.id)})">
+          EDITAR
+        </button>
 
-<button class="editar"
-onclick="abrirEditarMovimiento(${Number(m.id)})">
-EDITAR
-</button>
+        <button
+          class="eliminar"
+          onclick="eliminarMovimiento(${Number(m.id)})">
+          ELIMINAR
+        </button>
 
-<button class="eliminar"
-onclick="eliminarMovimiento(${Number(m.id)})">
-ELIMINAR
-</button>
+      </td>
 
-</td>`;
+    `;
 
 
-tb.appendChild(tr);
+    tb.appendChild(tr);
 
-});
+  });
 
 }
 
 
 function construirTablaMensual(){
 
-const tb=
-document.getElementById(
-"tablaIngresos"
-);
+  const tb=document.getElementById("tablaIngresos");
 
-tb.innerHTML="";
+  tb.innerHTML="";
 
-const grupos={};
+  const grupos={};
 
 
-movimientos.forEach(m=>{
+  movimientos.forEach(m=>{
 
-if(m.ignorado)
-return;
+    if(m.ignorado) return;
 
 
-const f=
-new Date(
-(m.fecha||"")+
-"T12:00:00"
-);
+    const f=
+      new Date(
+        (m.fecha||"")+"T12:00:00"
+      );
 
 
-if(
-f.getFullYear()!==2026
-)
-return;
+    if(f.getFullYear()!==2026)
+      return;
 
 
-const k=
+    const k=
+      (m.cuenta||"")+
+      "||"+
+      (m.proyecto||"")+
+      "||"+
+      (m.origen||"");
 
-(m.cuenta||"")+
-"||"+
-(m.proyecto||"")+
-"||"+
-(m.origen||"");
 
+    if(!grupos[k]){
 
-if(!grupos[k]){
+      grupos[k]={
 
-grupos[k]={
+        cuenta:m.cuenta,
 
-cuenta:m.cuenta,
+        proyecto:m.proyecto,
 
-proyecto:m.proyecto,
+        origen:m.origen,
 
-origen:m.origen,
+        meses:new Array(12).fill(0)
 
-meses:
-new Array(12).fill(0)
+      };
 
-};
+    }
 
-}
 
+    grupos[k].meses[
+      f.getMonth()
+    ]+=Number(m.cantidadTotal)||0;
 
-grupos[k]
-.meses[
-f.getMonth()
-]+=
-Number(m.cantidadTotal)||0;
+  });
 
-});
 
+  const tm=
+    new Array(12).fill(0);
 
-const tm=
-new Array(12).fill(0);
+  let tg=0;
 
-let tg=0;
 
+  Object.values(grupos)
+    .sort(
+      (a,b)=>
+        a.proyecto.localeCompare(b.proyecto) ||
+        a.cuenta.localeCompare(b.cuenta)
+    )
+    .forEach(g=>{
 
-Object.values(grupos)
+      const tr=
+        document.createElement("tr");
 
-.sort(
-(a,b)=>
-a.proyecto.localeCompare(b.proyecto)||
-a.cuenta.localeCompare(b.cuenta)
-)
+      let total=0;
 
-.forEach(g=>{
+      let mh="";
 
-const tr=
-document.createElement(
-"tr"
-);
 
-let total=0;
-let mh="";
+      g.meses.forEach((v,i)=>{
 
+        total+=v;
 
-g.meses.forEach((v,i)=>{
+        tm[i]+=v;
 
-total+=v;
 
-tm[i]+=v;
+        mh+=`
 
+          <td class="${
+            Math.abs(v)<.000001
+              ? "numero cero"
+              : "numero valor-con-datos"
+          }">
 
-mh+=
+            ${
+              Math.abs(v)<.000001
+                ? "—"
+                : formatoNumero(v)
+            }
 
-`<td class="${
-Math.abs(v)<.000001
-?
-"numero cero"
-:
-"numero valor-con-datos"
-}">${
-Math.abs(v)<.000001
-?
-"—"
-:
-formatoNumero(v)
-}</td>`;
+          </td>
 
-});
+        `;
 
+      });
 
-tg+=total;
 
+      tg+=total;
 
-tr.innerHTML=
 
-`<td class="texto">
-${escapeHTML(obtenerNombreCuenta(g.cuenta))}
-</td>
+      tr.innerHTML=`
 
-<td class="texto">
-${escapeHTML(g.proyecto)}
-</td>
+        <td class="texto">
+          ${escapeHTML(obtenerNombreCuenta(g.cuenta))}
+        </td>
 
-<td class="texto">
-${escapeHTML(g.origen)}
-</td>
+        <td class="texto">
+          ${escapeHTML(g.proyecto)}
+        </td>
 
-${mh}
+        <td class="texto">
+          ${escapeHTML(g.origen)}
+        </td>
 
-<td class="numero">
-<strong>
-${formatoNumero(total)}
-</strong>
-</td>`;
+        ${mh}
 
+        <td class="numero">
+          <strong>
+            ${formatoNumero(total)}
+          </strong>
+        </td>
 
-tb.appendChild(tr);
+      `;
 
-});
 
+      tb.appendChild(tr);
 
-const tr=
-document.createElement(
-"tr"
-);
+    });
 
-tr.className="total";
 
+  const tr=
+    document.createElement("tr");
 
-tr.innerHTML=
+  tr.className="total";
 
-`<td class="texto">
-TOTAL
-</td>
 
-<td></td>
-<td></td>
+  tr.innerHTML=`
 
-${tm.map(
-v=>
-`<td class="numero">${formatoNumero(v)}</td>`
-).join("")}
+    <td class="texto">TOTAL</td>
 
-<td class="numero">
-${formatoNumero(tg)}
-</td>`;
+    <td></td>
 
+    <td></td>
 
-tb.appendChild(tr);
+    ${tm.map(
+      v=>`
+        <td class="numero">
+          ${formatoNumero(v)}
+        </td>
+      `
+    ).join("")}
+
+    <td class="numero">
+      ${formatoNumero(tg)}
+    </td>
+
+  `;
+
+
+  tb.appendChild(tr);
 
 }
 
 
 function actualizarResumen(){
 
-const movimientosActivos=
-movimientos.filter(
-m=>!m.ignorado
-);
+  const movimientosActivos=
+    movimientos.filter(
+      m=>!m.ignorado
+    );
 
 
-const total=
-movimientosActivos.reduce(
+  const total=
+    movimientosActivos.reduce(
 
-(s,m)=>
-s+
-(Number(m.cantidadTotal)||0),
+      (s,m)=>
+        s+
+        (Number(m.cantidadTotal)||0),
 
-0
+      0
 
-);
-
-
-document.getElementById(
-"totalIngresos"
-).textContent=
-formatearDinero(total);
+    );
 
 
-document.getElementById(
-"numeroMovimientos"
-).textContent=
-movimientosActivos.length;
+  document.getElementById("totalIngresos").textContent=
+    formatearDinero(total);
 
 
-const cuentasUsadas=
-new Set(
-
-movimientosActivos
-
-.map(m=>m.cuenta)
-
-.filter(Boolean)
-
-);
+  document.getElementById("numeroMovimientos").textContent=
+    movimientosActivos.length;
 
 
-document.getElementById(
-"numeroCuentas"
-).textContent=
-cuentasUsadas.size;
+  const cuentasUsadas=
+    new Set(
+
+      movimientosActivos
+        .map(m=>m.cuenta)
+        .filter(Boolean)
+
+    );
+
+
+  document.getElementById("numeroCuentas").textContent=
+    cuentasUsadas.size;
 
 }
 
 
 function construirTodo(){
 
-construirTablaMovimientos();
-construirTablaMensual();
-actualizarResumen();
+  construirTablaMovimientos();
+
+  construirTablaMensual();
+
+  actualizarResumen();
 
 }
 
 
 function limpiarFiltrosMovimientos(){
 
-document.getElementById(
-"filtroCuentaMovimiento"
-).value="";
+  document.getElementById("filtroCuentaMovimiento").value="";
 
-document.getElementById(
-"filtroProyectoMovimiento"
-).value="";
+  document.getElementById("filtroProyectoMovimiento").value="";
 
-construirTablaMovimientos();
+  construirTablaMovimientos();
 
 }
 
 
 function identificarRectificativa(doc,line){
 
-const txt=
-JSON.stringify({
+  const txt=JSON.stringify({
 
-type:doc?.type,
+    type:doc?.type,
 
-document_type:
-doc?.document_type,
+    document_type:doc?.document_type,
 
-doc_type:
-doc?.doc_type,
+    doc_type:doc?.doc_type,
 
-category:
-doc?.category,
+    category:doc?.category,
 
-kind:
-doc?.kind,
+    kind:doc?.kind,
 
-status:
-doc?.status,
+    status:doc?.status,
 
-name:
-doc?.name,
+    name:doc?.name,
 
-lineType:
-line?.type
+    lineType:line?.type
 
-}).toLowerCase();
+  }).toLowerCase();
 
 
-return txt.includes(
-"rectific"
-);
+  return txt.includes("rectific");
 
 }
 
 
 function identificarAnulada(doc,line){
 
-const txt=
-JSON.stringify({
+  const txt=JSON.stringify({
 
-status:
-doc?.status,
+    status:doc?.status,
 
-state:
-doc?.state,
+    state:doc?.state,
 
-category:
-doc?.category,
+    category:doc?.category,
 
-kind:
-doc?.kind,
+    kind:doc?.kind,
 
-type:
-doc?.type,
+    type:doc?.type,
 
-line_status:
-line?.status
+    line_status:line?.status
 
-}).toLowerCase();
+  }).toLowerCase();
 
 
-return
-
-txt.includes("deleted")||
-txt.includes("elimin")||
-txt.includes("cancel")||
-txt.includes("void")||
-txt.includes("anulad");
+  return (
+    txt.includes("deleted") ||
+    txt.includes("elimin") ||
+    txt.includes("cancel") ||
+    txt.includes("void") ||
+    txt.includes("anulad")
+  );
 
 }
 
 
 function valorNumeroSeguro(v){
 
-if(
-v===null||
-v===undefined||
-v===""
-)
-return null;
+  if(
+    v===null ||
+    v===undefined ||
+    v===""
+  )
+    return null;
 
 
-if(
-typeof v==="number"
-)
-return Number.isFinite(v)
-?
-v
-:
-null;
+  if(typeof v==="number")
+    return Number.isFinite(v)
+      ? v
+      : null;
 
 
-const n=
-Number(
-
-String(v)
-.trim()
-.replace(/\./g,"")
-.replace(",",".")
-
-);
+  const n=
+    Number(
+      String(v)
+        .trim()
+        .replace(/\./g,"")
+        .replace(",",".")
+    );
 
 
-return Number.isFinite(n)
-?
-n
-:
-null;
+  return Number.isFinite(n)
+    ? n
+    : null;
 
 }
 
 
 function valorLinea(line,nombres){
 
-if(
-!line||
-typeof line!=="object"
-)
-return null;
+  if(
+    !line ||
+    typeof line!=="object"
+  )
+    return null;
 
 
-for(const n of nombres){
+  for(const n of nombres){
 
-if(
-line[n]!==undefined &&
-line[n]!==null &&
-line[n]!==""
-){
+    if(
+      line[n]!==undefined &&
+      line[n]!==null &&
+      line[n]!==""
+    ){
 
-const v=
-valorNumeroSeguro(
-line[n]
-);
+      const v=
+        valorNumeroSeguro(
+          line[n]
+        );
 
-if(v!==null)
-return v;
+
+      if(v!==null)
+        return v;
+
+    }
+
+  }
+
+
+  return null;
 
 }
 
+
+function valorLineaProfundo(line,nombres){
+
+  const directo=
+    valorLinea(
+      line,
+      nombres
+    );
+
+
+  if(directo!==null)
+    return directo;
+
+
+  if(
+    !line ||
+    typeof line!=="object"
+  )
+    return null;
+
+
+  const visitado=
+    new Set();
+
+
+  const stack=[
+    line
+  ];
+
+
+  while(stack.length){
+
+    const actual=
+      stack.pop();
+
+
+    if(
+      !actual ||
+      typeof actual!=="object"
+    )
+      continue;
+
+
+    if(
+      visitado.has(actual)
+    )
+      continue;
+
+
+    visitado.add(actual);
+
+
+    for(const clave of nombres){
+
+      if(
+        actual[clave]!==undefined &&
+        actual[clave]!==null &&
+        actual[clave]!==""
+      ){
+
+        const v=
+          Number(
+            actual[clave]
+          );
+
+
+        if(
+          Number.isFinite(v)
+        )
+          return v;
+
+      }
+
+    }
+
+
+    for(
+      const v of Object.values(actual)
+    ){
+
+      if(
+        v &&
+        typeof v==="object"
+      )
+        stack.push(v);
+
+    }
+
+  }
+
+
+  return null;
+
 }
 
-return null;
+
+function textoLinea(line,nombres){
+
+  if(
+    !line ||
+    typeof line!=="object"
+  )
+    return "";
+
+
+  for(const n of nombres){
+
+    if(
+      line[n]!==undefined &&
+      line[n]!==null &&
+      line[n]!==""
+    ){
+
+      return String(
+        line[n]
+      );
+
+    }
+
+  }
+
+
+  return "";
 
 }
 
 
 function obtenerLineasFactura(doc){
 
-if(Array.isArray(doc?.lines))
-return doc.lines;
+  if(Array.isArray(doc?.lines))
+    return doc.lines;
 
-if(Array.isArray(doc?.items))
-return doc.items;
+  if(Array.isArray(doc?.items))
+    return doc.items;
 
-if(Array.isArray(doc?.line_items))
-return doc.line_items;
+  if(Array.isArray(doc?.line_items))
+    return doc.line_items;
 
-if(Array.isArray(doc?.details))
-return doc.details;
+  if(Array.isArray(doc?.details))
+    return doc.details;
 
-return [];
+
+  return [];
 
 }
 
 
 function obtenerFechaDoc(doc){
 
-let d=
-
-doc?.date||
-doc?.invoice_date||
-doc?.created_at||
-"";
-
-
-if(typeof d==="number"){
-
-const x=
-new Date(
-d<1e12
-?
-d*1000
-:
-d
-);
-
-return x
-.toISOString()
-.slice(0,10);
-
-}
+  let d=
+    doc?.date ||
+    doc?.invoice_date ||
+    doc?.created_at ||
+    "";
 
 
-if(
-typeof d==="string" &&
-d.length>=10
-){
+  if(typeof d==="number"){
 
-const m=
-d.match(
-/(\d{4})[-/](\d{2})[-/](\d{2})/
-);
-
-if(m)
-
-return `${m[1]}-${m[2]}-${m[3]}`;
+    const x=
+      new Date(
+        d<1e12
+          ? d*1000
+          : d
+      );
 
 
-const x=
-new Date(d);
+    return x
+      .toISOString()
+      .slice(0,10);
 
-if(
-!Number.isNaN(
-x.getTime()
-)
-)
-
-return x
-.toISOString()
-.slice(0,10);
-
-}
+  }
 
 
-return "";
+  if(
+    typeof d==="string" &&
+    d.length>=10
+  ){
+
+    const m=
+      d.match(
+        /(\d{4})[-/](\d{2})[-/](\d{2})/
+      );
+
+
+    if(m)
+      return `${m[1]}-${m[2]}-${m[3]}`;
+
+
+    const x=
+      new Date(d);
+
+
+    if(
+      !Number.isNaN(
+        x.getTime()
+      )
+    )
+      return x
+        .toISOString()
+        .slice(0,10);
+
+  }
+
+
+  return "";
 
 }
 
 
 function obtenerNumeroDoc(doc){
 
-return String(
+  return String(
 
-doc?.document_number??
-doc?.number??
-doc?.invoice_number??
-doc?.code??
-""
+    doc?.document_number ??
+    doc?.number ??
+    doc?.invoice_number ??
+    doc?.code ??
+    ""
 
-);
+  );
+
+}
+  function obtenerIdLinea(line,idx){
+
+  return String(
+    line?.id ??
+    line?.line_id ??
+    line?.lineId ??
+    idx
+  );
 
 }
 
 
 function resolverReferencia(obj){
 
-if(
-obj===null||
-obj===undefined||
-obj===""
-)
-return "";
+  if(
+    obj===null ||
+    obj===undefined ||
+    obj===""
+  )
+    return "";
 
 
-if(
-typeof obj!=="object"
-)
-return String(obj);
+  if(typeof obj!=="object")
+    return String(obj);
 
 
-return String(
+  return String(
 
-obj.id ??
-obj.account_id ??
-obj.accountId ??
-obj.project_id ??
-obj.projectId ??
-obj.number ??
-obj.code ??
-obj.key ??
-""
+    obj.id ??
+    obj.account_id ??
+    obj.accountId ??
+    obj.project_id ??
+    obj.projectId ??
+    obj.number ??
+    obj.code ??
+    obj.key ??
+    ""
 
-);
+  );
 
 }
 
 
 function obtenerCuentaLinea(line,doc){
 
-const candidatos=[
+  const candidatos=[
 
-line?.account,
-line?.account_id,
-line?.accountId,
-line?.account_number,
-line?.accountNumber,
-line?.account_code,
-line?.accountCode,
+    line?.account,
+    line?.account_id,
+    line?.accountId,
+    line?.account_number,
+    line?.accountNumber,
+    line?.account_code,
+    line?.accountCode,
 
-doc?.account,
-doc?.account_id,
-doc?.accountId
+    doc?.account,
+    doc?.account_id,
+    doc?.accountId
 
-];
+  ];
 
 
-for(const c of candidatos){
+  for(const c of candidatos){
 
-const r=
-resolverReferencia(c);
+    const r=
+      resolverReferencia(c);
 
-if(r)
-return r;
+    if(r)
+      return r;
 
-}
+  }
 
-return "";
+
+  return "";
 
 }
 
 
 function obtenerProyectoLinea(line,doc){
 
-const candidatos=[
+  const candidatos=[
 
-line?.project_id,
-line?.projectId,
-line?.project,
-line?.project_code,
-line?.projectCode,
+    line?.project_id,
+    line?.projectId,
+    line?.project,
+    line?.project_code,
+    line?.projectCode,
 
-doc?.project_id,
-doc?.projectId,
-doc?.project
+    doc?.project_id,
+    doc?.projectId,
+    doc?.project
 
-];
+  ];
 
 
-for(const c of candidatos){
+  for(const c of candidatos){
 
-const r=
-resolverReferencia(c);
+    const r=
+      resolverReferencia(c);
 
-if(r)
-return r;
+    if(r)
+      return r;
 
-}
+  }
 
-return "";
+
+  return "";
 
 }
 
 
 function traducirCuenta(id){
 
-const s=
-String(id||"");
-
-if(!s)
-return "";
+  const s=
+    String(id||"");
 
 
-const dato=
-mapaHoldedCuentas?.[s];
+  if(!s)
+    return "";
 
 
-if(dato){
-
-if(Array.isArray(dato))
-
-return String(
-dato[0]||""
-);
+  const dato=
+    mapaHoldedCuentas?.[s];
 
 
-if(typeof dato==="object")
+  if(dato){
 
-return String(
-
-dato.number ??
-dato.code ??
-dato.account_number ??
-dato.id ??
-""
-
-);
-
-}
+    if(Array.isArray(dato))
+      return String(
+        dato[0]||""
+      );
 
 
-const porNumero=
+    if(typeof dato==="object"){
 
-Object.values(
-mapaHoldedCuentas||{}
-)
+      return String(
 
-.find(x=>
+        dato.number ??
+        dato.code ??
+        dato.account_number ??
+        dato.id ??
+        ""
 
-Array.isArray(x)
+      );
 
-?
+    }
 
-String(x[0]||"")===s
-
-:
-
-String(
-x?.number ??
-x?.code ??
-""
-)===s
-
-);
+  }
 
 
-return porNumero
+  const porNumero=
+    Object.values(
+      mapaHoldedCuentas||{}
+    ).find(x=>
 
-?
+      Array.isArray(x)
 
-(
-Array.isArray(porNumero)
+        ? String(x[0]||"")===s
 
-?
+        : String(
+            x?.number ??
+            x?.code ??
+            ""
+          )===s
 
-String(
-porNumero[0]||s
-)
+    );
 
-:
 
-String(
-porNumero.number ??
-porNumero.code ??
-s
-)
+  return porNumero
 
-)
+    ? (
+        Array.isArray(porNumero)
 
-:
+          ? String(
+              porNumero[0]||s
+            )
 
-s;
+          : String(
+              porNumero.number ??
+              porNumero.code ??
+              s
+            )
+      )
+
+    : s;
 
 }
 
 
 function traducirProyecto(id){
 
-const s=
-String(id||"");
+  const s=
+    String(id||"");
 
 
-if(!s)
-
-return PROYECTO_SIN_PROYECTO;
-
-
-const dato=
-mapaHoldedProyectos?.[s];
+  if(!s)
+    return PROYECTO_SIN_PROYECTO;
 
 
-if(dato){
-
-if(typeof dato==="string")
-
-return dato;
+  const dato=
+    mapaHoldedProyectos?.[s];
 
 
-if(typeof dato==="object")
+  if(dato){
 
-return String(
-dato.name??""
-);
-
-}
+    if(typeof dato==="string")
+      return dato;
 
 
-const porNombre=
+    if(typeof dato==="object")
+      return String(
+        dato.name ?? ""
+      );
 
-Object.values(
-mapaHoldedProyectos||{}
-)
-
-.find(x=>
-
-String(
-x?.name ??
-x
-)===s
-
-);
+  }
 
 
-return porNombre
+  const porNombre=
+    Object.values(
+      mapaHoldedProyectos||{}
+    ).find(x=>
 
-?
+      String(
+        x?.name ?? x
+      )===s
 
-String(
-porNombre?.name ??
-porNombre
-)
+    );
 
-:
 
-PROYECTO_SIN_PROYECTO;
+  return porNombre
+
+    ? String(
+        porNombre?.name ??
+        porNombre
+      )
+
+    : PROYECTO_SIN_PROYECTO;
 
 }
 
 
 async function fetchJSON(url){
 
-const r=
-await fetch(
-
-url,
-
-{
-headers:{
-"Accept":
-"application/json"
-}
-}
-
-);
+  const r=
+    await fetch(
+      url,
+      {
+        headers:{
+          "Accept":"application/json"
+        }
+      }
+    );
 
 
-if(!r.ok)
-
-throw new Error(
-
-(await r.text())
-.slice(0,500)
-
-||
-
-`HTTP ${r.status}`
-
-);
+  if(!r.ok)
+    throw new Error(
+      (await r.text()).slice(0,500) ||
+      `HTTP ${r.status}`
+    );
 
 
-return await r.json();
+  return await r.json();
 
 }
 
 
-/* ================================================================
+
+/* ==========================================================
    SINCRONIZACIÓN HOLDED
-
-   REGLA PRINCIPAL:
-
-   UNA FACTURA SOLO SE DIVIDE CUANDO CAMBIA EL PROYECTO.
-
-   LAS CUENTAS CONTABLES NO DIVIDEN UNA FACTURA.
-
-   CLAVE DE SINCRONIZACIÓN:
-
-   HOLDED ID + PROYECTO
-   ================================================================ */
-
+   REGLA:
+   UNA FACTURA + UN PROYECTO = UN MOVIMIENTO
+   ========================================================== */
 
 async function sincronizarHolded(){
 
-const b=
-document.querySelector(
-".json-morado"
-);
+  const b=
+    document.querySelector(".json-morado");
 
-const viejo=
-b.textContent;
+  const viejo=
+    b.textContent;
 
 
-b.disabled=true;
+  b.disabled=true;
 
-b.textContent=
-"SINCRONIZANDO...";
+  b.textContent=
+    "SINCRONIZANDO...";
 
 
-mostrarMensaje(
-"Leyendo Holded…",
-true
-);
+  mostrarMensaje(
+    "Leyendo Holded…",
+    true
+  );
 
 
-try{
+  try{
 
 
-const data=
-await fetchJSON(
+    /* ------------------------------------------------------
+       MISMA LLAMADA AL BRIDGE QUE YA FUNCIONABA
+       ------------------------------------------------------ */
 
-"http://127.0.0.1:8787/api/holded/bootstrap?year=2026"
+    const data=
+      await fetchJSON(
+        "http://127.0.0.1:8787/api/holded/bootstrap?year=2026"
+      );
 
-);
 
+    mapaHoldedCuentas=
+      data.accountMap||{};
 
-mapaHoldedCuentas=
-data.accountMap||{};
+    mapaHoldedProyectos=
+      data.projectMap||{};
 
-mapaHoldedProyectos=
-data.projectMap||{};
 
 
-/* ================================================================
-   CUENTAS CONTABLES
-   ================================================================ */
+    /* ------------------------------------------------------
+       CUENTAS CONTABLES
+       ------------------------------------------------------ */
 
+    if(
+      Array.isArray(
+        data.accounts
+      )
+    ){
 
-if(
-Array.isArray(
-data.accounts
-)
-){
+      data.accounts.forEach(a=>{
 
-data.accounts.forEach(a=>{
+        const numero=
+          String(
+            a.number ??
+            a.code ??
+            ""
+          );
 
-const numero=
-String(
-a.number??
-a.code??
-""
-);
 
-const nombre=
-String(
-a.name??
-""
-);
+        const nombre=
+          String(
+            a.name ??
+            ""
+          );
 
 
-if(
+        if(
+          /^7\d{7}$/.test(numero) &&
+          !cuentas.some(
+            c=>c[0]===numero
+          )
+        ){
 
-/^7\d{7}$/.test(numero)
+          cuentas.push([
+            numero,
+            nombre
+          ]);
 
-&&
+        }
 
-!cuentas.some(
-c=>c[0]===numero
-)
+      });
 
-){
 
-cuentas.push(
-[
-numero,
-nombre
-]
-);
+      cuentas=
+        cuentas.filter(
+          cuentaEsIngreso
+        );
 
-}
 
-});
+      cuentasIniciales.forEach(ci=>{
 
+        if(
+          !cuentas.some(
+            c=>c[0]===ci[0]
+          )
+        ){
 
-cuentas=
-cuentas.filter(
-cuentaEsIngreso
-);
+          cuentas.push(ci);
 
+        }
 
-cuentasIniciales.forEach(ci=>{
+      });
 
-if(
-!cuentas.some(
-c=>c[0]===ci[0]
-)
-)
 
-cuentas.push(ci);
+      guardarCuentas();
 
-});
+      cargarSelectores();
 
+    }
 
-guardarCuentas();
 
-cargarSelectores();
 
-}
+    /* ------------------------------------------------------
+       FACTURAS
+       ------------------------------------------------------ */
 
+    const invoices=
+      Array.isArray(data.invoices)
+        ? data.invoices
+        : [];
 
-/* ================================================================
-   FACTURAS
-   ================================================================ */
 
+    let creados=0;
+    let actualizados=0;
+    let saltados=0;
+    let alertas=0;
 
-const invoices=
 
-Array.isArray(
-data.invoices
-)
 
-?
+    /* ======================================================
+       RECORREMOS TODAS LAS FACTURAS
+       ====================================================== */
 
-data.invoices
+    for(const doc of invoices){
 
-:
 
-[];
+      const fecha=
+        obtenerFechaDoc(doc);
 
 
-let creados=0;
+      if(
+        !fecha ||
+        !fecha.startsWith("2026-")
+      )
+        continue;
 
-let actualizados=0;
 
-let saltados=0;
 
-let alertas=0;
+      const invoiceId=
+        String(
 
+          doc.id ??
+          doc.document_id ??
+          doc._id ??
+          ""
 
-/* ================================================================
-   RECORRER FACTURAS
-   ================================================================ */
+        );
 
 
-for(
-const doc
-of invoices
-){
+      if(!invoiceId)
+        continue;
 
 
-const fecha=
-obtenerFechaDoc(doc);
 
+      const numero=
+        obtenerNumeroDoc(doc);
 
-if(
-!fecha ||
-!fecha.startsWith("2026-")
-)
 
-continue;
+      const rect=
+        identificarRectificativa(
+          doc,
+          null
+        );
 
 
-const invoiceId=
-String(
+      const anulada=
+        identificarAnulada(
+          doc,
+          null
+        );
 
-doc.id ??
-doc.document_id ??
-doc._id ??
-""
 
-);
+      const lineas=
+        obtenerLineasFactura(doc);
 
 
-if(!invoiceId)
+      if(!lineas.length)
+        continue;
 
-continue;
 
 
-const numero=
-obtenerNumeroDoc(doc);
+      /* ----------------------------------------------------
+         IVA GENERAL DEL DOCUMENTO
+         Se conserva el cálculo de la versión anterior
+         ---------------------------------------------------- */
 
+      const docSubtotal=
 
-const rect=
-identificarRectificativa(
-doc,
-null
-);
+        valorNumeroSeguro(
 
+          doc.subtotal ??
+          doc.base ??
+          doc.tax_base ??
+          0
 
-const anulada=
-identificarAnulada(
-doc,
-null
-);
+        ) || 0;
 
 
-const lineas=
-obtenerLineasFactura(doc);
+      const docTax=
 
+        valorNumeroSeguro(
 
-if(!lineas.length)
+          doc.tax ??
+          doc.vat ??
+          doc.iva ??
+          0
 
-continue;
+        ) || 0;
 
 
-/* ================================================================
-   IVA GLOBAL DE FACTURA
+      const ratioIVA=
 
-   Se utiliza como respaldo cuando una línea no trae IVA separado.
-   ================================================================ */
+        docSubtotal!==0
+          ? docTax/docSubtotal
+          : 0;
 
 
-const docSubtotal=
 
-valorNumeroSeguro(
+      /* ====================================================
+         NUEVO:
+         PRIMERO AGRUPAMOS LAS LÍNEAS POR PROYECTO
+         ==================================================== */
 
-doc.subtotal ??
-doc.base ??
-doc.tax_base ??
-0
+      const gruposProyecto={};
 
-)
 
-||0;
 
+      lineas.forEach((line,idx)=>{
 
-const docTax=
 
-valorNumeroSeguro(
+        const cuentaId=
+          obtenerCuentaLinea(
+            line,
+            doc
+          );
 
-doc.tax ??
-doc.vat ??
-doc.iva ??
-0
 
-)
+        const proyectoId=
+          obtenerProyectoLinea(
+            line,
+            doc
+          );
 
-||0;
 
+        /*
+          ESTA ES LA CLAVE ESTABLE.
 
-const ratioIVA=
+          Si Holded trae ID de proyecto usamos ese ID.
 
-docSubtotal!==0
+          Si la línea NO tiene proyecto,
+          todas las líneas sin proyecto de esta factura
+          quedan juntas.
+        */
 
-?
+        const proyectoKey=
+          proyectoId
+            ? String(proyectoId)
+            : "__SIN_PROYECTO__";
 
-docTax/docSubtotal
 
-:
+        const cuenta=
+          traducirCuenta(
+            cuentaId
+          );
 
-0;
 
+        const proyecto=
+          traducirProyecto(
+            proyectoId
+          );
 
-/* ================================================================
-   GRUPOS DE PROYECTO
 
-   AQUÍ ESTÁ LA NUEVA OPERATORIA.
 
-   SOLO EL PROYECTO CREA UN GRUPO.
+        /* --------------------------------------------------
+           CÁLCULO DE IMPORTES DE LA LÍNEA
+           MISMA LÓGICA QUE EL HTML ANTERIOR
+           -------------------------------------------------- */
 
-   LA CUENTA CONTABLE NO FORMA PARTE DE LA CLAVE.
-   ================================================================ */
+        const qty=
+          valorLinea(
+            line,
+            [
+              "quantity",
+              "units",
+              "qty"
+            ]
+          );
 
 
-const gruposProyecto={};
+        const price=
+          valorLinea(
+            line,
+            [
+              "price",
+              "unit_price",
+              "unitPrice"
+            ]
+          );
 
 
-/* ================================================================
-   LEER LÍNEAS DE LA FACTURA
-   ================================================================ */
+        const discountRaw=
+          valorLinea(
+            line,
+            [
+              "discount",
+              "discount_percent",
+              "discountPercentage"
+            ]
+          );
 
 
-for(
-let idx=0;
-idx<lineas.length;
-idx++
-){
+        let base=
+          valorLinea(
+            line,
+            [
+              "subtotal",
+              "base",
+              "net",
+              "net_amount",
+              "amount",
+              "amount_without_tax",
+              "net_amount_before_tax"
+            ]
+          );
 
 
-const line=
-lineas[idx];
+        let total=
+          valorLinea(
+            line,
+            [
+              "total",
+              "gross",
+              "total_amount",
+              "amount_with_tax",
+              "gross_amount"
+            ]
+          );
 
 
-/* ---------------------------------------------------------------
-   PROYECTO
-   --------------------------------------------------------------- */
+        let iva=
+          valorLinea(
+            line,
+            [
+              "tax_amount",
+              "vat_amount",
+              "iva_amount",
+              "taxes_amount"
+            ]
+          );
 
 
-const proyectoId=
-obtenerProyectoLinea(
-line,
-doc
-);
 
+        if(
+          base===null &&
+          qty!==null &&
+          price!==null
+        ){
 
-const proyecto=
-traducirProyecto(
-proyectoId
-);
+          const discount=
+            discountRaw===null
+              ? 0
+              : discountRaw;
 
 
-/* ---------------------------------------------------------------
-   CUENTA CONTABLE
+          base=
+            (qty*price) *
+            (1-discount/100);
 
-   SOLO INFORMATIVA.
+        }
 
-   NO DIVIDE LA FACTURA.
-   --------------------------------------------------------------- */
 
 
-const cuentaId=
-obtenerCuentaLinea(
-line,
-doc
-);
+        if(
+          base===null &&
+          total!==null &&
+          iva!==null
+        ){
 
+          base=
+            total-iva;
 
-const cuenta=
-traducirCuenta(
-cuentaId
-);
+        }
 
 
-/* ---------------------------------------------------------------
-   DATOS ECONÓMICOS DE LA LÍNEA
-   --------------------------------------------------------------- */
 
+        /*
+          Igual que antes:
+          si no podemos calcular la base de esta línea,
+          no podemos incorporarla.
+        */
 
-const qty=
-valorLinea(
+        if(base===null)
+          return;
 
-line,
 
-[
-"quantity",
-"units",
-"qty"
-]
 
-);
+        if(
+          iva===null ||
+          iva===0
+        ){
 
+          iva=
+            base*ratioIVA;
 
-const price=
-valorLinea(
+        }
 
-line,
 
-[
-"price",
-"unit_price",
-"unitPrice"
-]
 
-);
+        if(
+          total===null ||
+          total===0
+        ){
 
+          total=
+            base+iva;
 
-const discountRaw=
-valorLinea(
+        }
 
-line,
 
-[
-"discount",
-"discount_percent",
-"discountPercentage"
-]
 
-);
+        if(rect){
 
+          if(base>0)
+            base=-base;
 
-let base=
-valorLinea(
+          if(iva>0)
+            iva=-iva;
 
-line,
+          if(total>0)
+            total=-total;
 
-[
-"subtotal",
-"base",
-"net",
-"net_amount",
-"amount",
-"amount_without_tax",
-"net_amount_before_tax"
-]
+        }
 
-);
 
 
-let total=
-valorLinea(
+        /* ==================================================
+           CREAMOS EL GRUPO DEL PROYECTO
+           ================================================== */
 
-line,
+        if(
+          !gruposProyecto[
+            proyectoKey
+          ]
+        ){
 
-[
-"total",
-"gross",
-"total_amount",
-"amount_with_tax",
-"gross_amount"
-]
+          gruposProyecto[
+            proyectoKey
+          ]={
 
-);
+            proyectoKey,
 
+            proyecto,
 
-let iva=
-valorLinea(
+            /*
+              La cuenta queda como información.
+              NO forma parte de la agrupación.
+              Conservamos la primera cuenta válida.
+            */
 
-line,
+            cuenta:
+              cuenta||"",
 
-[
-"tax_amount",
-"vat_amount",
-"iva_amount",
-"taxes_amount"
-]
+            base:0,
 
-);
+            iva:0,
 
+            total:0,
 
-/* ---------------------------------------------------------------
-   CALCULAR BASE SI ES NECESARIO
-   --------------------------------------------------------------- */
+            lineas:[],
 
+            descripciones:[]
 
-if(
+          };
 
-base===null
+        }
 
-&&
 
-qty!==null
 
-&&
+        const grupo=
+          gruposProyecto[
+            proyectoKey
+          ];
 
-price!==null
 
-){
 
-const discount=
+        /*
+          Si la primera línea no tenía cuenta
+          pero otra del mismo proyecto sí,
+          usamos la primera cuenta válida encontrada.
+        */
 
-discountRaw===null
+        if(
+          !grupo.cuenta &&
+          cuenta
+        ){
 
-?
+          grupo.cuenta=
+            cuenta;
 
-0
+        }
 
-:
 
-discountRaw;
 
+        grupo.base+=
+          Number(base)||0;
 
-base=
 
-(qty*price)
+        grupo.iva+=
+          Number(iva)||0;
 
-*
 
-(1-discount/100);
+        grupo.total+=
+          Number(total)||0;
 
-}
 
 
-/* ---------------------------------------------------------------
-   SI TENEMOS TOTAL E IVA
-   --------------------------------------------------------------- */
+        grupo.lineas.push(
+          obtenerIdLinea(
+            line,
+            idx
+          )
+        );
 
 
-if(
+        const descripcion=
+          line?.description ??
+          line?.name ??
+          "";
 
-base===null
 
-&&
+        if(descripcion){
 
-total!==null
+          grupo.descripciones.push(
+            String(descripcion)
+          );
 
-&&
+        }
 
-iva!==null
 
-){
+      });
 
-base=
-total-iva;
 
-}
 
+      /* ====================================================
+         AHORA:
+         UN GRUPO DE PROYECTO = UN MOVIMIENTO
+         ==================================================== */
 
-/* ---------------------------------------------------------------
-   SIN BASE NO PODEMOS CONTABILIZAR LA LÍNEA
-   --------------------------------------------------------------- */
+      for(
+        const grupo of
+        Object.values(gruposProyecto)
+      ){
 
 
-if(base===null)
+        const proyecto=
+          grupo.proyecto;
 
-continue;
 
+        const sinProyecto=
+          proyecto===
+          PROYECTO_SIN_PROYECTO;
 
-/* ---------------------------------------------------------------
-   CALCULAR IVA SI HOLDED NO LO ENTREGA EN LA LÍNEA
-   --------------------------------------------------------------- */
 
+        const cuenta=
+          grupo.cuenta;
 
-if(
 
-iva===null
+        const base=
+          redondear2(
+            grupo.base
+          );
 
-||
 
-iva===0
+        const iva=
+          redondear2(
+            grupo.iva
+          );
 
-){
 
-iva=
+        const total=
+          redondear2(
+            grupo.total
+          );
 
-base*
 
-ratioIVA;
+        /*
+          CLAVE FUNDAMENTAL:
 
-}
+          Ya NO buscamos por holdedLineId.
 
+          Buscamos por:
+          FACTURA + PROYECTO ORIGINAL DE HOLDED.
+        */
 
-/* ---------------------------------------------------------------
-   CALCULAR TOTAL
-   --------------------------------------------------------------- */
+        let existing=
+          movimientos.find(m=>
 
+            m?.origenDatos==="HOLDED" &&
 
-if(
+            String(
+              m?.holdedId ?? ""
+            )===invoiceId &&
 
-total===null
+            String(
+              m?.holdedProjectKey ?? ""
+            )===String(
+              grupo.proyectoKey
+            )
 
-||
+          );
 
-total===0
 
-){
 
-total=
+        /*
+          Compatibilidad:
+          si hubiera un movimiento agrupado anterior
+          sin holdedProjectKey, intentamos reconocerlo
+          por factura + proyecto.
+        */
 
-base+
+        if(!existing){
 
-iva;
+          existing=
+            movimientos.find(m=>
 
-}
+              m?.origenDatos==="HOLDED" &&
 
+              String(
+                m?.holdedId ?? ""
+              )===invoiceId &&
 
-/* ---------------------------------------------------------------
-   RECTIFICATIVA
-   --------------------------------------------------------------- */
+              !m?.holdedProjectKey &&
 
+              String(
+                m?.proyecto ?? ""
+              )===String(proyecto)
 
-if(rect){
+            );
 
-if(base>0)
-base=-base;
+        }
 
-if(iva>0)
-iva=-iva;
 
-if(total>0)
-total=-total;
 
-}
+        /* ==================================================
+           SI YA EXISTE
+           ================================================== */
 
+        if(existing){
 
-/* ================================================================
-   CREAR GRUPO DEL PROYECTO
-   ================================================================ */
 
+          existing.holdedProjectKey=
+            grupo.proyectoKey;
 
-if(
-!gruposProyecto[proyecto]
-){
 
-gruposProyecto[proyecto]={
+          /*
+            Si el usuario lo IGNORÓ,
+            NO vuelve a aparecer.
+          */
 
-proyecto:proyecto,
+          if(
+            existing.ignorado===true
+          ){
 
-cuenta:cuenta,
+            existing.estadoSync=
+              "IGNORADO MANUALMENTE";
 
-base:0,
 
-iva:0,
+            existing.ultimaSyncHolded=
+              new Date().toISOString();
 
-total:0,
 
-numeroLineas:0,
+            saltados++;
 
-descripciones:[]
 
-};
+            continue;
 
-}
+          }
 
 
-const grupo=
-gruposProyecto[proyecto];
 
+          /*
+            Si el usuario lo modificó manualmente,
+            respetamos su modificación.
+          */
 
-/* ---------------------------------------------------------------
-   Si la primera línea no tenía cuenta y encontramos una después,
-   utilizamos esa cuenta.
-   --------------------------------------------------------------- */
+          if(
+            existing.modificadoManual===true ||
+            existing.manual===true
+          ){
 
+            existing.estadoSync=
+              "MODIFICADO MANUALMENTE";
 
-if(
-!grupo.cuenta &&
-cuenta
-){
 
-grupo.cuenta=
-cuenta;
+            existing.ultimaSyncHolded=
+              new Date().toISOString();
 
-}
 
+            saltados++;
 
-/* ---------------------------------------------------------------
-   SUMAR TODO EL PROYECTO
-   --------------------------------------------------------------- */
 
+            continue;
 
-grupo.base+=
-Number(base)||0;
+          }
 
 
-grupo.iva+=
-Number(iva)||0;
 
+          /*
+            ACTUALIZAMOS EL MOVIMIENTO AGRUPADO
+          */
 
-grupo.total+=
-Number(total)||0;
+          Object.assign(
+            existing,
+            {
 
+              fecha,
 
-grupo.numeroLineas++;
+              numeroFactura:
+                numero,
 
+              cuenta,
 
-/* ---------------------------------------------------------------
-   DESCRIPCIONES
-   --------------------------------------------------------------- */
+              proyecto,
 
+              importeConIVA:
+                total,
 
-const descripcion=
+              tipoIVA:
+                base!==0
+                  ? redondear2(
+                      (iva/base)*100
+                    )
+                  : 0,
 
-line?.description ??
-line?.name ??
-"";
+              importeIVA:
+                iva,
 
+              cantidadTotal:
+                base,
 
-if(descripcion){
+              rectificativa:
+                rect,
 
-grupo.descripciones.push(
-String(descripcion)
-);
+              anulada,
 
-}
+              holdedStatus:
+                doc.status ??
+                doc.state ??
+                "",
 
-}
+              holdedDocumentType:
+                doc.type ??
+                doc.document_type ??
+                "",
 
+              origenDatos:
+                "HOLDED",
 
-/* ================================================================
-   CONVERTIR LOS GRUPOS EN MOVIMIENTOS
+              /*
+                Guardamos las líneas únicamente
+                como referencia informativa.
+              */
 
-   UNA FACTURA CON:
+              holdedLineIds:
+                grupo.lineas,
 
-   PROYECTO A
-   PROYECTO A
-   PROYECTO A
-   PROYECTO B
-   PROYECTO B
+              description:
+                grupo.descripciones.join(
+                  " | "
+                ),
 
-   PRODUCE:
+              estadoSync:
+                "ACTUALIZADO HOLDED",
 
-   1 MOVIMIENTO PROYECTO A
-   1 MOVIMIENTO PROYECTO B
-   ================================================================ */
+              ultimaSyncHolded:
+                new Date().toISOString()
 
+            }
 
-for(
-const grupo
-of Object.values(
-gruposProyecto
-)
-){
+          );
 
 
-const proyecto=
-grupo.proyecto;
+          actualizados++;
 
 
-const cuenta=
-grupo.cuenta;
+          if(sinProyecto)
+            alertas++;
 
 
-const base=
-redondear2(
-grupo.base
-);
+          continue;
 
+        }
 
-const iva=
-redondear2(
-grupo.iva
-);
 
 
-const total=
-redondear2(
-grupo.total
-);
+        /* ==================================================
+           SI NO EXISTE:
+           CREAMOS UN ÚNICO MOVIMIENTO PARA
+           FACTURA + PROYECTO
+           ================================================== */
 
+        movimientos.push({
 
-const sinProyecto=
+          id:
+            crearIdMovimiento(),
 
-proyecto===
-PROYECTO_SIN_PROYECTO;
+          fecha,
 
+          numeroFactura:
+            numero,
 
-/* ================================================================
-   BUSCAR MOVIMIENTO EXISTENTE
+          cuenta,
 
-   FACTURA HOLDED + PROYECTO
+          origen:
+            "GERA",
 
-   LA CUENTA CONTABLE NO INTERVIENE.
-   ================================================================ */
+          proyecto,
 
+          importeConIVA:
+            total,
 
-const existing=
+          tipoIVA:
+            base!==0
+              ? redondear2(
+                  (iva/base)*100
+                )
+              : 0,
 
-movimientos.find(m=>
+          importeIVA:
+            iva,
 
-m.origenDatos==="HOLDED"
+          cantidadTotal:
+            base,
 
-&&
+          origenDatos:
+            "HOLDED",
 
-String(
-m.holdedId ??
-""
-)===invoiceId
+          holdedId:
+            invoiceId,
 
-&&
+          /*
+            ESTA SUSTITUYE AL ANTIGUO
+            holdedLineId COMO CLAVE DE SINCRONIZACIÓN.
+          */
 
-String(
-m.proyecto ??
-""
-)===String(proyecto)
+          holdedProjectKey:
+            grupo.proyectoKey,
 
-);
+          /*
+            Conservamos los IDs de líneas
+            solamente como información.
+          */
 
+          holdedLineIds:
+            grupo.lineas,
 
-/* ================================================================
-   YA EXISTE
-   ================================================================ */
+          holdedStatus:
+            doc.status ??
+            doc.state ??
+            "",
 
+          holdedDocumentType:
+            doc.type ??
+            doc.document_type ??
+            "",
 
-if(existing){
+          rectificativa:
+            rect,
 
+          anulada,
 
-/* ---------------------------------------------------------------
-   IGNORADO
-   --------------------------------------------------------------- */
+          modificadoManual:
+            false,
 
+          manual:
+            false,
 
-if(
-existing.ignorado===true
-){
+          description:
+            grupo.descripciones.join(
+              " | "
+            ),
 
-existing.estadoSync=
-"IGNORADO MANUALMENTE";
+          estadoSync:
+            "NUEVO HOLDED",
 
+          ultimaSyncHolded:
+            new Date().toISOString()
 
-existing.ultimaSyncHolded=
-new Date().toISOString();
+        });
 
 
-saltados++;
+        creados++;
 
-}
 
+        if(sinProyecto)
+          alertas++;
 
-/* ---------------------------------------------------------------
-   MODIFICADO MANUALMENTE
-   --------------------------------------------------------------- */
 
+      }
 
-else if(
+    }
+    function obtenerIdLinea(line,idx){
 
-existing.modificadoManual===true
-
-||
-
-existing.manual===true
-
-){
-
-existing.estadoSync=
-"MODIFICADO MANUALMENTE";
-
-
-existing.ultimaSyncHolded=
-new Date().toISOString();
-
-
-saltados++;
-
-}
-
-
-/* ---------------------------------------------------------------
-   ACTUALIZAR NORMALMENTE
-   --------------------------------------------------------------- */
-
-
-else{
-
-
-Object.assign(
-
-existing,
-
-{
-
-fecha:fecha,
-
-numeroFactura:numero,
-
-cuenta:cuenta,
-
-origen:"GERA",
-
-proyecto:proyecto,
-
-importeConIVA:total,
-
-tipoIVA:
-
-base!==0
-
-?
-
-redondear2(
-(iva/base)*100
-)
-
-:
-
-0,
-
-importeIVA:iva,
-
-cantidadTotal:base,
-
-origenDatos:"HOLDED",
-
-holdedId:invoiceId,
-
-holdedStatus:
-
-doc.status ??
-doc.state ??
-"",
-
-holdedDocumentType:
-
-doc.type ??
-doc.document_type ??
-"",
-
-rectificativa:rect,
-
-anulada:anulada,
-
-numeroLineasHolded:
-grupo.numeroLineas,
-
-description:
-grupo.descripciones.join(
-" | "
-),
-
-estadoSync:
-"ACTUALIZADO HOLDED",
-
-ultimaSyncHolded:
-new Date().toISOString()
-
-}
-
-);
-
-
-actualizados++;
-
-}
-
-
-if(sinProyecto)
-
-alertas++;
-
-
-continue;
-
-}
-
-
-/* ================================================================
-   CREAR NUEVO MOVIMIENTO
-
-   UNO POR FACTURA + PROYECTO
-   ================================================================ */
-
-
-movimientos.push({
-
-id:
-crearIdMovimiento(),
-
-fecha:
-fecha,
-
-numeroFactura:
-numero,
-
-cuenta:
-cuenta,
-
-origen:
-"GERA",
-
-proyecto:
-proyecto,
-
-importeConIVA:
-total,
-
-tipoIVA:
-
-base!==0
-
-?
-
-redondear2(
-(iva/base)*100
-)
-
-:
-
-0,
-
-importeIVA:
-iva,
-
-cantidadTotal:
-base,
-
-origenDatos:
-"HOLDED",
-
-holdedId:
-invoiceId,
-
-holdedStatus:
-
-doc.status ??
-doc.state ??
-"",
-
-holdedDocumentType:
-
-doc.type ??
-doc.document_type ??
-"",
-
-rectificativa:
-rect,
-
-anulada:
-anulada,
-
-modificadoManual:
-false,
-
-manual:
-false,
-
-numeroLineasHolded:
-grupo.numeroLineas,
-
-description:
-grupo.descripciones.join(
-" | "
-),
-
-estadoSync:
-"NUEVO HOLDED",
-
-ultimaSyncHolded:
-new Date().toISOString()
-
-});
-
-
-creados++;
-
-
-if(sinProyecto)
-
-alertas++;
-
-}
+  return String(
+    line?.id ??
+    line?.line_id ??
+    line?.lineId ??
+    idx
+  );
 
 }
 
 
-/* ================================================================
-   GUARDAR RESULTADO
-   ================================================================ */
+function resolverReferencia(obj){
+
+  if(
+    obj===null ||
+    obj===undefined ||
+    obj===""
+  )
+    return "";
 
 
-guardarLocal();
-
-construirTodo();
-
-
-mostrarMensaje(
-
-`Holded actualizado: `+
-
-`${creados} nuevas · `+
-
-`${actualizados} actualizadas · `+
-
-`${saltados} manuales respetadas · `+
-
-`${movimientos.filter(m=>!m.ignorado).length} movimientos.`
-
-+
-
-(
-alertas
-
-?
-
-` ${alertas} sin proyecto para revisar.`
-
-:
-
-""
-),
-
-true
-
-);
+  if(typeof obj!=="object")
+    return String(obj);
 
 
-}catch(e){
+  return String(
 
+    obj.id ??
+    obj.account_id ??
+    obj.accountId ??
+    obj.project_id ??
+    obj.projectId ??
+    obj.number ??
+    obj.code ??
+    obj.key ??
+    ""
 
-console.error(e);
-
-
-mostrarMensaje(
-
-"ERROR AL ACTUALIZAR HOLDED: "+
-
-e.message,
-
-false
-
-);
-
-
-}finally{
-
-
-b.disabled=false;
-
-b.textContent=viejo;
+  );
 
 }
 
+
+function obtenerCuentaLinea(line,doc){
+
+  const candidatos=[
+
+    line?.account,
+    line?.account_id,
+    line?.accountId,
+    line?.account_number,
+    line?.accountNumber,
+    line?.account_code,
+    line?.accountCode,
+
+    doc?.account,
+    doc?.account_id,
+    doc?.accountId
+
+  ];
+
+
+  for(const c of candidatos){
+
+    const r=
+      resolverReferencia(c);
+
+    if(r)
+      return r;
+
+  }
+
+
+  return "";
+
 }
 
+
+function obtenerProyectoLinea(line,doc){
+
+  const candidatos=[
+
+    line?.project_id,
+    line?.projectId,
+    line?.project,
+    line?.project_code,
+    line?.projectCode,
+
+    doc?.project_id,
+    doc?.projectId,
+    doc?.project
+
+  ];
+
+
+  for(const c of candidatos){
+
+    const r=
+      resolverReferencia(c);
+
+    if(r)
+      return r;
+
+  }
+
+
+  return "";
+
+}
+
+
+function traducirCuenta(id){
+
+  const s=
+    String(id||"");
+
+
+  if(!s)
+    return "";
+
+
+  const dato=
+    mapaHoldedCuentas?.[s];
+
+
+  if(dato){
+
+    if(Array.isArray(dato))
+      return String(
+        dato[0]||""
+      );
+
+
+    if(typeof dato==="object"){
+
+      return String(
+
+        dato.number ??
+        dato.code ??
+        dato.account_number ??
+        dato.id ??
+        ""
+
+      );
+
+    }
+
+  }
+
+
+  const porNumero=
+    Object.values(
+      mapaHoldedCuentas||{}
+    ).find(x=>
+
+      Array.isArray(x)
+
+        ? String(x[0]||"")===s
+
+        : String(
+            x?.number ??
+            x?.code ??
+            ""
+          )===s
+
+    );
+
+
+  return porNumero
+
+    ? (
+        Array.isArray(porNumero)
+
+          ? String(
+              porNumero[0]||s
+            )
+
+          : String(
+              porNumero.number ??
+              porNumero.code ??
+              s
+            )
+      )
+
+    : s;
+
+}
+
+
+function traducirProyecto(id){
+
+  const s=
+    String(id||"");
+
+
+  if(!s)
+    return PROYECTO_SIN_PROYECTO;
+
+
+  const dato=
+    mapaHoldedProyectos?.[s];
+
+
+  if(dato){
+
+    if(typeof dato==="string")
+      return dato;
+
+
+    if(typeof dato==="object")
+      return String(
+        dato.name ?? ""
+      );
+
+  }
+
+
+  const porNombre=
+    Object.values(
+      mapaHoldedProyectos||{}
+    ).find(x=>
+
+      String(
+        x?.name ?? x
+      )===s
+
+    );
+
+
+  return porNombre
+
+    ? String(
+        porNombre?.name ??
+        porNombre
+      )
+
+    : PROYECTO_SIN_PROYECTO;
+
+}
+
+
+async function fetchJSON(url){
+
+  const r=
+    await fetch(
+      url,
+      {
+        headers:{
+          "Accept":"application/json"
+        }
+      }
+    );
+
+
+  if(!r.ok)
+    throw new Error(
+      (await r.text()).slice(0,500) ||
+      `HTTP ${r.status}`
+    );
+
+
+  return await r.json();
+
+}
+
+
+
+/* ==========================================================
+   SINCRONIZACIÓN HOLDED
+   REGLA:
+   UNA FACTURA + UN PROYECTO = UN MOVIMIENTO
+   ========================================================== */
+
+async function sincronizarHolded(){
+
+  const b=
+    document.querySelector(".json-morado");
+
+  const viejo=
+    b.textContent;
+
+
+  b.disabled=true;
+
+  b.textContent=
+    "SINCRONIZANDO...";
+
+
+  mostrarMensaje(
+    "Leyendo Holded…",
+    true
+  );
+
+
+  try{
+
+
+    /* ------------------------------------------------------
+       MISMA LLAMADA AL BRIDGE QUE YA FUNCIONABA
+       ------------------------------------------------------ */
+
+    const data=
+      await fetchJSON(
+        "http://127.0.0.1:8787/api/holded/bootstrap?year=2026"
+      );
+
+
+    mapaHoldedCuentas=
+      data.accountMap||{};
+
+    mapaHoldedProyectos=
+      data.projectMap||{};
+
+
+
+    /* ------------------------------------------------------
+       CUENTAS CONTABLES
+       ------------------------------------------------------ */
+
+    if(
+      Array.isArray(
+        data.accounts
+      )
+    ){
+
+      data.accounts.forEach(a=>{
+
+        const numero=
+          String(
+            a.number ??
+            a.code ??
+            ""
+          );
+
+
+        const nombre=
+          String(
+            a.name ??
+            ""
+          );
+
+
+        if(
+          /^7\d{7}$/.test(numero) &&
+          !cuentas.some(
+            c=>c[0]===numero
+          )
+        ){
+
+          cuentas.push([
+            numero,
+            nombre
+          ]);
+
+        }
+
+      });
+
+
+      cuentas=
+        cuentas.filter(
+          cuentaEsIngreso
+        );
+
+
+      cuentasIniciales.forEach(ci=>{
+
+        if(
+          !cuentas.some(
+            c=>c[0]===ci[0]
+          )
+        ){
+
+          cuentas.push(ci);
+
+        }
+
+      });
+
+
+      guardarCuentas();
+
+      cargarSelectores();
+
+    }
+
+
+
+    /* ------------------------------------------------------
+       FACTURAS
+       ------------------------------------------------------ */
+
+    const invoices=
+      Array.isArray(data.invoices)
+        ? data.invoices
+        : [];
+
+
+    let creados=0;
+    let actualizados=0;
+    let saltados=0;
+    let alertas=0;
+
+
+
+    /* ======================================================
+       RECORREMOS TODAS LAS FACTURAS
+       ====================================================== */
+
+    for(const doc of invoices){
+
+
+      const fecha=
+        obtenerFechaDoc(doc);
+
+
+      if(
+        !fecha ||
+        !fecha.startsWith("2026-")
+      )
+        continue;
+
+
+
+      const invoiceId=
+        String(
+
+          doc.id ??
+          doc.document_id ??
+          doc._id ??
+          ""
+
+        );
+
+
+      if(!invoiceId)
+        continue;
+
+
+
+      const numero=
+        obtenerNumeroDoc(doc);
+
+
+      const rect=
+        identificarRectificativa(
+          doc,
+          null
+        );
+
+
+      const anulada=
+        identificarAnulada(
+          doc,
+          null
+        );
+
+
+      const lineas=
+        obtenerLineasFactura(doc);
+
+
+      if(!lineas.length)
+        continue;
+
+
+
+      /* ----------------------------------------------------
+         IVA GENERAL DEL DOCUMENTO
+         Se conserva el cálculo de la versión anterior
+         ---------------------------------------------------- */
+
+      const docSubtotal=
+
+        valorNumeroSeguro(
+
+          doc.subtotal ??
+          doc.base ??
+          doc.tax_base ??
+          0
+
+        ) || 0;
+
+
+      const docTax=
+
+        valorNumeroSeguro(
+
+          doc.tax ??
+          doc.vat ??
+          doc.iva ??
+          0
+
+        ) || 0;
+
+
+      const ratioIVA=
+
+        docSubtotal!==0
+          ? docTax/docSubtotal
+          : 0;
+
+
+
+      /* ====================================================
+         NUEVO:
+         PRIMERO AGRUPAMOS LAS LÍNEAS POR PROYECTO
+         ==================================================== */
+
+      const gruposProyecto={};
+
+
+
+      lineas.forEach((line,idx)=>{
+
+
+        const cuentaId=
+          obtenerCuentaLinea(
+            line,
+            doc
+          );
+
+
+        const proyectoId=
+          obtenerProyectoLinea(
+            line,
+            doc
+          );
+
+
+        /*
+          ESTA ES LA CLAVE ESTABLE.
+
+          Si Holded trae ID de proyecto usamos ese ID.
+
+          Si la línea NO tiene proyecto,
+          todas las líneas sin proyecto de esta factura
+          quedan juntas.
+        */
+
+        const proyectoKey=
+          proyectoId
+            ? String(proyectoId)
+            : "__SIN_PROYECTO__";
+
+
+        const cuenta=
+          traducirCuenta(
+            cuentaId
+          );
+
+
+        const proyecto=
+          traducirProyecto(
+            proyectoId
+          );
+
+
+
+        /* --------------------------------------------------
+           CÁLCULO DE IMPORTES DE LA LÍNEA
+           MISMA LÓGICA QUE EL HTML ANTERIOR
+           -------------------------------------------------- */
+
+        const qty=
+          valorLinea(
+            line,
+            [
+              "quantity",
+              "units",
+              "qty"
+            ]
+          );
+
+
+        const price=
+          valorLinea(
+            line,
+            [
+              "price",
+              "unit_price",
+              "unitPrice"
+            ]
+          );
+
+
+        const discountRaw=
+          valorLinea(
+            line,
+            [
+              "discount",
+              "discount_percent",
+              "discountPercentage"
+            ]
+          );
+
+
+        let base=
+          valorLinea(
+            line,
+            [
+              "subtotal",
+              "base",
+              "net",
+              "net_amount",
+              "amount",
+              "amount_without_tax",
+              "net_amount_before_tax"
+            ]
+          );
+
+
+        let total=
+          valorLinea(
+            line,
+            [
+              "total",
+              "gross",
+              "total_amount",
+              "amount_with_tax",
+              "gross_amount"
+            ]
+          );
+
+
+        let iva=
+          valorLinea(
+            line,
+            [
+              "tax_amount",
+              "vat_amount",
+              "iva_amount",
+              "taxes_amount"
+            ]
+          );
+
+
+
+        if(
+          base===null &&
+          qty!==null &&
+          price!==null
+        ){
+
+          const discount=
+            discountRaw===null
+              ? 0
+              : discountRaw;
+
+
+          base=
+            (qty*price) *
+            (1-discount/100);
+
+        }
+
+
+
+        if(
+          base===null &&
+          total!==null &&
+          iva!==null
+        ){
+
+          base=
+            total-iva;
+
+        }
+
+
+
+        /*
+          Igual que antes:
+          si no podemos calcular la base de esta línea,
+          no podemos incorporarla.
+        */
+
+        if(base===null)
+          return;
+
+
+
+        if(
+          iva===null ||
+          iva===0
+        ){
+
+          iva=
+            base*ratioIVA;
+
+        }
+
+
+
+        if(
+          total===null ||
+          total===0
+        ){
+
+          total=
+            base+iva;
+
+        }
+
+
+
+        if(rect){
+
+          if(base>0)
+            base=-base;
+
+          if(iva>0)
+            iva=-iva;
+
+          if(total>0)
+            total=-total;
+
+        }
+
+
+
+        /* ==================================================
+           CREAMOS EL GRUPO DEL PROYECTO
+           ================================================== */
+
+        if(
+          !gruposProyecto[
+            proyectoKey
+          ]
+        ){
+
+          gruposProyecto[
+            proyectoKey
+          ]={
+
+            proyectoKey,
+
+            proyecto,
+
+            /*
+              La cuenta queda como información.
+              NO forma parte de la agrupación.
+              Conservamos la primera cuenta válida.
+            */
+
+            cuenta:
+              cuenta||"",
+
+            base:0,
+
+            iva:0,
+
+            total:0,
+
+            lineas:[],
+
+            descripciones:[]
+
+          };
+
+        }
+
+
+
+        const grupo=
+          gruposProyecto[
+            proyectoKey
+          ];
+
+
+
+        /*
+          Si la primera línea no tenía cuenta
+          pero otra del mismo proyecto sí,
+          usamos la primera cuenta válida encontrada.
+        */
+
+        if(
+          !grupo.cuenta &&
+          cuenta
+        ){
+
+          grupo.cuenta=
+            cuenta;
+
+        }
+
+
+
+        grupo.base+=
+          Number(base)||0;
+
+
+        grupo.iva+=
+          Number(iva)||0;
+
+
+        grupo.total+=
+          Number(total)||0;
+
+
+
+        grupo.lineas.push(
+          obtenerIdLinea(
+            line,
+            idx
+          )
+        );
+
+
+        const descripcion=
+          line?.description ??
+          line?.name ??
+          "";
+
+
+        if(descripcion){
+
+          grupo.descripciones.push(
+            String(descripcion)
+          );
+
+        }
+
+
+      });
+
+
+
+      /* ====================================================
+         AHORA:
+         UN GRUPO DE PROYECTO = UN MOVIMIENTO
+         ==================================================== */
+
+      for(
+        const grupo of
+        Object.values(gruposProyecto)
+      ){
+
+
+        const proyecto=
+          grupo.proyecto;
+
+
+        const sinProyecto=
+          proyecto===
+          PROYECTO_SIN_PROYECTO;
+
+
+        const cuenta=
+          grupo.cuenta;
+
+
+        const base=
+          redondear2(
+            grupo.base
+          );
+
+
+        const iva=
+          redondear2(
+            grupo.iva
+          );
+
+
+        const total=
+          redondear2(
+            grupo.total
+          );
+
+
+        /*
+          CLAVE FUNDAMENTAL:
+
+          Ya NO buscamos por holdedLineId.
+
+          Buscamos por:
+          FACTURA + PROYECTO ORIGINAL DE HOLDED.
+        */
+
+        let existing=
+          movimientos.find(m=>
+
+            m?.origenDatos==="HOLDED" &&
+
+            String(
+              m?.holdedId ?? ""
+            )===invoiceId &&
+
+            String(
+              m?.holdedProjectKey ?? ""
+            )===String(
+              grupo.proyectoKey
+            )
+
+          );
+
+
+
+        /*
+          Compatibilidad:
+          si hubiera un movimiento agrupado anterior
+          sin holdedProjectKey, intentamos reconocerlo
+          por factura + proyecto.
+        */
+
+        if(!existing){
+
+          existing=
+            movimientos.find(m=>
+
+              m?.origenDatos==="HOLDED" &&
+
+              String(
+                m?.holdedId ?? ""
+              )===invoiceId &&
+
+              !m?.holdedProjectKey &&
+
+              String(
+                m?.proyecto ?? ""
+              )===String(proyecto)
+
+            );
+
+        }
+
+
+
+        /* ==================================================
+           SI YA EXISTE
+           ================================================== */
+
+        if(existing){
+
+
+          existing.holdedProjectKey=
+            grupo.proyectoKey;
+
+
+          /*
+            Si el usuario lo IGNORÓ,
+            NO vuelve a aparecer.
+          */
+
+          if(
+            existing.ignorado===true
+          ){
+
+            existing.estadoSync=
+              "IGNORADO MANUALMENTE";
+
+
+            existing.ultimaSyncHolded=
+              new Date().toISOString();
+
+
+            saltados++;
+
+
+            continue;
+
+          }
+
+
+
+          /*
+            Si el usuario lo modificó manualmente,
+            respetamos su modificación.
+          */
+
+          if(
+            existing.modificadoManual===true ||
+            existing.manual===true
+          ){
+
+            existing.estadoSync=
+              "MODIFICADO MANUALMENTE";
+
+
+            existing.ultimaSyncHolded=
+              new Date().toISOString();
+
+
+            saltados++;
+
+
+            continue;
+
+          }
+
+
+
+          /*
+            ACTUALIZAMOS EL MOVIMIENTO AGRUPADO
+          */
+
+          Object.assign(
+            existing,
+            {
+
+              fecha,
+
+              numeroFactura:
+                numero,
+
+              cuenta,
+
+              proyecto,
+
+              importeConIVA:
+                total,
+
+              tipoIVA:
+                base!==0
+                  ? redondear2(
+                      (iva/base)*100
+                    )
+                  : 0,
+
+              importeIVA:
+                iva,
+
+              cantidadTotal:
+                base,
+
+              rectificativa:
+                rect,
+
+              anulada,
+
+              holdedStatus:
+                doc.status ??
+                doc.state ??
+                "",
+
+              holdedDocumentType:
+                doc.type ??
+                doc.document_type ??
+                "",
+
+              origenDatos:
+                "HOLDED",
+
+              /*
+                Guardamos las líneas únicamente
+                como referencia informativa.
+              */
+
+              holdedLineIds:
+                grupo.lineas,
+
+              description:
+                grupo.descripciones.join(
+                  " | "
+                ),
+
+              estadoSync:
+                "ACTUALIZADO HOLDED",
+
+              ultimaSyncHolded:
+                new Date().toISOString()
+
+            }
+
+          );
+
+
+          actualizados++;
+
+
+          if(sinProyecto)
+            alertas++;
+
+
+          continue;
+
+        }
+
+
+
+        /* ==================================================
+           SI NO EXISTE:
+           CREAMOS UN ÚNICO MOVIMIENTO PARA
+           FACTURA + PROYECTO
+           ================================================== */
+
+        movimientos.push({
+
+          id:
+            crearIdMovimiento(),
+
+          fecha,
+
+          numeroFactura:
+            numero,
+
+          cuenta,
+
+          origen:
+            "GERA",
+
+          proyecto,
+
+          importeConIVA:
+            total,
+
+          tipoIVA:
+            base!==0
+              ? redondear2(
+                  (iva/base)*100
+                )
+              : 0,
+
+          importeIVA:
+            iva,
+
+          cantidadTotal:
+            base,
+
+          origenDatos:
+            "HOLDED",
+
+          holdedId:
+            invoiceId,
+
+          /*
+            ESTA SUSTITUYE AL ANTIGUO
+            holdedLineId COMO CLAVE DE SINCRONIZACIÓN.
+          */
+
+          holdedProjectKey:
+            grupo.proyectoKey,
+
+          /*
+            Conservamos los IDs de líneas
+            solamente como información.
+          */
+
+          holdedLineIds:
+            grupo.lineas,
+
+          holdedStatus:
+            doc.status ??
+            doc.state ??
+            "",
+
+          holdedDocumentType:
+            doc.type ??
+            doc.document_type ??
+            "",
+
+          rectificativa:
+            rect,
+
+          anulada,
+
+          modificadoManual:
+            false,
+
+          manual:
+            false,
+
+          description:
+            grupo.descripciones.join(
+              " | "
+            ),
+
+          estadoSync:
+            "NUEVO HOLDED",
+
+          ultimaSyncHolded:
+            new Date().toISOString()
+
+        });
+
+
+        creados++;
+
+
+        if(sinProyecto)
+          alertas++;
+
+
+      }
+
+    }
+        /* ======================================================
+       FIN DEL RECORRIDO DE HOLDED
+       ====================================================== */
+
+    guardarLocal();
+
+    construirTodo();
+
+
+    mostrarMensaje(
+
+      `Holded actualizado: ${creados} nuevas · ${actualizados} actualizadas · ${saltados} manuales/ignoradas respetadas · ${movimientos.filter(m=>!m.ignorado).length} movimientos activos.`
+
+      + (
+          alertas
+            ? ` ${alertas} para revisar.`
+            : ""
+        ),
+
+      true
+
+    );
+
+
+  }catch(e){
+
+    console.error(e);
+
+
+    mostrarMensaje(
+
+      "ERROR AL ACTUALIZAR HOLDED: "+
+      e.message,
+
+      false
+
+    );
+
+
+  }finally{
+
+    b.disabled=false;
+
+    b.textContent=viejo;
+
+  }
+
+}
+
+
+
+/* ==========================================================
+   GUARDAR COPIA JSON
+   ========================================================== */
 
 function descargarJSON(){
 
-const copia={
+  const copia={
 
-aplicacion:
-"GERAVALON ANALISIS ECONOMICO",
+    aplicacion:
+      "GERAVALON ANALISIS ECONOMICO",
 
-tipo:
-"INGRESOS",
+    tipo:
+      "INGRESOS",
 
-ejercicio:
-2026,
+    ejercicio:
+      2026,
 
-fechaCopia:
-new Date().toISOString(),
+    fechaCopia:
+      new Date().toISOString(),
 
-cuentas,
+    cuentas,
 
-movimientos
+    movimientos
 
-};
-
-
-const blob=
-new Blob(
-
-[
-JSON.stringify(
-copia,
-null,
-2
-)
-],
-
-{
-type:
-"application/json"
-}
-
-);
+  };
 
 
-const url=
-URL.createObjectURL(
-blob
-);
+  const blob=
+    new Blob(
+
+      [
+        JSON.stringify(
+          copia,
+          null,
+          2
+        )
+      ],
+
+      {
+        type:"application/json"
+      }
+
+    );
 
 
-const a=
-document.createElement(
-"a"
-);
+  const url=
+    URL.createObjectURL(
+      blob
+    );
 
 
-a.href=url;
-
-a.download=
-"GERAVALON_INGRESOS_2026.json";
-
-a.click();
+  const a=
+    document.createElement("a");
 
 
-URL.revokeObjectURL(
-url
-);
+  a.href=url;
+
+  a.download=
+    "GERAVALON_INGRESOS_2026.json";
 
 
-mostrarMensaje(
-"Copia JSON guardada.",
-true
-);
+  a.click();
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  mostrarMensaje(
+    "Copia JSON guardada.",
+    true
+  );
 
 }
 
+
+
+/* ==========================================================
+   CARGAR COPIA JSON
+   ========================================================== */
 
 function cargarJSON(event){
 
-const a=
-event.target.files[0];
-
-if(!a)
-return;
+  const a=
+    event.target.files[0];
 
 
-const fr=
-new FileReader();
+  if(!a)
+    return;
 
 
-fr.onload=e=>{
-
-try{
-
-const d=
-JSON.parse(
-e.target.result
-);
+  const fr=
+    new FileReader();
 
 
-const nm=
-Array.isArray(d)
-?
-d
-:
-d?.movimientos;
+  fr.onload=e=>{
+
+    try{
 
 
-if(
-!Array.isArray(nm)
-)
+      const d=
+        JSON.parse(
+          e.target.result
+        );
 
-throw new Error();
+
+      const nm=
+        Array.isArray(d)
+          ? d
+          : d?.movimientos;
 
 
-if(
-!confirm(
+      if(
+        !Array.isArray(nm)
+      )
+        throw new Error();
 
-"LA COPIA SUSTITUIRÁ LOS INGRESOS ACTUALES.\n\n¿CONTINUAR?"
 
-)
-){
+      if(
+        !confirm(
 
-event.target.value="";
-return;
+          "LA COPIA SUSTITUIRÁ LOS INGRESOS ACTUALES.\n\n"+
+          "¿CONTINUAR?"
+
+        )
+      ){
+
+        event.target.value="";
+
+        return;
+
+      }
+
+
+      movimientos=nm;
+
+
+      if(
+        Array.isArray(
+          d?.cuentas
+        )
+      ){
+
+        cuentas=
+          d.cuentas;
+
+
+        guardarCuentas();
+
+        cargarSelectores();
+
+      }
+
+
+      guardarLocal();
+
+      construirTodo();
+
+
+      mostrarMensaje(
+        "Copia cargada correctamente.",
+        true
+      );
+
+
+    }catch{
+
+      alert(
+        "EL ARCHIVO JSON NO ES VÁLIDO."
+      );
+
+    }
+
+
+    event.target.value="";
+
+  };
+
+
+  fr.readAsText(a);
 
 }
 
 
-movimientos=nm;
 
-
-if(
-Array.isArray(
-d?.cuentas
-)
-){
-
-cuentas=
-d.cuentas;
-
-guardarCuentas();
-
-cargarSelectores();
-
-}
-
-
-guardarLocal();
-
-construirTodo();
-
-
-mostrarMensaje(
-"Copia cargada correctamente.",
-true
-);
-
-
-}catch{
-
-alert(
-"EL ARCHIVO JSON NO ES VÁLIDO."
-);
-
-}
-
-
-event.target.value="";
-
-};
-
-
-fr.readAsText(a);
-
-}
-
+/* ==========================================================
+   FORMATOS
+   ========================================================== */
 
 function formatoNumero(n){
 
-return Number(n||0)
-.toLocaleString(
+  return Number(
+    n||0
+  ).toLocaleString(
 
-"es-ES",
+    "es-ES",
 
-{
-minimumFractionDigits:2,
-maximumFractionDigits:2
-}
+    {
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }
 
-);
+  );
 
 }
 
 
 function formatearDinero(v){
 
-return formatoNumero(v)+" €";
+  return formatoNumero(v)+" €";
 
 }
 
 
 function formatearFecha(f){
 
-if(!f)
-return "";
+  if(!f)
+    return "";
 
 
-const p=
-f.split("-");
+  const p=
+    f.split("-");
 
 
-return p.length===3
-
-?
-
-`${p[2]}/${p[1]}/${p[0]}`
-
-:
-
-f;
+  return p.length===3
+    ? `${p[2]}/${p[1]}/${p[0]}`
+    : f;
 
 }
 
 
 function mostrarMensaje(t,ok){
 
-const e=
-document.getElementById(
-"mensaje"
-);
+  const e=
+    document.getElementById(
+      "mensaje"
+    );
 
 
-e.textContent=t;
-
-e.className=
-ok
-?
-"estado ok"
-:
-"estado error";
+  e.textContent=t;
 
 
-setTimeout(()=>{
-
-e.textContent=
-"Los datos se guardan automáticamente en este navegador.";
-
-e.className=
-"estado";
-
-},7000);
-
-}
+  e.className=
+    ok
+      ? "estado ok"
+      : "estado error";
 
 
-document.getElementById(
-"modalCuenta"
-)
-.addEventListener(
-"click",
-function(e){
+  setTimeout(
+    ()=>{
 
-if(e.target===this)
+      e.textContent=
+        "Los datos se guardan automáticamente en este navegador.";
 
-cerrarNuevaCuenta();
+
+      e.className=
+        "estado";
+
+    },
+
+    7000
+
+  );
 
 }
-);
 
 
-document.getElementById(
-"modalEditar"
-)
-.addEventListener(
-"click",
-function(e){
 
-if(e.target===this)
+/* ==========================================================
+   CERRAR MODALES AL PULSAR FUERA
+   ========================================================== */
 
-cerrarEditarMovimiento();
+document
+  .getElementById("modalCuenta")
+  .addEventListener(
+    "click",
+    function(e){
 
-}
-);
+      if(e.target===this)
+        cerrarNuevaCuenta();
+
+    }
+  );
+
+
+document
+  .getElementById("modalEditar")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target===this)
+        cerrarEditarMovimiento();
+
+    }
+  );
+
 
 </script>
 
