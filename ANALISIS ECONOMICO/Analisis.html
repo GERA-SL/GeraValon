@@ -699,10 +699,12 @@ function actualizarAnalisis(){
         );
 
 
-    const ingresos =
-        leerDatos(
-            CLAVE_INGRESOS
-        );
+   const ingresos =
+    leerDatos(
+        CLAVE_INGRESOS
+    ).filter(
+        movimiento => !movimiento.ignorado
+    );
 
 
     /* =====================================================
