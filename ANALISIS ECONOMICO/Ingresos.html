@@ -280,6 +280,7 @@ function compararNumeroFactura(a,b){
 function construirTablaMovimientos(){
  const tb=document.getElementById("tablaMovimientos");tb.innerHTML="";const fc=document.getElementById("filtroCuentaMovimiento").value,fp=document.getElementById("filtroProyectoMovimiento").value;
 let arr=movimientos.filter(m=>
+  !m.ignorado &&
   (!fc || m.cuenta===fc) &&
   (!fp || m.proyecto===fp)
 );
