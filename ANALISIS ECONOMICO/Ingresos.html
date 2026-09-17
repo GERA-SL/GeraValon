@@ -369,7 +369,30 @@ function construirTablaMensual(){
  });
  const tr=document.createElement("tr");tr.className="total";tr.innerHTML=`<td class="texto">TOTAL</td><td></td><td></td>${tm.map(v=>`<td class="numero">${formatoNumero(v)}</td>`).join("")}<td class="numero">${formatoNumero(tg)}</td>`;tb.appendChild(tr)
 }
-function actualizarResumen(){const total=movimientos.reduce((s,m)=>s+(Number(m.cantidadTotal)||0),0);document.getElementById("totalIngresos").textContent=formatearDinero(total);document.getElementById("numeroMovimientos").textContent=movimientos.length;document.getElementById("numeroCuentas").textContent=cuentas.length}
+function actualizarResumen(){
+
+  const movimientosActivos=movimientos.filter(m=>!m.ignorado);
+
+  const total=movimientosActivos.reduce(
+    (s,m)=>s+(Number(m.cantidadTotal)||0),
+    0
+  );
+
+  document.getElementById("totalIngresos").textContent=
+    formatearDinero(total);
+
+  document.getElementById("numeroMovimientos").textContent=
+    movimientosActivos.length;
+
+  const cuentasUsadas=new Set(
+    movimientosActivos
+      .map(m=>m.cuenta)
+      .filter(Boolean)
+  );
+
+  document.getElementById("numeroCuentas").textContent=
+    cuentasUsadas.size;
+}
 function construirTodo(){construirTablaMovimientos();construirTablaMensual();actualizarResumen()}
 function limpiarFiltrosMovimientos(){document.getElementById("filtroCuentaMovimiento").value="";document.getElementById("filtroProyectoMovimiento").value="";construirTablaMovimientos()}
 
